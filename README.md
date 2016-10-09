@@ -1,6 +1,6 @@
 # vue-music
 
-> Vue 音乐搜索、播放 Demo
+> Vue 音乐搜索、播放 Demo [查看Demo](http://sioxas.github.io/)
 
 ## Build Setup
 
