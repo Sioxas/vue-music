@@ -1,6 +1,6 @@
 # vue-music
 
-> A Vue.js project
+> Vue 音乐搜索、播放 Demo
 
 ## Build Setup
 
