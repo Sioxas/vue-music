@@ -1,22 +1,22 @@
 <template>
   <div id="play" class="music-play-page">
     <div class="music-album">
-      <div class="play-page-hide-btn"  @click="hidePlayPage()">
+      <div class="play-page-hide-btn" @click="hidePlayPage()">
         <img src="../assets/icon-jiantou.png" alt="">
       </div>
-      <img  v-bind:src="$parent.playBar.coverImgUrl">
+      <img v-bind:src="$parent.playBar.coverImgUrl">
 
     </div>
     <div class="button-group">
       <img class="blurbg" v-bind:src="$parent.playBar.coverImgUrl">
       <div class="progress-bar-group">
         <div class="progress-bar">
-          <div class="progress"></div>
-          <div class="indicater"></div>
+          <div class="progress" v-bind:style="{width:indicatorPosition+'%'}"></div>
+          <div class="indicater" v-bind:style="{left:indicatorPosition+'%'}"></div>
         </div>
         <div class="time-indicater">
-          <span>1:30</span>
-          <span>-3:24</span>
+          <span>{{getCurrentTime}}</span>
+          <span>{{getDuration}}</span>
         </div>
       </div>
       <div class="music-info">
@@ -27,7 +27,8 @@
         <ul>
           <li><img src="../assets/icon-like.png"></li>
           <li><img src="../assets/icon-shangyiqu.png"></li>
-          <li><img  v-bind:src="$parent.playing?$parent.iconPause:$parent.iconPlay" @click="$parent.playing?$parent.pause():$parent.play()"></li>
+          <li><img v-bind:src="$parent.playing?$parent.iconPause:$parent.iconPlay"
+                   @click="$parent.playing?$parent.pause():$parent.play()"></li>
           <li><img src="../assets/icon-xiayiqu.png"></li>
           <li><img src="../assets/icon-list.png"></li>
         </ul>
@@ -60,14 +61,25 @@
 
 <script type="text/ecmascript-6">
   export default {
-    props: ['playBar'],
     data () {
-      return {}
+      return {
+        playingState: this.$parent.playingState
+      }
     },
-
     methods: {
       hidePlayPage: function () {
         this.$parent.playPageShow = false
+      }
+    },
+    computed: {
+      getCurrentTime: function () {
+        return parseInt(this.playingState.currentTime / 60) + ':' + (Array(2).join(0) + (this.playingState.currentTime % 60)).slice(-2)
+      },
+      getDuration: function () {
+        return parseInt(this.playingState.duration / 60) + ':' + (Array(2).join(0) + (this.playingState.duration % 60)).slice(-2)
+      },
+      indicatorPosition: function () {
+        return this.playingState.currentTime / this.playingState.duration * 100
       }
     }
   }
@@ -136,7 +148,7 @@
   .music-play-page .button-group .progress-bar-group .progress-bar .progress {
     height: 100%;
     background: #7f7f7f;
-    width: 20%;
+    /*width: 20%;*/
   }
 
   .music-play-page .button-group .progress-bar-group .progress-bar .indicater {
@@ -145,7 +157,7 @@
     height: 12px;
     background: #ff2d55;
     top: 0;
-    left: 20%;
+    /*left: 20%;*/
   }
 
   .music-play-page .button-group .progress-bar-group .time-indicater {
@@ -289,9 +301,9 @@
     margin-left: -10px;
   }
 
-  .music-play-page .music-album .play-page-hide-btn{
-    width:25px;
-    height:25px;
+  .music-play-page .music-album .play-page-hide-btn {
+    width: 25px;
+    height: 25px;
     top: 27px;
     left: 11px;
     position: absolute;
@@ -302,23 +314,24 @@
     justify-content: center;
     cursor: pointer;
   }
-  .music-play-page .music-album .play-page-hide-btn img{
-    width:12px;
-    height:12px;
+
+  .music-play-page .music-album .play-page-hide-btn img {
+    width: 12px;
+    height: 12px;
     display: inline-block;
   }
 
-  @media screen and (min-width:450px){
-    .music-play-page .music-album{
-      height:450px;
+  @media screen and (min-width: 450px) {
+    .music-play-page .music-album {
+      height: 450px;
     }
 
-    .music-play-page .button-group{
-      top:450px;
-      width:450px;
-      margin:0 auto;
-      margin-left:-225px;
-      left:50%;
+    .music-play-page .button-group {
+      top: 450px;
+      width: 450px;
+      margin: 0 auto;
+      margin-left: -225px;
+      left: 50%;
     }
   }
 </style>

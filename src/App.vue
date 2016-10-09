@@ -5,7 +5,7 @@
     </transition>
 
     <transition name="play-slide">
-      <play v-show="playPageShow"></play>
+      <play v-if="playPageShow"></play>
     </transition>
 
     <transition name="bar-slide">
@@ -64,7 +64,8 @@
     },
     data () {
       return {
-        playing: false,
+        playing: true,
+        playingState: this.$parent.playingState,
         iconPlay: require('./assets/icon-play.png'),
         iconPause: require('./assets/icon-pause.png'),
         playBar: {
