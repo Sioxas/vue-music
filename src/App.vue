@@ -1,8 +1,6 @@
 ﻿<template>
   <div id="app">
-    <transition name="fade">
-      <search v-show="!playPageShow"></search>
-    </transition>
+    <search v-show="!blurBgShow"></search>
 
     <transition name="play-slide" v-on:after-enter="showBlurBg" v-on:before-leave="hideBlurBg">
       <play v-if="playPageShow"></play>

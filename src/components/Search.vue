@@ -141,6 +141,7 @@
     background: #eee;
     font-size: medium;
     flex-grow: 1;
+    border-radius: 5px;
   }
 
   .result {
