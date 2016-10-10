@@ -1,10 +1,10 @@
 ﻿<template>
   <div id="app">
     <transition name="fade">
-      <search  v-show="!playPageShow"></search>
+      <search v-show="!playPageShow"></search>
     </transition>
 
-    <transition name="play-slide">
+    <transition name="play-slide" v-on:after-enter="showBlurBg" v-on:before-leave="hideBlurBg">
       <play v-if="playPageShow"></play>
     </transition>
 
@@ -60,6 +60,12 @@
       },
       hidePlayPage: function () {
         this.playPageShow = false
+      },
+      showBlurBg: function () {
+        this.blurBgShow = true
+      },
+      hideBlurBg: function () {
+        this.blurBgShow = false
       }
     },
     data () {
@@ -74,7 +80,8 @@
           singer: '周杰伦',
           coverImgUrl: 'http://y.gtimg.cn/music/photo_new/T002R300x300M000003RMaRI1iFoYd.jpg?max_age=2592000'
         },
-        playPageShow: false
+        playPageShow: false,
+        blurBgShow: false
       }
     }
   }
@@ -144,42 +151,50 @@
     padding-right: 15px;
     cursor: pointer;
   }
+
   .fade-enter-active {
     transition: all .3s ease;
   }
+
   .fade-leave-active {
     transition: all .3s ease-out;
   }
+
   .fade-enter, .fade-leave-active {
     opacity: 0;
   }
+
   .play-slide-enter-active {
     transition: all .3s ease;
   }
+
   .play-slide-leave-active {
     transition: all .3s ease-out;
   }
+
   .play-slide-enter, .play-slide-leave-active {
-    margin-top:100vh;
+    margin-top: 100vh;
   }
 
   .bar-slide-enter-active {
     transition: all .3s ease;
   }
+
   .bar-slide-leave-active {
     transition: all .3s ease-out;
   }
+
   .bar-slide-enter, .bar-slide-leave-active {
-    margin-bottom:-50px;
+    margin-bottom: -50px;
   }
 
-
-  @media screen and (min-width: 450px){
+  @media screen and (min-width: 450px) {
     body {
       width: 450px;
       margin: 0 auto;
     }
-    #play-bar{
+
+    #play-bar {
       width: 450px;
     }
   }

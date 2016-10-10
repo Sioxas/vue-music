@@ -8,7 +8,7 @@
 
     </div>
     <div class="button-group">
-      <img class="blurbg" v-bind:src="$parent.playBar.coverImgUrl">
+      <img class="blurbg" v-bind:src="$parent.playBar.coverImgUrl" v-if="$parent.blurBgShow">
       <div class="progress-bar-group">
         <div class="progress-bar">
           <div class="progress" v-bind:style="{width:indicatorPosition+'%'}"></div>
