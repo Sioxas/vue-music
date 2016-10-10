@@ -1,7 +1,10 @@
 <template>
   <div id="search">
     <div class="search">
-      <input type="text" class="search-input" placeholder="歌曲/专辑/歌手" v-model="key">
+      <div class="search-input">
+        <img src="./../assets/icon-search.png" alt="搜索">
+        <input type="text" placeholder="搜索 歌曲/专辑/歌手" v-model="key">
+      </div>
     </div>
     <div class="result" v-if="searchRes!=null">
       <div class="result-group" v-if="searchRes.song!=null">
@@ -107,19 +110,37 @@
     width:100%;
     height: 60px;
     display: flex;
+    flex-direction: row;
     position: fixed;
     top: 0;
     background: #fff;
   }
+
+
 
   .search-input {
     width: 100%;
     background: #eee;
     border-radius: 5px;
     margin: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .search-input img{
+    height: 30px;
+    width:30px;
+    display:inline-block;
+    margin:0 5px;
+  }
+
+  .search-input input{
+    height:100%;
     border: none;
-    padding: 10px;
+    background: #eee;
     font-size: medium;
+    flex-grow: 1;
   }
 
   .result {
