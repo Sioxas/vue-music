@@ -12,7 +12,7 @@
           <img class="group-img" src="./../assets/icon-music.png">
           <p class="group-p">单曲</p>
         </div>
-        <div class="result-item" v-for="item in searchRes.song.itemlist" v-on:click="play(item)">
+        <div class="result-item" v-for="(item, index) in searchRes.song.itemlist" v-on:click="play(index)">
           <p class="result-title">{{item.name}}</p>
           <p class="result-author">-{{item.singer}}</p>
         </div>
@@ -63,8 +63,9 @@
 <script type="text/ecmascript-6">
   export default {
     methods: {
-      play: function (res) {
-        this.$parent.playThis(res)
+      play: function (index) {
+        this.$parent.playList = this.searchRes.song.itemlist
+        this.$parent.playThis(index)
       }
     },
     watch: {
@@ -107,7 +108,7 @@
 
 
   .search {
-    width:100%;
+    width: 100%;
     height: 60px;
     display: flex;
     flex-direction: row;
@@ -115,8 +116,6 @@
     top: 0;
     background: #fff;
   }
-
-
 
   .search-input {
     width: 100%;
@@ -128,15 +127,15 @@
     align-items: center;
   }
 
-  .search-input img{
+  .search-input img {
     height: 30px;
-    width:30px;
-    display:inline-block;
-    margin:0 5px;
+    width: 30px;
+    display: inline-block;
+    margin: 0 5px;
   }
 
-  .search-input input{
-    height:100%;
+  .search-input input {
+    height: 100%;
     border: none;
     background: #eee;
     font-size: medium;
@@ -269,9 +268,9 @@
     line-height: 20px;
   }
 
-  @media screen and (min-width: 450px){
-    .search{
-      width:450px;
+  @media screen and (min-width: 450px) {
+    .search {
+      width: 450px;
     }
   }
 

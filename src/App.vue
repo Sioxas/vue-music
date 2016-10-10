@@ -8,12 +8,18 @@
 
     <transition name="bar-slide">
       <div id="play-bar" v-show="!playPageShow">
-        <audio id="music" v-bind:src="playBar.dataUrl" autoplay="autoplay"></audio>
-        <div class="play-bar-image-container" @click="playPageShow?hidePlayPage():showPlayPage()">
+        <audio id="music"
+               v-bind:src="playBar.dataUrl"
+               autoplay="autoplay"
+               v-on:ended="playNext"></audio>
+        <div class="play-bar-image-container" @touchstart="showPlayPage" @click="showPlayPage">
           <img class="play-bar-image" v-bind:src="playBar.coverImgUrl">
         </div>
-        <p class="play-bar-text" @click="playPageShow?hidePlayPage():showPlayPage()">{{playBar.name}}</p>
-        <img class="play-bar-button" v-bind:src="playing?iconPause:iconPlay" @click="playing?pause():play()">
+        <p class="play-bar-text" @touchstart="showPlayPage" @click="showPlayPage">{{playBar.name}}</p>
+        <img class="play-bar-button"
+             v-bind:src="playing?iconPause:iconPlay"
+             @touchend="tapButton"
+             @click="tapButton">
       </div>
     </transition>
 
@@ -30,6 +36,10 @@
       Play
     },
     methods: {
+      tapButton: function (event) {
+        event.preventDefault()
+        this.playing ? this.pause() : this.play()
+      },
       play: function () {
         document.getElementById('music').play()
         this.playing = true
@@ -38,25 +48,27 @@
         document.getElementById('music').pause()
         this.playing = false
       },
-      playThis: function (res) {
-        this.playBar.dataUrl = 'http://stream.qqmusic.tc.qq.com/' + res.id + '.mp3'
-        this.playBar.name = res.name
-        this.playBar.singer = res.singer
+      playThis: function (index) {
+        this.playBar.index = index
+        this.playBar.dataUrl = 'http://stream.qqmusic.tc.qq.com/' + this.playList[index].id + '.mp3'
+        this.playBar.name = this.playList[index].name
+        this.playBar.singer = this.playList[index].singer
         this.$http.jsonp('http://120.27.93.97/weappserver/get_music_image.php', {
           params: {
-            mid: res.mid
+            mid: this.playList[index].mid
           },
           jsonp: 'callback'
         }).then((response) => {
           this.playBar.coverImgUrl = response.data.url
         })
-        this.play()
+//        this.play()
       },
-      showPlayPage: function () {
+      showPlayPage: function (event) {
+        event.preventDefault()
         this.playPageShow = true
-        console.log('show')
       },
-      hidePlayPage: function () {
+      hidePlayPage: function (event) {
+        event.preventDefault()
         this.playPageShow = false
       },
       showBlurBg: function () {
@@ -64,6 +76,9 @@
       },
       hideBlurBg: function () {
         this.blurBgShow = false
+      },
+      playNext: function () {
+        this.playThis((this.playBar.index + 1) % this.playList.length)
       }
     },
     data () {
@@ -78,6 +93,7 @@
           singer: '周杰伦',
           coverImgUrl: 'http://y.gtimg.cn/music/photo_new/T002R300x300M000003RMaRI1iFoYd.jpg?max_age=2592000'
         },
+        playList: [],
         playPageShow: false,
         blurBgShow: false
       }

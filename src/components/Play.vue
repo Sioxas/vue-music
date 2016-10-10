@@ -1,10 +1,13 @@
 <template>
   <div id="play" class="music-play-page">
     <div class="music-album">
-      <div class="play-page-hide-btn" @click="hidePlayPage()">
+      <div class="play-page-hide-btn" @touchend.prevent.stop="hidePlayPage" @click="hidePlayPage">
         <img src="../assets/icon-jiantou.png" alt="">
       </div>
-      <img v-bind:src="$parent.playBar.coverImgUrl">
+      <img v-bind:src="$parent.playBar.coverImgUrl"
+           @touchstart="movestart"
+           @touchmove.prevent=""
+           @touchend="moveend">
 
     </div>
     <div class="button-group">
@@ -26,10 +29,11 @@
       <div class="music-ctrl">
         <ul>
           <li><img src="../assets/icon-like.png"></li>
-          <li><img src="../assets/icon-shangyiqu.png"></li>
+          <li><img src="../assets/icon-shangyiqu.png" @touchend.prevent="playFront" @click="playFront"></li>
           <li><img v-bind:src="$parent.playing?$parent.iconPause:$parent.iconPlay"
-                   @click="$parent.playing?$parent.pause():$parent.play()"></li>
-          <li><img src="../assets/icon-xiayiqu.png"></li>
+                   @click="$parent.tapButton"
+                   @touchend="$parent.tapButton"></li>
+          <li><img src="../assets/icon-xiayiqu.png" @touchend.prevent="playNext" @click="playNext"></li>
           <li><img src="../assets/icon-list.png"></li>
         </ul>
       </div>
@@ -63,12 +67,27 @@
   export default {
     data () {
       return {
-        playingState: this.$parent.playingState
+        playingState: this.$parent.playingState,
+        clientY: 0
       }
     },
     methods: {
       hidePlayPage: function () {
         this.$parent.playPageShow = false
+      },
+      movestart: function (event) {
+        console.log('start' + event.touches[0].clientY)
+      },
+      moveend: function (event) {
+        if (event.changedTouches[0].clientY - this.clientY > 0) {
+          this.hidePlayPage()
+        }
+      },
+      playFront: function () {
+        this.$parent.playThis((this.$parent.playBar.index - 1 + this.$parent.playList.length) % this.$parent.playList.length)
+      },
+      playNext: function () {
+        this.$parent.playThis((this.$parent.playBar.index + 1) % this.$parent.playList.length)
       }
     },
     computed: {
