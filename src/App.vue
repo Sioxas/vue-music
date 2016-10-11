@@ -25,7 +25,6 @@
              @click="tapButton">
       </div>
     </transition>
-
   </div>
 </template>
 
@@ -33,12 +32,14 @@
   import Search from './components/Search'
   import Play from './components/Play'
   import PlayingList from './components/PlayingList'
+  import ActionSheet from './components/ActionSheet'
 
   export default {
     components: {
       Search,
       Play,
-      PlayingList
+      PlayingList,
+      ActionSheet
     },
     methods: {
       tapButton: function (event) {
@@ -216,6 +217,56 @@
 
     #play-bar {
       width: 450px;
+    }
+  }
+
+  /*border-1px 部分*/
+  .border-1px {
+    position: relative;
+  }
+
+  .border-1px-after:after {
+    border-top: 1px solid #d0d0d0;
+    content: ' ';
+    display: block;
+    width: 100%;
+    position: absolute;
+    left: 0;
+  }
+
+  .border-1px-before:before {
+    border-top: 1px solid #d0d0d0;
+    content: ' ';
+    display: block;
+    width: 100%;
+    position: absolute;
+    left: 0;
+  }
+
+  .border-1px:before {
+    top: 0;
+  }
+
+  .border-1px:after {
+    bottom: 0;
+  }
+
+  @media (-webkit-min-device-pixel-ratio: 1.5), (min-device-pixel-ratio: 1.5) {
+    .border-1px:after, .border-1px:before {
+      -webkit-transform: scaleY(.7);
+      -webkit-transform-origin: 0 0;
+      transform: scaleY(.7);
+    }
+
+    .border-1px:after {
+      -webkit-transform-origin: left bottom;
+    }
+  }
+
+  @media (-webkit-min-device-pixel-ratio: 2), (min-device-pixel-ratio: 2) {
+    .border-1px:after, .border-1px:before {
+      -webkit-transform: scaleY(.5);
+      transform: scaleY(.5);
     }
   }
 

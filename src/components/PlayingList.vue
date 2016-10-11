@@ -2,7 +2,7 @@
   <div id="playing-list">
     <div class="tittle border-1px border-1px-after ">
       <img src="./../assets/icon-xunhuan.png" alt="顺序播放">
-      <p class="tittle-text">顺序播放 8首歌曲</p>
+      <p class="tittle-text">顺序播放 {{$parent.playList.length}}首歌曲</p>
       <p class="tittle-button" @touchend.prevent="hidePlayList" @click="hidePlayList">完成</p>
     </div>
     <div class="m-list">
@@ -13,25 +13,36 @@
             <p class="music-author">-{{item.singer}}</p>
             <img class="music-playing" src="./../assets/icon-playing.svg" alt="正在播放" v-show="index==$parent.playBar.index">
           </div>
-          <div class="action-button">
+          <div class="action-button" @touchend.prevent="showMenu" @click="showMenu">
             <img src="./../assets/icon-...black.png">
           </div>
         </li>
       </ul>
     </div>
+    <action-sheet v-if="menuShow"></action-sheet>
   </div>
 </template>
 
 <script>
+  import ActionSheet from './ActionSheet'
   export default {
+    components: {
+      ActionSheet
+    },
     data () {
       return {
-        msg: 'Hello Vue!'
+        menuShow: false
       }
     },
     methods: {
       hidePlayList: function () {
         this.$parent.playingListShow = false
+      },
+      showMenu: function () {
+        this.menuShow = true
+      },
+      hideMenu: function () {
+        this.menuShow = false
       }
     }
   }
@@ -131,53 +142,5 @@
     }
   }
 
-  /*border-1px 部分*/
-  .border-1px {
-    position: relative;
-  }
 
-  .border-1px-after:after {
-    border-top: 1px solid #d0d0d0;
-    content: ' ';
-    display: block;
-    width: 100%;
-    position: absolute;
-    left: 0;
-  }
-
-  .border-1px-before:before {
-    border-top: 1px solid #d0d0d0;
-    content: ' ';
-    display: block;
-    width: 100%;
-    position: absolute;
-    left: 0;
-  }
-
-  .border-1px:before {
-    top: 0;
-  }
-
-  .border-1px:after {
-    bottom: 0;
-  }
-
-  @media (-webkit-min-device-pixel-ratio: 1.5), (min-device-pixel-ratio: 1.5) {
-    .border-1px:after, .border-1px:before {
-      -webkit-transform: scaleY(.7);
-      -webkit-transform-origin: 0 0;
-      transform: scaleY(.7);
-    }
-
-    .border-1px:after {
-      -webkit-transform-origin: left bottom;
-    }
-  }
-
-  @media (-webkit-min-device-pixel-ratio: 2), (min-device-pixel-ratio: 2) {
-    .border-1px:after, .border-1px:before {
-      -webkit-transform: scaleY(.5);
-      transform: scaleY(.5);
-    }
-  }
 </style>
