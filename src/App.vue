@@ -1,5 +1,8 @@
 ﻿<template>
   <div id="app">
+    <transition name="play-slide">
+      <playing-list v-if="playingListShow"></playing-list>
+    </transition>
     <search v-show="!blurBgShow"></search>
 
     <transition name="play-slide" v-on:after-enter="showBlurBg" v-on:before-leave="hideBlurBg">
@@ -29,11 +32,13 @@
 <script type="text/ecmascript-6">
   import Search from './components/Search'
   import Play from './components/Play'
+  import PlayingList from './components/PlayingList'
 
   export default {
     components: {
       Search,
-      Play
+      Play,
+      PlayingList
     },
     methods: {
       tapButton: function (event) {
@@ -95,7 +100,8 @@
         },
         playList: [],
         playPageShow: false,
-        blurBgShow: false
+        blurBgShow: false,
+        playingListShow: false
       }
     }
   }

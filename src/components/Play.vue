@@ -34,7 +34,7 @@
                    @click="$parent.tapButton"
                    @touchend="$parent.tapButton"></li>
           <li><img src="../assets/icon-xiayiqu.png" @touchend.prevent="playNext" @click="playNext"></li>
-          <li><img src="../assets/icon-list.png"></li>
+          <li><img src="../assets/icon-list.png" @touchend.prevent="showPlayList" @click="showPlayList"></li>
         </ul>
       </div>
       <div class="volue-bar-group">
@@ -88,6 +88,9 @@
       },
       playNext: function () {
         this.$parent.playThis((this.$parent.playBar.index + 1) % this.$parent.playList.length)
+      },
+      showPlayList: function () {
+        this.$parent.playingListShow = true
       }
     },
     computed: {
