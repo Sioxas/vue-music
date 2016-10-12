@@ -10,7 +10,8 @@ var vm = new Vue({
   data: {
     playingState: {
       currentTime: 0,
-      duration: 0
+      duration: 0,
+      playMode: 0
     }
   }
 })

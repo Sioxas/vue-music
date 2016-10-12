@@ -14,13 +14,13 @@
             <img class="music-playing" src="./../assets/icon-playing.svg" alt="正在播放"
                  v-show="index==$parent.playBar.index">
           </div>
-          <div class="action-button" @touchend.prevent="showMenu" @click="showMenu">
+          <div class="action-button" @touchend.prevent="showMenu(item)" @click="showMenu(item)">
             <img src="./../assets/icon-...black.png">
           </div>
         </li>
       </ul>
     </div>
-    <actionsheet :show="menuShow" :menus="menus1" @on-click-menu="click" show-cancel></actionsheet>
+    <actionsheet :show="menuShow" :menus="menus" @on-click-menu="click" show-cancel></actionsheet>
   </div>
 </template>
 
@@ -33,29 +33,28 @@
     data () {
       return {
         menuShow: false,
-        menus1: {
-          menu1: 'Share to friends',
-          menu2: 'Share to timeline'
-        }
+        menus: {}
       }
     },
     methods: {
       hidePlayList: function () {
         this.$parent.playingListShow = false
       },
-      showMenu: function () {
+      showMenu: function (item) {
+        this.menus = {
+          'title.noop': item.name + '<br/><span style="color:#666;font-size:12px;">' + item.singer + '</span>',
+          menu1: '下一首播放',
+          menu2: '删除'
+        }
         this.menuShow = true
       },
       hideMenu: function () {
         this.menuShow = false
       },
       click (key) {
-        console.log(key)
         switch (key) {
           case 'cancel':
-            console.log(this.menuShow)
             this.hideMenu()
-            console.log(this.menuShow)
             break
           default:
             console.log(key)

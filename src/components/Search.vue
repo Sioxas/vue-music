@@ -185,8 +185,17 @@
     align-items: center;
   }
 
-  .result-author {
+  .result-item .result-title{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .result-item .result-author {
     color: #929292;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   .album-item {

@@ -83,6 +83,13 @@
       },
       playNext: function () {
         this.playThis((this.playBar.index + 1) % this.playList.length)
+      },
+      playContinue: function () {
+        if (this.playingState.playMode === 0) {
+          this.playNext()
+        } else {
+          this.play()
+        }
       }
     },
     data () {
