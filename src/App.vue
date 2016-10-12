@@ -32,14 +32,12 @@
   import Search from './components/Search'
   import Play from './components/Play'
   import PlayingList from './components/PlayingList'
-  import ActionSheet from './components/ActionSheet'
 
   export default {
     components: {
       Search,
       Play,
-      PlayingList,
-      ActionSheet
+      PlayingList
     },
     methods: {
       tapButton: function (event) {

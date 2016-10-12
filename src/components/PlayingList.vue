@@ -11,7 +11,8 @@
           <div class="music-info">
             <p class="music-name">{{item.name}}</p>
             <p class="music-author">-{{item.singer}}</p>
-            <img class="music-playing" src="./../assets/icon-playing.svg" alt="正在播放" v-show="index==$parent.playBar.index">
+            <img class="music-playing" src="./../assets/icon-playing.svg" alt="正在播放"
+                 v-show="index==$parent.playBar.index">
           </div>
           <div class="action-button" @touchend.prevent="showMenu" @click="showMenu">
             <img src="./../assets/icon-...black.png">
@@ -19,19 +20,23 @@
         </li>
       </ul>
     </div>
-    <action-sheet v-if="menuShow"></action-sheet>
+    <actionsheet :show="menuShow" :menus="menus1" @on-click-menu="click" show-cancel></actionsheet>
   </div>
 </template>
 
-<script>
-  import ActionSheet from './ActionSheet'
+<script type="text/ecmascript-6">
+  import Actionsheet from './../lib/components/Actionsheet'
   export default {
     components: {
-      ActionSheet
+      Actionsheet
     },
     data () {
       return {
-        menuShow: false
+        menuShow: false,
+        menus1: {
+          menu1: 'Share to friends',
+          menu2: 'Share to timeline'
+        }
       }
     },
     methods: {
@@ -43,6 +48,18 @@
       },
       hideMenu: function () {
         this.menuShow = false
+      },
+      click (key) {
+        console.log(key)
+        switch (key) {
+          case 'cancel':
+            console.log(this.menuShow)
+            this.hideMenu()
+            console.log(this.menuShow)
+            break
+          default:
+            console.log(key)
+        }
       }
     }
   }
@@ -121,9 +138,9 @@
   }
 
   .m-list .list-item .music-info .music-playing {
-    width:15px;
-    height:15px;
-    margin-left:10px;
+    width: 15px;
+    height: 15px;
+    margin-left: 10px;
   }
 
   .m-list .list-item .action-button {
