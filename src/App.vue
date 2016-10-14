@@ -1,8 +1,6 @@
 ﻿<template>
   <div id="app">
-    <transition name="play-slide">
-      <playing-list v-if="playingListShow"></playing-list>
-    </transition>
+
     <search v-show="!blurBgShow"></search>
 
     <transition name="play-slide" v-on:after-enter="showBlurBg" v-on:before-leave="hideBlurBg">
@@ -12,13 +10,14 @@
     <transition name="bar-slide">
       <div id="play-bar" v-show="!playPageShow">
         <audio id="music"
-               v-bind:src="playBar.dataUrl"
+               v-bind:src="song.dataUrl"
                autoplay="autoplay"
-               v-on:ended="playNext"></audio>
+               @timeupdate="updateTime"
+               v-on:ended="playContinue"></audio>
         <div class="play-bar-image-container" @touchstart="showPlayPage" @click="showPlayPage">
-          <img class="play-bar-image" v-bind:src="playBar.coverImgUrl">
+          <img class="play-bar-image" v-bind:src="song.coverImgUrl">
         </div>
-        <p class="play-bar-text" @touchstart="showPlayPage" @click="showPlayPage">{{playBar.name}}</p>
+        <p class="play-bar-text" @touchstart="showPlayPage" @click="showPlayPage">{{song.name}}</p>
         <img class="play-bar-button"
              v-bind:src="playing?iconPause:iconPlay"
              @touchend="tapButton"
@@ -31,41 +30,17 @@
 <script type="text/ecmascript-6">
   import Search from './components/Search'
   import Play from './components/Play'
-  import PlayingList from './components/PlayingList'
+  import {mapMutations, mapState} from 'vuex'
 
   export default {
     components: {
       Search,
-      Play,
-      PlayingList
+      Play
     },
     methods: {
       tapButton: function (event) {
         event.preventDefault()
         this.playing ? this.pause() : this.play()
-      },
-      play: function () {
-        document.getElementById('music').play()
-        this.playing = true
-      },
-      pause: function () {
-        document.getElementById('music').pause()
-        this.playing = false
-      },
-      playThis: function (index) {
-        this.playBar.index = index
-        this.playBar.dataUrl = 'http://stream.qqmusic.tc.qq.com/' + this.playList[index].id + '.mp3'
-        this.playBar.name = this.playList[index].name
-        this.playBar.singer = this.playList[index].singer
-        this.$http.jsonp('http://120.27.93.97/weappserver/get_music_image.php', {
-          params: {
-            mid: this.playList[index].mid
-          },
-          jsonp: 'callback'
-        }).then((response) => {
-          this.playBar.coverImgUrl = response.data.url
-        })
-//        this.play()
       },
       showPlayPage: function (event) {
         event.preventDefault()
@@ -81,33 +56,34 @@
       hideBlurBg: function () {
         this.blurBgShow = false
       },
-      playNext: function () {
-        this.playThis((this.playBar.index + 1) % this.playList.length)
+      updateTime: function () {
+        this.$store.commit('updateCurrentTime', parseInt(document.getElementById('music').currentTime))
+        this.$store.commit('updateDuration', parseInt(document.getElementById('music').duration))
       },
-      playContinue: function () {
-        if (this.playingState.playMode === 0) {
-          this.playNext()
-        } else {
-          this.play()
-        }
-      }
+      ...mapMutations([
+        'play', 'pause', 'playContinue'
+      ])
     },
     data () {
       return {
-        playing: true,
-        playingState: this.$parent.playingState,
         iconPlay: require('./assets/icon-play.png'),
         iconPause: require('./assets/icon-pause.png'),
-        playBar: {
-          dataUrl: 'http://stream.qqmusic.tc.qq.com/137192078.mp3',
-          name: '告白气球',
-          singer: '周杰伦',
-          coverImgUrl: 'http://y.gtimg.cn/music/photo_new/T002R300x300M000003RMaRI1iFoYd.jpg?max_age=2592000'
-        },
-        playList: [],
         playPageShow: false,
-        blurBgShow: false,
-        playingListShow: false
+        blurBgShow: false
+      }
+    },
+    computed: {
+      ...mapState([
+        'playing', 'song'
+      ])
+    },
+    watch: {
+      playing: function (val) {
+        if (val) {
+          document.getElementById('music').play()
+        } else {
+          document.getElementById('music').pause()
+        }
       }
     }
   }

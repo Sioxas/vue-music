@@ -64,8 +64,10 @@
   export default {
     methods: {
       play: function (index) {
-        this.$parent.playList = this.searchRes.song.itemlist
-        this.$parent.playThis(index)
+        this.$store.commit('setPlayList', {
+          index: index,
+          list: this.searchRes.song.itemlist
+        })
       }
     },
     watch: {
@@ -185,7 +187,7 @@
     align-items: center;
   }
 
-  .result-item .result-title{
+  .result-item .result-title {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;

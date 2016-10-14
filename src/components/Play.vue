@@ -4,33 +4,32 @@
       <div class="play-page-hide-btn" @touchend.prevent.stop="hidePlayPage" @click="hidePlayPage">
         <img src="../assets/icon-jiantou.png" alt="">
       </div>
-      <img v-bind:src="$parent.playBar.coverImgUrl"
+      <img v-bind:src="song.coverImgUrl"
            @touchstart="movestart"
-           @touchmove.prevent=""
            @touchend="moveend">
 
     </div>
     <div class="button-group">
-      <img class="blurbg" v-bind:src="$parent.playBar.coverImgUrl" v-if="$parent.blurBgShow">
+      <img class="blurbg" v-bind:src="song.coverImgUrl" v-if="$parent.blurBgShow">
       <div class="progress-bar-group">
         <div class="progress-bar">
           <div class="progress" v-bind:style="{width:indicatorPosition+'%'}"></div>
           <div class="indicater" v-bind:style="{left:indicatorPosition+'%'}"></div>
         </div>
         <div class="time-indicater">
-          <span>{{getCurrentTime}}</span>
-          <span>{{getDuration}}</span>
+          <span>{{currentTime}}</span>
+          <span>{{duration}}</span>
         </div>
       </div>
       <div class="music-info">
-        <p class="music-name">{{$parent.playBar.name}}</p>
-        <p class="music-author">{{$parent.playBar.singer}}</p>
+        <p class="music-name">{{song.name}}</p>
+        <p class="music-author">{{song.singer}}</p>
       </div>
       <div class="music-ctrl">
         <ul>
           <li><img src="../assets/icon-like.png"></li>
           <li><img src="../assets/icon-shangyiqu.png" @touchend.prevent="playFront" @click="playFront"></li>
-          <li><img v-bind:src="$parent.playing?$parent.iconPause:$parent.iconPlay"
+          <li><img v-bind:src="playing?$parent.iconPause:$parent.iconPlay"
                    @click="$parent.tapButton"
                    @touchend="$parent.tapButton"></li>
           <li><img src="../assets/icon-xiayiqu.png" @touchend.prevent="playNext" @click="playNext"></li>
@@ -60,16 +59,24 @@
         </ul>
       </div>
     </div>
-
+    <transition name="play-slide">
+      <playing-list v-if="playingListShow"></playing-list>
+    </transition>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import PlayingList from './PlayingList'
+  import {mapMutations, mapState, mapGetters} from 'vuex'
+
   export default {
+    components: {
+      PlayingList
+    },
     data () {
       return {
-        playingState: this.$parent.playingState,
-        clientY: 0
+        clientY: 0,
+        playingListShow: false
       }
     },
     methods: {
@@ -84,26 +91,25 @@
           this.hidePlayPage()
         }
       },
-      playFront: function () {
-        this.$parent.playThis((this.$parent.playBar.index - 1 + this.$parent.playList.length) % this.$parent.playList.length)
-      },
-      playNext: function () {
-        this.$parent.playThis((this.$parent.playBar.index + 1) % this.$parent.playList.length)
-      },
       showPlayList: function () {
-        this.$parent.playingListShow = true
-      }
+        this.playingListShow = true
+      },
+      ...mapMutations([
+        'play', 'pause', 'playFront', 'playNext'
+      ])
     },
     computed: {
-      getCurrentTime: function () {
-        return parseInt(this.playingState.currentTime / 60) + ':' + (Array(2).join(0) + (this.playingState.currentTime % 60)).slice(-2)
-      },
-      getDuration: function () {
-        return parseInt(this.playingState.duration / 60) + ':' + (Array(2).join(0) + (this.playingState.duration % 60)).slice(-2)
-      },
-      indicatorPosition: function () {
-        return this.playingState.currentTime / this.playingState.duration * 100
-      }
+      ...mapState([
+        'playing', 'song'
+      ]),
+      ...mapGetters([
+        'currentTime', 'duration'
+      ]),
+      ...mapState({
+        indicatorPosition (state) {
+          return state.currentTime / state.duration * 100
+        }
+      })
     }
   }
 </script>
