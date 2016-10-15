@@ -1,16 +1,19 @@
 <template>
+
   <div id="play" class="music-play-page">
+    <transition name="play-slide">
+      <playing-list v-if="playingListShow"></playing-list>
+    </transition>
     <div class="music-album">
       <div class="play-page-hide-btn" @touchend.prevent.stop="hidePlayPage" @click="hidePlayPage">
         <img src="../assets/icon-jiantou.png" alt="">
       </div>
-      <img v-bind:src="song.coverImgUrl"
+      <img v-bind:src="coverImgUrl"
            @touchstart="movestart"
            @touchend="moveend">
-
     </div>
     <div class="button-group">
-      <img class="blurbg" v-bind:src="song.coverImgUrl" v-if="$parent.blurBgShow">
+      <img class="blurbg" v-bind:src="coverImgUrl" v-if="$parent.blurBgShow">
       <div class="progress-bar-group">
         <div class="progress-bar">
           <div class="progress" v-bind:style="{width:indicatorPosition+'%'}"></div>
@@ -59,9 +62,7 @@
         </ul>
       </div>
     </div>
-    <transition name="play-slide">
-      <playing-list v-if="playingListShow"></playing-list>
-    </transition>
+
   </div>
 </template>
 
@@ -100,7 +101,7 @@
     },
     computed: {
       ...mapState([
-        'playing', 'song'
+        'playing', 'song', 'coverImgUrl'
       ]),
       ...mapGetters([
         'currentTime', 'duration'

@@ -28,7 +28,7 @@
       showCancel: Boolean,
       cancelText: {
         type: String,
-        default: 'cancel'
+        default: '取消'
       },
       menus: {
         type: Object,

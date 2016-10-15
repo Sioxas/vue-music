@@ -15,17 +15,18 @@ const store = new Vuex.Store({
     duration: 0,
     playMode: SEQUENTIAL,
     index: 0,
+    coverImgUrl: 'http://y.gtimg.cn/music/photo_new/T002R300x300M000003RMaRI1iFoYd.jpg?max_age=2592000',
     song: {
-      dataUrl: 'http://stream.qqmusic.tc.qq.com/137192078.mp3',
+      id: '107192078',
+      mid: '003OUlho2HcRHC',
       name: '告白气球',
-      singer: '周杰伦',
-      coverImgUrl: 'http://y.gtimg.cn/music/photo_new/T002R300x300M000003RMaRI1iFoYd.jpg?max_age=2592000'
+      singer: '周杰伦'
     },
     playList: [{
-      dataUrl: 'http://stream.qqmusic.tc.qq.com/137192078.mp3',
+      id: '107192078',
+      mid: '003OUlho2HcRHC',
       name: '告白气球',
-      singer: '周杰伦',
-      coverImgUrl: 'http://y.gtimg.cn/music/photo_new/T002R300x300M000003RMaRI1iFoYd.jpg?max_age=2592000'
+      singer: '周杰伦'
     }]
   },
   mutations: {

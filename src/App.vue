@@ -10,12 +10,12 @@
     <transition name="bar-slide">
       <div id="play-bar" v-show="!playPageShow">
         <audio id="music"
-               v-bind:src="song.dataUrl"
+               v-bind:src="dataUrl"
                autoplay="autoplay"
                @timeupdate="updateTime"
                v-on:ended="playContinue"></audio>
         <div class="play-bar-image-container" @touchstart="showPlayPage" @click="showPlayPage">
-          <img class="play-bar-image" v-bind:src="song.coverImgUrl">
+          <img class="play-bar-image" v-bind:src="coverImgUrl">
         </div>
         <p class="play-bar-text" @touchstart="showPlayPage" @click="showPlayPage">{{song.name}}</p>
         <img class="play-bar-button"
@@ -73,8 +73,13 @@
       }
     },
     computed: {
+      ...mapState({
+        dataUrl (state) {
+          return 'http://stream.qqmusic.tc.qq.com/' + state.song.id + '.mp3'
+        }
+      }),
       ...mapState([
-        'playing', 'song'
+        'playing', 'song', 'coverImgUrl'
       ])
     },
     watch: {
@@ -84,6 +89,16 @@
         } else {
           document.getElementById('music').pause()
         }
+      },
+      song: function (song) {
+        this.$http.jsonp('http://120.27.93.97/weappserver/get_music_image.php', {
+          params: {
+            mid: song.mid
+          },
+          jsonp: 'callback'
+        }).then((response) => {
+          this.$store.state['coverImgUrl'] = response.data.url
+        })
       }
     }
   }
