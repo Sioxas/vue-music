@@ -1,5 +1,6 @@
 <template>
   <div class="album" :class="{'album_slide_toggle':show}">
+
     <div class="header play-list-page-header">
       <div class="back-button" @touchend.prevent="hideAlbum" @click="hideAlbum">
         <div class="back-icon">
@@ -95,14 +96,21 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  .m-list{
+    background: rgba(255, 255, 255, 0.8);
+  }
   .m-list ul {
     list-style: none;
   }
 
   .m-list .list-item {
-    margin-right: 10px;
+    /*margin-right: 10px;*/
+    padding-left: 15px;
+    padding-right: 10px;
     height: 40px;
-    padding: 5px 0;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background: rgba(255, 255, 255, 0.8);
   }
 
   .m-list .list-item .music-photo {
@@ -170,7 +178,7 @@
 
   .album {
     top: 0;
-    position: fixed;
+    position: absolute;
     width: 100%;
     height: 100%;
     transform: translate(100%, 0);
@@ -179,7 +187,7 @@
   }
 
   .album_slide_toggle {
-    transform: translate(0, 0);
+    transform: none;
   }
 
   .header {
@@ -225,11 +233,11 @@
   }
 
   .play-list-page {
-    padding-left: 15px;
+    /*padding-left: 15px;*/
     margin-top: 50px;
     margin-bottom: 75px;
     z-index: 0;
-    background: rgba(255, 255, 255, 0.8);
+    /*background: rgba(255, 255, 255, 0.8);*/
   }
 
   .play-list-page-header {
@@ -240,6 +248,8 @@
     height: 110px;
     position: relative;
     padding-bottom: 10px;
+    background: rgba(255, 255, 255, 0.8);
+    padding-left: 15px;
   }
 
   .play-list-page .play-list-info .play-list-photo {
@@ -308,12 +318,12 @@
 
   }
 
-  .play-list-page .blurbg {
+  .blurbg {
     top: 0px;
     left: 0;
     position: absolute;
     width: 100%;
-    z-index: -1;
+    z-index: 0;
     display: block;
     -webkit-filter: blur(30px);
     -moz-filter: blur(30px);
