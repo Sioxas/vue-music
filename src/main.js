@@ -30,6 +30,10 @@ const store = new Vuex.Store({
     }]
   },
   mutations: {
+    playIndex (state, index) {
+      state.index = index
+      state.song = state.playList[index]
+    },
     setPlayList (state, playList) {
       state.playList = playList.list
       state.index = playList.index

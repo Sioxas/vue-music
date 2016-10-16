@@ -8,7 +8,7 @@
     <div class="m-list">
       <ul>
         <li class="border-1px border-1px-after list-item" v-for="(item,num) in playList">
-          <div class="music-info">
+          <div class="music-info" @click="play(num)">
             <p class="music-name">{{item.name}}</p>
             <p class="music-author">-{{item.singer}}</p>
             <img class="music-playing" src="./../assets/icon-playing.svg" alt="正在播放"
@@ -39,12 +39,15 @@
       }
     },
     methods: {
+      play: function (index) {
+        this.$store.commit('playIndex', index)
+      },
       hidePlayList: function () {
         this.$parent.playingListShow = false
       },
       showMenu: function (num) {
         this.menus = {
-          'title.noop': this.playList[num].name + '<br/><span style="color:#666;font-size:12px;">' + this.playList[num].name + '</span>',
+          'title.noop': this.playList[num].name + '<br/><span style="color:#666;font-size:12px;">' + this.playList[num].singer + '</span>',
           delete: '删除'
         }
         this.menuShow = true
@@ -98,11 +101,13 @@
 
   .tittle .tittle-button {
     margin-right: 10px;
+    cursor: pointer;
   }
 
   .tittle img {
     width: 25px;
     display: inline-block;
+    cursor: pointer;
   }
 
   .tittle p {
@@ -129,6 +134,7 @@
     flex-direction: row;
     flex-grow: 1;
     align-items: center;
+    cursor: pointer;
   }
 
   .m-list .list-item .music-info .music-name {

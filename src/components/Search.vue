@@ -1,5 +1,6 @@
 <template>
   <div id="search">
+    <actionsheet :show="menuShow" :menus="menus" @on-click-menu="click" show-cancel></actionsheet>
     <div class="search">
       <div class="search-input">
         <img src="./../assets/icon-search.png" alt="搜索">
@@ -12,9 +13,12 @@
           <img class="group-img" src="./../assets/icon-music.png">
           <p class="group-p">单曲</p>
         </div>
-        <div class="result-item" v-for="(item, index) in searchRes.song.itemlist" v-on:click="play(index)">
-          <p class="result-title">{{item.name}}</p>
-          <p class="result-author">-{{item.singer}}</p>
+        <div class="result-item" v-for="(item, index) in searchRes.song.itemlist">
+          <p class="result-title" @click="play(index)">{{item.name}}</p>
+          <p class="result-author" @click="play(index)">-{{item.singer}}</p>
+          <div class="action-button" @touchend.prevent="showMenu(index)" @click="showMenu(index)">
+            <img src="./../assets/icon-...black.png">
+          </div>
         </div>
 
       </div>
@@ -24,7 +28,7 @@
           <img class="group-img" src="./../assets/icon-album.png">
           <p class="group-p">专辑</p>
         </div>
-        <div class="album-item" v-for="item in searchRes.album.itemlist">
+        <div class="album-item" v-for="item in searchRes.album.itemlist" @click="showAlbum(item.mid)">
           <img class="album-img" v-bind:src="item.pic">
           <div class="album-info">
             <p class="album-name">{{item.name}}</p>
@@ -57,17 +61,59 @@
         </div>
       </div>
     </div>
+    <album :show="isAlbumShow" @hideAlbum="hideAlbum" :mid="mid"></album>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import Actionsheet from './../lib/components/Actionsheet'
+  import Album from './Album'
   export default {
+    components: {
+      Actionsheet, Album
+    },
     methods: {
       play: function (index) {
         this.$store.commit('setPlayList', {
           index: index,
           list: this.searchRes.song.itemlist
         })
+      },
+      showMenu: function (num) {
+        this.menus = {
+          'title.noop': this.searchRes.song.itemlist[num].name + '<br/><span style="color:#666;font-size:12px;">' + this.searchRes.song.itemlist[num].singer + '</span>',
+          playAsNext: '下一首播放',
+          addToPlayList: '添加到播放列表'
+        }
+        this.menuShow = true
+        this.menuedIndex = num
+      },
+      hideMenu: function () {
+        this.menuShow = false
+      },
+      showAlbum: function (mid) {
+        this.isAlbumShow = true
+        this.mid = mid
+      },
+      hideAlbum: function () {
+        this.isAlbumShow = false
+      },
+      click (key) {
+        switch (key) {
+          case 'cancel':
+            this.hideMenu()
+            break
+          case 'playAsNext':
+            this.$store.commit('addToPlayListAsNextPlay', this.searchRes.song.itemlist[this.menuedIndex])
+            this.hideMenu()
+            break
+          case 'addToPlayList':
+            this.$store.commit('addToPlayList', this.searchRes.song.itemlist[this.menuedIndex])
+            this.hideMenu()
+            break
+          default:
+            console.log(key)
+        }
       }
     },
     watch: {
@@ -100,14 +146,18 @@
     data () {
       return {
         key: '',
-        searchRes: {}
+        searchRes: {},
+        menuShow: false,
+        menuedIndex: 0,
+        menus: {},
+        isAlbumShow: false,
+        mid: 0
       }
     }
   }
 </script>
 
 <style scoped>
-
 
   .search {
     width: 100%;
@@ -185,6 +235,7 @@
     padding-left: 10px;
     height: 40px;
     align-items: center;
+    cursor: pointer;
   }
 
   .result-item .result-title {
@@ -198,6 +249,7 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    flex-grow: 1;
   }
 
   .album-item {
@@ -277,6 +329,16 @@
     font-size: 12px;
     color: #929292;
     line-height: 20px;
+  }
+
+  .action-button {
+    width: 20px;
+    height: 20px;
+    padding: 10px;
+  }
+
+  .action-button img {
+    width: 20px;
   }
 
   @media screen and (min-width: 450px) {
