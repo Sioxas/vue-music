@@ -18,7 +18,7 @@
       <img class="blurbg " :src="albumImgUrl">
       <div class="play-list-info  border-1px border-1px-after">
         <div class="play-list-photo">
-          <div class="play-button" @click="playAll">
+          <div class="play-button" @click="play(0)">
             <img src="../assets/icon-play.png">
           </div>
           <img :src="albumImgUrl">
@@ -32,7 +32,7 @@
       <div class="m-list">
         <ul>
           <li class="border-1px border-1px-after list-item" v-for="(song,index) in album.list">
-            <div class="music-info">
+            <div class="music-info" @click="play(index)">
               <p class="music-name">{{song.songorig}}</p>
               <p class="music-author">
                 <span v-for="singer in song.singer">{{singer.name}}</span>
@@ -65,7 +65,22 @@
         this.$emit('hideAlbum')
         this.album = null
       },
-      playAll: function () {}
+      play: function (index) {
+        console.log(this.album)
+        var list = []
+        this.album.list.forEach(item => {
+          list.push({
+            id: item.songid,
+            mid: item.songmid,
+            name: item.songorig,
+            singer: item.singer
+          })
+        })
+        this.$store.commit('setPlayList', {
+          index: index,
+          list: list
+        })
+      }
     },
     computed: {
       albumImgUrl: function () {

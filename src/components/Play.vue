@@ -26,7 +26,7 @@
       </div>
       <div class="music-info">
         <p class="music-name">{{song.name}}</p>
-        <p class="music-author">{{song.singer}}</p>
+        <p class="music-author">{{song.singer | singer}}</p>
       </div>
       <div class="music-ctrl">
         <ul>
@@ -111,6 +111,19 @@
           return state.currentTime / state.duration * 100
         }
       })
+    },
+    filters: {
+      singer: val => {
+        if (typeof val === 'string') {
+          return val
+        } else if (val instanceof Array) {
+          var singer = ''
+          val.forEach(item => {
+            singer = singer + item.name + ' '
+          })
+          return singer
+        }
+      }
     }
   }
 </script>

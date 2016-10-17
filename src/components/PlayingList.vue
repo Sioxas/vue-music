@@ -10,7 +10,7 @@
         <li class="border-1px border-1px-after list-item" v-for="(item,num) in playList">
           <div class="music-info" @click="play(num)">
             <p class="music-name">{{item.name}}</p>
-            <p class="music-author">-{{item.singer}}</p>
+            <p class="music-author">-{{item.singer | singer}}</p>
             <img class="music-playing" src="./../assets/icon-playing.svg" alt="正在播放"
                  v-show="index==num">
           </div>
@@ -47,7 +47,7 @@
       },
       showMenu: function (num) {
         this.menus = {
-          'title.noop': this.playList[num].name + '<br/><span style="color:#666;font-size:12px;">' + this.playList[num].singer + '</span>',
+          'title.noop': this.playList[num].name + '<br/><span style="color:#666;font-size:12px;">' + this.getSingerStr(this.playList[num].singer) + '</span>',
           delete: '删除'
         }
         this.menuShow = true
@@ -55,6 +55,17 @@
       },
       hideMenu: function () {
         this.menuShow = false
+      },
+      getSingerStr: val => {
+        if (typeof val === 'string') {
+          return val
+        } else if (val instanceof Array) {
+          var singer = ''
+          val.forEach(item => {
+            singer = singer + item.name + ' '
+          })
+          return singer
+        }
       },
       click (key) {
         switch (key) {
@@ -74,6 +85,19 @@
       ...mapState([
         'playList', 'palyMode', 'index'
       ])
+    },
+    filters: {
+      singer: val => {
+        if (typeof val === 'string') {
+          return val
+        } else if (val instanceof Array) {
+          var singer = ''
+          val.forEach(item => {
+            singer = singer + item.name + ' '
+          })
+          return singer
+        }
+      }
     }
   }
 </script>
@@ -82,17 +106,21 @@
 <style scoped>
   #playing-list {
     z-index: 2;
-    position: fixed;
+    position: absolute;
     width: 100%;
+    min-height: 100%;
     background: #fff;
-    height: 100%;
   }
 
   .tittle {
+    position: fixed;
     height: 50px;
     display: flex;
     align-items: center;
-    padding-left: 10px;
+    background: #fff;
+    width: 100%;
+    max-width: 450px;
+    z-index: 3;
   }
 
   .tittle .tittle-text {
@@ -108,10 +136,15 @@
     width: 25px;
     display: inline-block;
     cursor: pointer;
+    padding-left: 10px;
   }
 
   .tittle p {
     padding-left: 5px;
+  }
+
+  .m-list {
+    margin-top: 50px;
   }
 
   .m-list ul {
