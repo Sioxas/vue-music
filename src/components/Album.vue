@@ -1,5 +1,5 @@
 <template>
-  <div class="album" :class="{'album_slide_toggle':show}">
+  <div class="album">
 
     <div class="header play-list-page-header">
       <div class="back-button" @touchend.prevent="hideAlbum" @click="hideAlbum">
@@ -18,7 +18,7 @@
       <img class="blurbg " :src="albumImgUrl">
       <div class="play-list-info  border-1px border-1px-after">
         <div class="play-list-photo">
-          <div class="play-button">
+          <div class="play-button" @click="playAll">
             <img src="../assets/icon-play.png">
           </div>
           <img :src="albumImgUrl">
@@ -33,8 +33,11 @@
         <ul>
           <li class="border-1px border-1px-after list-item" v-for="(song,index) in album.list">
             <div class="music-info">
-              <p class="music-name">{{song.songname}}</p>
-              <p class="music-author" v-for="singer in song.singer">{{singer.name}}</p>
+              <p class="music-name">{{song.songorig}}</p>
+              <p class="music-author">
+                <span v-for="singer in song.singer">{{singer.name}}</span>
+                <span>{{song.albumdesc}}</span>
+              </p>
             </div>
             <div class="action-button">
               <img src="../assets/icon-...black.png">
@@ -61,44 +64,44 @@
       hideAlbum: function () {
         this.$emit('hideAlbum')
         this.album = null
-      }
+      },
+      playAll: function () {}
     },
     computed: {
       albumImgUrl: function () {
         return 'http://y.gtimg.cn/music/photo_new/T002R300x300M000' + this.mid + '.jpg?max_age=2592000'
       }
     },
-    watch: {
-      mid: function (mid) {
-        this.$http.jsonp('http://c.y.qq.com/v8/fcg-bin/fcg_v8_album_info_cp.fcg', {
-          params: {
-            albummid: mid,
-            g_tk: 5381,
+    created: function () {
+      this.$http.jsonp('http://c.y.qq.com/v8/fcg-bin/fcg_v8_album_info_cp.fcg', {
+        params: {
+          albummid: this.mid,
+          g_tk: 5381,
 //        jsonpCallback:albuminfoCallback,
-            loginUin: 0,
-            hostUin: 0,
-            format: 'jsonp',
-            inCharset: 'utf8',
-            outCharset: 'utf-8',
-            notice: 0,
-            platform: 'yqq',
-            needNewCode: 0
-          },
-          jsonp: 'jsonpCallback'
-        }).then((response) => {
+          loginUin: 0,
+          hostUin: 0,
+          format: 'jsonp',
+          inCharset: 'utf8',
+          outCharset: 'utf-8',
+          notice: 0,
+          platform: 'yqq',
+          needNewCode: 0
+        },
+        jsonp: 'jsonpCallback'
+      }).then((response) => {
 //            console.log(response.data)
-          this.album = response.data.data
-        })
-      }
+        this.album = response.data.data
+      })
     }
   }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .m-list{
+  .m-list {
     background: rgba(255, 255, 255, 0.8);
   }
+
   .m-list ul {
     list-style: none;
   }
@@ -111,6 +114,8 @@
     padding-top: 5px;
     padding-bottom: 5px;
     background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    flex-direction: row;
   }
 
   .m-list .list-item .music-photo {
@@ -144,7 +149,9 @@
     height: 40px;
     overflow: hidden;
     width: 100%;
-    position: absolute;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
   }
 
   .m-list .list-item .music-info .music-name {
@@ -165,10 +172,13 @@
     overflow: hidden;
   }
 
+  .m-list .list-item .music-info .music-author span {
+    margin-right: 5px;
+  }
+
   .m-list .list-item .action-button {
     width: 20px;
     height: 20px;
-    float: right;
     padding: 10px 0;
   }
 
@@ -180,9 +190,10 @@
     top: 0;
     position: absolute;
     width: 100%;
+    max-width: 450px;
     height: 100%;
-    transform: translate(100%, 0);
-    transition: transform .3s;
+    /*transform: translate(100%, 0);*/
+    /*transition: transform .3s;*/
     background: #fff;
   }
 
@@ -192,6 +203,7 @@
 
   .header {
     width: 100%;
+    max-width: 450px;
     height: 50px;
     position: fixed;
     top: 0;
@@ -235,7 +247,7 @@
   .play-list-page {
     /*padding-left: 15px;*/
     margin-top: 50px;
-    margin-bottom: 75px;
+    margin-bottom: 50px;
     z-index: 0;
     /*background: rgba(255, 255, 255, 0.8);*/
   }

@@ -61,7 +61,9 @@
         </div>
       </div>
     </div>
-    <album :show="isAlbumShow" @hideAlbum="hideAlbum" :mid="mid"></album>
+    <transition name="page-slide">
+      <album @hideAlbum="hideAlbum" :mid="mid" v-if="isAlbumShow"></album>
+    </transition>
   </div>
 </template>
 
@@ -345,6 +347,18 @@
     .search {
       width: 450px;
     }
+  }
+
+  .page-slide-enter-active {
+    transition: all .3s ease;
+  }
+
+  .page-slide-leave-active {
+    transition: all .3s ease-out;
+  }
+
+  .page-slide-enter, .page-slide-leave-active {
+    margin-left: 100%;
   }
 
 
