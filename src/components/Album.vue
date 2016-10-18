@@ -24,8 +24,13 @@
           <img :src="albumImgUrl">
         </div>
         <div class="play-list-text">
-          <p class="play-list-name">{{album.name}}</p>
+          <p class="play-list-name">{{album.name}}
+            <span class="play-list-num">-{{album.singername}}</span>
+          </p>
           <p class="play-list-num">{{album.list.length}}首歌曲</p>
+          <p class="play-list-num">{{album.genre}}&nbsp;&nbsp;{{album.lan}}</p>
+          <p class="play-list-num">发行时间:{{album.aDate}}</p>
+          <p class="play-list-num">唱片公司:{{album.company}}</p>
         </div>
       </div>
 
@@ -39,7 +44,7 @@
                 <span>{{song.albumdesc}}</span>
               </p>
             </div>
-            <div class="action-button">
+            <div class="action-button" @touchend.prevent="showMenu(index)" @click="showMenu(index)">
               <img src="../assets/icon-...black.png">
             </div>
           </li>
@@ -48,18 +53,25 @@
       </div>
 
     </div>
+    <actionsheet :show="menuShow" :menus="menus" @on-click-menu="click" show-cancel></actionsheet>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import Actionsheet from './../lib/components/Actionsheet'
   export default {
-    props: ['show', 'mid'],
+    components: {
+      Actionsheet
+    },
+    props: ['mid'],
     data () {
       return {
-        album: null
+        album: null,
+        menuShow: false,
+        menuedIndex: 0,
+        menus: {}
       }
     },
-    components: {},
     methods: {
       hideAlbum: function () {
         this.$emit('hideAlbum')
@@ -80,6 +92,56 @@
           index: index,
           list: list
         })
+      },
+      showMenu: function (num) {
+        this.menus = {
+          'title.noop': this.album.list[num].songorig + '<br/><span style="color:#666;font-size:12px;">' + this.getSingerStr(this.album.list[num].singer) + '</span>',
+          playAsNext: '下一首播放',
+          addToPlayList: '添加到播放列表'
+        }
+        this.menuShow = true
+        this.menuedIndex = num
+      },
+      hideMenu: function () {
+        this.menuShow = false
+      },
+      click (key) {
+        switch (key) {
+          case 'cancel':
+            this.hideMenu()
+            break
+          case 'playAsNext':
+            this.$store.commit('addToPlayListAsNextPlay', {
+              id: this.album.list[this.menuedIndex].songid,
+              mid: this.album.list[this.menuedIndex].songmid,
+              name: this.album.list[this.menuedIndex].songorig,
+              singer: this.album.list[this.menuedIndex].singer
+            })
+            this.hideMenu()
+            break
+          case 'addToPlayList':
+            this.$store.commit('addToPlayList', {
+              id: this.album.list[this.menuedIndex].songid,
+              mid: this.album.list[this.menuedIndex].songmid,
+              name: this.album.list[this.menuedIndex].songorig,
+              singer: this.album.list[this.menuedIndex].singer
+            })
+            this.hideMenu()
+            break
+          default:
+            console.log(key)
+        }
+      },
+      getSingerStr: val => {
+        if (typeof val === 'string') {
+          return val
+        } else if (val instanceof Array) {
+          var singer = ''
+          val.forEach(item => {
+            singer = singer + item.name + ' '
+          })
+          return singer
+        }
       }
     },
     computed: {
@@ -277,16 +339,19 @@
     padding-bottom: 10px;
     background: rgba(255, 255, 255, 0.8);
     padding-left: 15px;
+    display: flex;
+    flex-direction: row;
   }
 
   .play-list-page .play-list-info .play-list-photo {
     position: relative;
     width: 110px;
-    float: left;
+    height: 110px;
   }
 
   .play-list-page .play-list-info .play-list-photo img {
-    width: 100%;
+    width: 110px;
+    height: 110px;
   }
 
   .play-list-page .play-list-info .play-list-photo .play-button {
@@ -302,13 +367,13 @@
 
   .play-list-page .play-list-info .play-list-photo .play-button img {
     width: 15px;
+    height: 15px;
     margin: 7.5px;
     margin-left: 9px;
   }
 
   .play-list-page .play-list-info .play-list-text {
     padding-left: 5px;
-    float: left;
   }
 
   .play-list-page .play-list-info .play-list-text .play-list-name {
