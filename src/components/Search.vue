@@ -42,7 +42,7 @@
           <img class="group-img" src="./../assets/icon-singer.png">
           <p class="group-p">歌手</p>
         </div>
-        <div class="singer-item" v-for="item in searchRes.singer.itemlist">
+        <div class="singer-item" v-for="item in searchRes.singer.itemlist" @click="showSinger(item.mid)">
           <img class="singer-img" v-bind:src="item.pic">
           <div class="singer-p">
             <p>{{item.name}}</p>
@@ -64,15 +64,32 @@
     <transition name="page-slide">
       <album @hideAlbum="hideAlbum" :mid="mid" v-if="isAlbumShow"></album>
     </transition>
+    <transition name="page-slide">
+      <singer @hideSinger="hideSinger" :singermid="singermid" v-if="isSingerShow"></singer>
+    </transition>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import Actionsheet from './../lib/components/Actionsheet'
   import Album from './Album'
+  import Singer from './Singer'
   export default {
     components: {
-      Actionsheet, Album
+      Actionsheet, Album, Singer
+    },
+    data () {
+      return {
+        key: '',
+        searchRes: {},
+        menuShow: false,
+        menuedIndex: 0,
+        menus: {},
+        isAlbumShow: false,
+        isSingerShow: false,
+        mid: 0,
+        singermid: 0
+      }
     },
     methods: {
       play: function (index) {
@@ -99,6 +116,13 @@
       },
       hideAlbum: function () {
         this.isAlbumShow = false
+      },
+      showSinger: function (singermid) {
+        this.isSingerShow = true
+        this.singermid = singermid
+      },
+      hideSinger: function () {
+        this.isSingerShow = false
       },
       click (key) {
         switch (key) {
@@ -143,17 +167,6 @@
           })
         },
         deep: true
-      }
-    },
-    data () {
-      return {
-        key: '',
-        searchRes: {},
-        menuShow: false,
-        menuedIndex: 0,
-        menus: {},
-        isAlbumShow: false,
-        mid: 0
       }
     }
   }

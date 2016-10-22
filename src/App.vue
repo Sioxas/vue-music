@@ -140,6 +140,7 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    z-index: 2;
   }
 
   .play-bar-image-container {
