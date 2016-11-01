@@ -112,7 +112,7 @@
 
   html {
     overflow-x: hidden;
-    background: #e7e7e7;
+    background: #EEEEEE;
   }
 
   body {
@@ -121,7 +121,7 @@
   }
 
   #app {
-    font-family: '微软雅黑', Source Sans Pro, Helvetica, sans-serif;
+    font-family: Arial, 微软雅黑,"Microsoft yahei", "Hiragino Sans GB", "冬青黑体简体中文 w3", STXihei, 华文细黑, SimSun, 宋体, Heiti, 黑体, sans-serif;
     width: 100%;
   }
 

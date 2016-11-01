@@ -137,6 +137,7 @@
     height: 100%;
     position: absolute;
     top: 0;
+    z-index: 5;
   }
 
   .music-play-page .music-album {

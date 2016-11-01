@@ -60,6 +60,7 @@
 
 <script type="text/ecmascript-6">
   import Actionsheet from './../lib/components/Actionsheet'
+
   export default {
     props: ['singermid'],
     data () {
@@ -69,7 +70,9 @@
         opacity: 0,
         menuShow: false,
         menuedIndex: 0,
-        menus: {}
+        menus: {},
+        list: ['介绍', '单曲', '专辑', 'MV'],
+        activeTabIndex: 0
       }
     },
     components: {
@@ -156,27 +159,30 @@
           var fixed = '00000' + this.singer.color.toString(16)
           return '#' + fixed.substr(fixed.length - 6)
         } else {
-          return '#fff'
+          return '#ffffff'
         }
       },
       imgurl: function () {
         return 'http://y.gtimg.cn/music/photo_new/T001R300x300M000' + this.singermid + '.jpg?max_age=2592000'
       },
       gradientcolor: function () {
-        return '-webkit-linear-gradient(top, rgba(255, 255, 255, 0), ' + this.color + ')'
+        return '-webkit-linear-gradient(top, rgba(' + this.r + ',' + this.g + ',' + this.b + ', 0), ' + this.color + ')'
       },
       isDark: function () {
-        var r = parseInt(this.color.slice(1, 3), 16)
-        var g = parseInt(this.color.slice(3, 5), 16)
-        var b = parseInt(this.color.slice(5, 7), 16)
-        var grayLevel = r * 0.299 + g * 0.587 + b * 0.114
+        var grayLevel = this.r * 0.299 + this.g * 0.587 + this.b * 0.114
         return (grayLevel < 192)
       },
       background: function () {
-        var r = parseInt(this.color.slice(1, 3), 16)
-        var g = parseInt(this.color.slice(3, 5), 16)
-        var b = parseInt(this.color.slice(5, 7), 16)
-        return 'rgba(' + r + ',' + g + ',' + b + ',' + this.opacity + ')'
+        return 'rgba(' + this.r + ',' + this.g + ',' + this.b + ',' + this.opacity + ')'
+      },
+      r: function () {
+        return parseInt(this.color.slice(1, 3), 16)
+      },
+      g: function () {
+        return parseInt(this.color.slice(3, 5), 16)
+      },
+      b: function () {
+        return parseInt(this.color.slice(5, 7), 16)
       }
 //      opacity: function () {
 //        if (document.getElementById('singer-header')) {
@@ -203,20 +209,13 @@
           needNewCode: 1,
           from: 'h5',
           _: new Date().getTime()
-//      jsonpCallback:ssonglist1477034287490
         },
         jsonp: 'jsonpCallback'
       }).then((response) => {
-//            console.log(response.data)
         this.singer = response.data.data
       })
       var that = this
       window.onscroll = function () {
-//        console.log(document.getElementById('singer').offsetTop)
-//        console.log(document.getElementById('singer').offsetParent)
-//        console.log(window.pageYOffset)
-//        that.scrollY = window.pageYOffset
-//        console.log(that.scrollY)
         if (document.getElementById('singer-header')) {
           that.opacity = window.pageYOffset / document.getElementById('singer-header').offsetHeight
         } else {
@@ -232,6 +231,11 @@
   * {
     margin: 0;
     padding: 0;
+  }
+
+  .tab-swiper {
+    background-color: #fff;
+    height: 100px;
   }
 
   /*border-1px 部分*/
@@ -287,7 +291,6 @@
   #singer {
     display: flex;
     flex-direction: column;
-    font-family: '微软雅黑';
     width: 100%;
     max-width: 450px;
     min-height: 100%;
@@ -317,6 +320,7 @@
     top: 0;
     height: 50px;
     width: 100%;
+    max-width: 450px;
     z-index: 2;
   }
 

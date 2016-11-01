@@ -17,7 +17,7 @@
   </div>
 </template>
 
-<script>
+<script type="text/ecmascript-6">
 import Swiper from './swiper'
 import { go } from '../../libs/router'
 

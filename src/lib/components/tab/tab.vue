@@ -5,7 +5,7 @@
   </div>
 </template>
 
-<script>
+<script type="text/ecmascript-6">
 import { parentMixin } from '../../mixins/multi-items'
 
 export default {
