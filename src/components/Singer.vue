@@ -1,5 +1,5 @@
 <template>
-  <div id="singer" @onscroll="scroll">
+  <div id="singer">
     <div class="singer-photo">
       <img :src="imgurl"
            alt="singerphoto">
@@ -83,9 +83,6 @@
         console.log('关闭')
         this.$emit('hideSinger')
 //        this.album = null
-      },
-      scroll: function (e) {
-        console.log('滚了')
       },
       play: function (index) {
         var list = []

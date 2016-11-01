@@ -7,6 +7,15 @@
         <input type="text" placeholder="搜索 歌曲/专辑/歌手" v-model="key">
       </div>
     </div>
+    <div class="hotkey" v-if="searchRes==null">
+      <ul>
+        <li v-for="(item,index) in hotkey" @click="search(item.k)">
+          <span class="hotkey-index">{{index+1}}</span>
+          <span class="hotkey-k">{{item.k}}</span>
+          <span class="hotkey-n">{{item.n | searchVol}}</span>
+        </li>
+      </ul>
+    </div>
     <div class="result" v-if="searchRes!=null">
       <div class="result-group" v-if="searchRes.song!=null">
         <div class="group">
@@ -81,7 +90,8 @@
     data () {
       return {
         key: '',
-        searchRes: {},
+        hotkey: null,
+        searchRes: null,
         menuShow: false,
         menuedIndex: 0,
         menus: {},
@@ -92,6 +102,9 @@
       }
     },
     methods: {
+      search: function (key) {
+        this.key = key
+      },
       play: function (index) {
         this.$store.commit('setPlayList', {
           index: index,
@@ -168,6 +181,29 @@
         },
         deep: true
       }
+    },
+    filters: {
+      searchVol: num=> {
+        return Math.round(num / 1000) / 10 + '万'
+      }
+    },
+    created: function () {
+      this.$http.jsonp('http://c.y.qq.com/splcloud/fcgi-bin/gethotkey.fcg', {
+        params: {
+          g_tk: 5381,
+          loginUin: 0,
+          hostUin: 0,
+          format: 'jsonp',
+          inCharset: 'utf8',
+          outCharset: 'utf-8',
+          notice: 0,
+          platform: 'yqq',
+          needNewCode: 0
+        },
+        jsonp: 'jsonpCallback'
+      }).then((response) => {
+        this.hotkey = response.data.data.hotkey.slice(0, 5)
+      })
     }
   }
 </script>
@@ -208,6 +244,37 @@
     font-size: medium;
     flex-grow: 1;
     border-radius: 5px;
+  }
+
+  .hotkey {
+    margin-top: 60px;
+    margin-bottom: 50px;
+    background: #eeeeee;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hotkey ul {
+    list-style: none;
+    background: #fff;
+  }
+
+  .hotkey ul li {
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+    cursor: pointer;
+  }
+
+  .hotkey ul li .hotkey-index {
+    padding-right: 10px;
+  }
+
+  .hotkey ul li .hotkey-k {
+    flex-grow: 1;
   }
 
   .result {
