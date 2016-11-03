@@ -4,10 +4,24 @@
     <div class="search">
       <div class="search-input">
         <img src="./../assets/icon-search.png" alt="搜索">
-        <input type="text" placeholder="搜索 歌曲/专辑/歌手" v-model="key">
+        <form @submit.prevent="search(key)">
+          <input type="text"
+                 placeholder="搜索 歌曲/专辑/歌手"
+                 v-model="key"
+                 @focus="focus()">
+        </form>
+      </div>
+      <div class="search-cancel"
+           :class="{ 'search-cancel-show' : searchShow }"
+           @touchend="searchCancel()"
+           @click="searchCancel()">
+        取消
       </div>
     </div>
-    <div class="hotkey" v-if="searchRes==null">
+    <div class="hotkey" v-if="searchRes==null&&searchShow">
+      <div class="search-history">
+        <div class="search-history-item" v-for="item in searchHistory" @click="search(item)">{{item}}</div>
+      </div>
       <ul>
         <li v-for="(item,index) in hotkey" @click="search(item.k)">
           <span class="hotkey-index">{{index+1}}</span>
@@ -16,7 +30,7 @@
         </li>
       </ul>
     </div>
-    <div class="result" v-if="searchRes!=null">
+    <div class="result" v-if="searchRes!=null&&searchShow">
       <div class="result-group" v-if="searchRes.song!=null">
         <div class="group">
           <img class="group-img" src="./../assets/icon-music.png">
@@ -92,6 +106,8 @@
         key: '',
         hotkey: null,
         searchRes: null,
+        searchHistory: [],
+        searchShow: false,
         menuShow: false,
         menuedIndex: 0,
         menus: {},
@@ -104,6 +120,34 @@
     methods: {
       search: function (key) {
         this.key = key
+        this.$http.jsonp('http://c.y.qq.com/splcloud/fcgi-bin/smartbox_new.fcg', {
+          params: {
+            is_xml: 0,
+            format: 'jsonp',
+            key: key,
+            g_tk: 5381,
+            loginUin: 0,
+            hostUin: 0,
+            inCharset: 'utf8',
+            outCharset: 'utf-8',
+            notice: 0,
+            platform: 'yqq',
+            needNewCode: 0
+          },
+          jsonp: 'jsonpCallback'
+        }).then((response) => {
+          this.searchRes = response.data.data
+          this.searchHistory.unshift(key)
+          localStorage.searchHistory = JSON.stringify(this.searchHistory)
+        })
+      },
+      focus: function () {
+        this.searchShow = true
+      },
+      searchCancel: function () {
+        this.searchShow = false
+        this.key = ''
+        this.searchRes = null
       },
       play: function (index) {
         this.$store.commit('setPlayList', {
@@ -155,39 +199,15 @@
         }
       }
     },
-    watch: {
-      'key': {
-        handler: function (key) {
-          this.$http.jsonp('http://c.y.qq.com/splcloud/fcgi-bin/smartbox_new.fcg', {
-            params: {
-              is_xml: 0,
-              format: 'jsonp',
-              key: key,
-              g_tk: 5381,
-//              jsonpCallback: 'SmartboxKeysCallbackmod',
-              loginUin: 0,
-              hostUin: 0,
-              inCharset: 'utf8',
-              outCharset: 'utf-8',
-              notice: 0,
-              platform: 'yqq',
-              needNewCode: 0
-            },
-            jsonp: 'jsonpCallback'
-          }).then((response) => {
-//            console.log(response.data)
-            this.searchRes = response.data.data
-          })
-        },
-        deep: true
-      }
-    },
     filters: {
       searchVol: num=> {
         return Math.round(num / 1000) / 10 + '万'
       }
     },
     created: function () {
+      if (localStorage.searchHistory) {
+        this.searchHistory = JSON.parse(localStorage.searchHistory)
+      }
       this.$http.jsonp('http://c.y.qq.com/splcloud/fcgi-bin/gethotkey.fcg', {
         params: {
           g_tk: 5381,
@@ -237,13 +257,29 @@
     margin: 0 5px;
   }
 
+  .search-input form,
   .search-input input {
+    width: 100%;
     height: 100%;
     border: none;
     background: #eee;
     font-size: medium;
     flex-grow: 1;
     border-radius: 5px;
+    outline: none;
+  }
+
+  .search-cancel {
+    height: 40px;
+    width: 0px;
+    margin: 10px auto;
+    line-height: 40px;
+    overflow: hidden;
+    transition: width 0.3s;
+  }
+
+  .search-cancel-show {
+    width: 55px;
   }
 
   .hotkey {
@@ -275,6 +311,20 @@
 
   .hotkey ul li .hotkey-k {
     flex-grow: 1;
+  }
+
+  .search-history {
+    display: flex;
+    flex-wrap: wrap;
+    background: #fff;
+    padding:0 10px;
+  }
+
+  .search-history .search-history-item {
+    margin: 5px;
+    padding: 0 3px;
+    border: 1px solid #000;
+    border-radius: 14px;
   }
 
   .result {
