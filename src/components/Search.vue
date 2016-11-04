@@ -137,6 +137,10 @@
           jsonp: 'jsonpCallback'
         }).then((response) => {
           this.searchRes = response.data.data
+          var index = this.searchHistory.indexOf(key)
+          if (index !== -1) {
+            this.searchHistory.splice(index, 1)
+          }
           this.searchHistory.unshift(key)
           localStorage.searchHistory = JSON.stringify(this.searchHistory)
         })
@@ -317,7 +321,8 @@
     display: flex;
     flex-wrap: wrap;
     background: #fff;
-    padding:0 10px;
+    padding: 0 10px;
+    max-height: 66px;
   }
 
   .search-history .search-history-item {
