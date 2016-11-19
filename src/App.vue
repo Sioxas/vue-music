@@ -75,7 +75,7 @@
     computed: {
       ...mapState({
         dataUrl (state) {
-          return 'http://stream.qqmusic.tc.qq.com/' + state.song.id + '.mp3'
+          return 'http://ws.stream.qqmusic.qq.com//' + state.song.id + '.m4a?fromtag=46'
         }
       }),
       ...mapState([
