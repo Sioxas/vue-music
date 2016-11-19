@@ -2,6 +2,10 @@
 
 > Vue 音乐搜索、播放 Demo [查看Demo](http://sioxas.github.io/)
 
+扫一扫体验
+
+![Demo](http://ww2.sinaimg.cn/large/6ee3e8b3gw1f9xjboxz2tj205i05fjrm.jpg)
+
 ## Build Setup
 
 ``` bash
