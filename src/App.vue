@@ -191,7 +191,8 @@
   }
 
   .play-slide-enter, .play-slide-leave-active {
-    margin-top: 100vh;
+    /*margin-top: 100vh;*/
+    transform:translateY(100vh);
   }
 
   .bar-slide-enter-active {

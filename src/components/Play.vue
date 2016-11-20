@@ -13,7 +13,7 @@
            @touchend="moveend">
     </div>
     <div class="button-group">
-      <img class="blurbg" v-bind:src="coverImgUrl" v-if="$parent.blurBgShow">
+      <img class="blurbg" v-bind:src="coverImgUrl">
       <div class="progress-bar-group">
         <div class="progress-bar">
           <div class="progress" v-bind:style="{width:indicatorPosition+'%'}"></div>

@@ -493,7 +493,8 @@
   }
 
   .page-slide-enter, .page-slide-leave-active {
-    margin-left: 100%;
+    /*margin-left: 100%;*/
+    transform: translateX(100%);
   }
 
 
