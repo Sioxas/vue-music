@@ -119,7 +119,7 @@
     align-items: center;
     background: #fff;
     width: 100%;
-    max-width: 450px;
+    max-width: 68vh;
     z-index: 3;
   }
 
@@ -202,9 +202,9 @@
     width: 20px;
   }
 
-  @media screen and (min-width: 450px) {
+  @media screen and (min-width: 68vh) {
     #playing-list {
-      width: 450px;
+      width: 68vh;
     }
   }
 

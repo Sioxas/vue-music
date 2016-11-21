@@ -207,14 +207,14 @@
     margin-bottom: -50px;
   }
 
-  @media screen and (min-width: 450px) {
+  @media screen and (min-width: 68vh) {
     body {
-      width: 450px;
+      width: 68vh;
       margin: 0 auto;
     }
 
     #play-bar {
-      width: 450px;
+      width: 68vh;
     }
   }
 

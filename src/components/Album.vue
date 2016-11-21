@@ -267,7 +267,7 @@
     top: 0;
     position: absolute;
     width: 100%;
-    max-width: 450px;
+    max-width: 68vh;
     height: 100%;
     /*transform: translate(100%, 0);*/
     /*transition: transform .3s;*/
@@ -280,7 +280,7 @@
 
   .header {
     width: 100%;
-    max-width: 450px;
+    max-width: 68vh;
     height: 50px;
     position: fixed;
     top: 0;

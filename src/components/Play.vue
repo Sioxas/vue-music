@@ -133,7 +133,7 @@
 
   .music-play-page {
     width: 100%;
-    max-width: 450px;
+    max-width: 68vh;
     height: 100%;
     position: absolute;
     top: 0;
@@ -143,7 +143,7 @@
   .music-play-page .music-album {
     width: 100%;
     height: 100vw;
-    max-height: 450px;
+    max-height: 68vh;
   }
 
   .music-play-page .music-album img {
@@ -365,16 +365,16 @@
     display: inline-block;
   }
 
-  @media screen and (min-width: 450px) {
+  @media screen and (min-width: 68vh) {
     .music-play-page .music-album {
-      height: 450px;
+      height: 68vh;
     }
 
     .music-play-page .button-group {
-      top: 450px;
-      width: 450px;
+      top: 68vh;
+      width: 68vh;
       margin: 0 auto;
-      margin-left: -225px;
+      margin-left: -34vh;
       left: 50%;
     }
   }

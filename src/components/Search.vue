@@ -479,9 +479,9 @@
     width: 20px;
   }
 
-  @media screen and (min-width: 450px) {
+  @media screen and (min-width: 68vh) {
     .search {
-      width: 450px;
+      width: 68vh;
     }
   }
 

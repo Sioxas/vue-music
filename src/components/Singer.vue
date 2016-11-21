@@ -289,7 +289,7 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 450px;
+    max-width: 68vh;
     min-height: 100%;
     overflow-x: hidden;
     position: absolute;
@@ -300,16 +300,16 @@
   .singer-photo {
     position: fixed;
     width: 100%;
-    max-width: 450px;
+    max-width: 68vh;
     height: 100vw;
-    max-height: 450px;
+    max-height: 68vh;
   }
 
   .singer-photo img {
     width: 100%;
-    max-width: 450px;
+    max-width: 68vh;
     height: 100vw;
-    max-height: 450px;
+    max-height: 68vh;
   }
 
   .header-bar {
@@ -317,7 +317,7 @@
     top: 0;
     height: 50px;
     width: 100%;
-    max-width: 450px;
+    max-width: 68vh;
     z-index: 2;
   }
 
@@ -346,9 +346,9 @@
 
   .header {
     width: 100%;
-    max-width: 450px;
+    max-width: 68vh;
     height: 100vw;
-    max-height: 450px;
+    max-height: 68vh;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
