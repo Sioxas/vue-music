@@ -148,11 +148,13 @@
       },
       focus: function () {
         this.searchShow = true
+        this.$emit('searchshow')
       },
       searchCancel: function () {
         this.searchShow = false
         this.key = ''
         this.searchRes = null
+        this.$emit('searchhide')
       },
       play: function (index) {
         this.$store.commit('setPlayList', {

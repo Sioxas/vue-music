@@ -1,8 +1,10 @@
 ﻿<template>
   <div id="app">
 
-    <search v-show="!blurBgShow"></search>
-
+    <search v-show="!blurBgShow"
+            @searchshow="rankshow=false"
+            @searchhide="rankshow=true"></search>
+    <rank v-show="rankshow&&!blurBgShow"></rank>
     <transition name="play-slide" v-on:after-enter="showBlurBg" v-on:before-leave="hideBlurBg">
       <play v-if="playPageShow"></play>
     </transition>
@@ -30,12 +32,14 @@
 <script type="text/ecmascript-6">
   import Search from './components/Search'
   import Play from './components/Play'
+  import Rank from './components/Rank'
   import {mapMutations, mapState} from 'vuex'
 
   export default {
     components: {
       Search,
-      Play
+      Play,
+      Rank
     },
     methods: {
       tapButton: function (event) {
@@ -69,13 +73,14 @@
         iconPlay: require('./assets/icon-play.png'),
         iconPause: require('./assets/icon-pause.png'),
         playPageShow: false,
-        blurBgShow: false
+        blurBgShow: false,
+        rankshow: true
       }
     },
     computed: {
       ...mapState({
         dataUrl (state) {
-          return 'http://ws.stream.qqmusic.qq.com//' + state.song.id + '.m4a?fromtag=46'
+          return 'http://ws.stream.qqmusic.qq.com/' + state.song.id + '.m4a?fromtag=46'
         }
       }),
       ...mapState([
@@ -121,7 +126,7 @@
   }
 
   #app {
-    font-family: Arial, 微软雅黑,"Microsoft yahei", "Hiragino Sans GB", "冬青黑体简体中文 w3", STXihei, 华文细黑, SimSun, 宋体, Heiti, 黑体, sans-serif;
+    font-family: Arial, 微软雅黑, "Microsoft yahei", "Hiragino Sans GB", "冬青黑体简体中文 w3", STXihei, 华文细黑, SimSun, 宋体, Heiti, 黑体, sans-serif;
     width: 100%;
   }
 
@@ -192,7 +197,7 @@
 
   .play-slide-enter, .play-slide-leave-active {
     /*margin-top: 100vh;*/
-    transform:translateY(100vh);
+    transform: translateY(100vh);
   }
 
   .bar-slide-enter-active {
