@@ -71,13 +71,11 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .rank {
+
+  .rank ul {
     margin-top: 60px;
     padding: 10px;
     margin-bottom: 50px;
-  }
-
-  .rank ul {
     display: flex;
     flex-direction: column;
     list-style: none;
@@ -105,6 +103,7 @@
     height: 100px;
     border-bottom-left-radius: 5px;
     border-top-left-radius: 5px;
+    z-index: 0;
   }
 
   .rank-item .rank-media .listen-count {
@@ -138,5 +137,18 @@
 
   .rank-item .rank-info .rank-singername {
     color: #8f8f8f;
+  }
+
+  .page-slide-enter-active {
+    transition: all .3s ease;
+  }
+
+  .page-slide-leave-active {
+    transition: all .3s ease-out;
+  }
+
+  .page-slide-enter, .page-slide-leave-active {
+    /*margin-left: 100%;*/
+    transform: translateX(100%);
   }
 </style>

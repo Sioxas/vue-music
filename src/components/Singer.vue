@@ -295,6 +295,7 @@
     position: absolute;
     top: 0;
     background: #fff;
+    z-index: 2;
   }
 
   .singer-photo {

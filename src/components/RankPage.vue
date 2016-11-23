@@ -20,7 +20,7 @@
       <div class="header-warp" :style="{background:gradientcolor}">
         <div class="singer-info" :class="{dark:isDark}">
           <h1 class="singer-name">{{topListData.topinfo.ListName}}</h1>
-          <p class="singer-fans">{{topListData.topinfo.listennum}}</p>
+          <p class="singer-fans">{{topListData.topinfo.listennum | listenCount}}</p>
         </div>
         <div class="play-button" @click="play(0)">
           <img src="../assets/icon-play.png">
@@ -30,6 +30,7 @@
     <div class="list" :style="{background:color}" v-if="topListData!=null">
       <ul>
         <li class="border-1px border-1px-after" v-for="(item,index) in topListData.songlist">
+          <div class="music-index" :class="{dark:isDark}">{{index+1}}</div>
           <div class="music-info" @click="play(index)">
             <div class="music-name" :class="{dark:isDark}">
               {{item.data.songorig}}
@@ -184,7 +185,7 @@
           tpl:3,
           page:'detail',
           type:'top',
-          topid:4,
+          topid:this.topid,
           _: new Date().getTime()
         },
         jsonp: 'jsonpCallback'
@@ -199,6 +200,11 @@
         } else {
           that.opacity = 0
         }
+      }
+    },
+    filters: {
+      listenCount: num=> {
+        return Math.round(num / 1000) / 10 + '万'
       }
     }
   }
@@ -276,6 +282,7 @@
     position: absolute;
     top: 0;
     background: #fff;
+    z-index: 2;
   }
 
   .singer-photo {
@@ -383,13 +390,19 @@
   }
 
   .list ul li {
-    width: 100%;
     display: flex;
     display: -webkit-flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     height: 60px;
+    margin-left:44px;
+  }
+
+  .list ul li .music-index{
+    margin-left: -50px;
+    width: 50px;
+    text-align: center;
   }
 
   .list ul li .music-info {

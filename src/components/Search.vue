@@ -245,6 +245,7 @@
     position: fixed;
     top: 0;
     background: #fff;
+    z-index: 1;
   }
 
   .search-input {

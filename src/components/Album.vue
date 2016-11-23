@@ -272,6 +272,7 @@
     /*transform: translate(100%, 0);*/
     /*transition: transform .3s;*/
     background: #fff;
+    z-index: 2;
   }
 
   .album_slide_toggle {
