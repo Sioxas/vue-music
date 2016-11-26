@@ -161,6 +161,7 @@
           index: index,
           list: this.searchRes.song.itemlist
         })
+        this.$store.commit('play', true)
       },
       showMenu: function (num) {
         this.menus = {
