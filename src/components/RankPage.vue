@@ -85,6 +85,7 @@
           index: index,
           list: list
         })
+        this.$store.commit('play')
       },
       showMenu: function (num) {
         this.menus = {
