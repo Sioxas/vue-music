@@ -173,7 +173,7 @@
       }
     },
     created: function () {
-      this.$store.dispatch('getRankSongs').then((response) => {
+      this.$store.dispatch('getRankSongs',this.topid).then((response) => {
         this.topListData = response.data
         console.log(this.topListData)
       })
