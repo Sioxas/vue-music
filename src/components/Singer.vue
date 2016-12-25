@@ -66,7 +66,6 @@
     data () {
       return {
         singer: null,
-//        scrollY: 0,
         opacity: 0,
         menuShow: false,
         menuedIndex: 0,
@@ -82,7 +81,6 @@
       hideSinger: function () {
         console.log('关闭')
         this.$emit('hideSinger')
-//        this.album = null
       },
       play: function (index) {
         var list = []
@@ -182,36 +180,12 @@
       b: function () {
         return parseInt(this.color.slice(5, 7), 16)
       }
-//      opacity: function () {
-//        if (document.getElementById('singer-header')) {
-//          return (this.scrollY / document.getElementById('singer-header').offsetHeight)
-//        } else {
-//          return 1
-//        }
-//      }
     },
     created: function () {
-      this.$http.jsonp('http://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_track_cp.fcg', {
-        params: {
-          order: 'listen',
-          begin: 0,
-          num: 8,
-          singermid: this.singermid,
-          g_tk: 5381,
-          uin: 0,
-          format: 'jsonp',
-          inCharset: 'utf-8',
-          outCharset: 'utf-8',
-          notice: 0,
-          platform: 'h5page',
-          needNewCode: 1,
-          from: 'h5',
-          _: new Date().getTime()
-        },
-        jsonp: 'jsonpCallback'
-      }).then((response) => {
+      this.$store.dispatch('getSingerInfo',this.singermid).then((response) => {
         this.singer = response.data.data
       })
+
       var that = this
       window.onscroll = function () {
         if (document.getElementById('singer-header')) {

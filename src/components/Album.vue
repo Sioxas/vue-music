@@ -155,7 +155,6 @@
         params: {
           albummid: this.mid,
           g_tk: 5381,
-//        jsonpCallback:albuminfoCallback,
           loginUin: 0,
           hostUin: 0,
           format: 'jsonp',

@@ -100,16 +100,16 @@
       ])
     },
     computed: {
-      ...mapState([
-        'playing', 'song', 'coverImgUrl'
-      ]),
       ...mapGetters([
         'currentTime', 'duration'
       ]),
       ...mapState({
         indicatorPosition (state) {
-          return state.currentTime / state.duration * 100
-        }
+          return state.PlayService.currentTime / state.PlayService.duration * 100
+        },
+        playing: state => state.PlayService.playing,
+        song: state => state.PlayService.song,
+        coverImgUrl: state => state.PlayService.coverImgUrl
       })
     },
     filters: {

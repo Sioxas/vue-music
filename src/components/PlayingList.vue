@@ -82,9 +82,11 @@
       }
     },
     computed: {
-      ...mapState([
-        'playList', 'palyMode', 'index'
-      ])
+      ...mapState({
+        playList: state=>state.PlayService.playList,
+        palyMode: state=>state.PlayService.palyMode,
+        index: state=>state.PlayService.index
+      })
     },
     filters: {
       singer: val => {

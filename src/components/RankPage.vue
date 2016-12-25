@@ -173,27 +173,11 @@
       }
     },
     created: function () {
-      this.$http.jsonp('http://c.y.qq.com/v8/fcg-bin/fcg_v8_toplist_cp.fcg', {
-        params: {
-          g_tk:5381,
-          uin:0,
-          format:'json',
-          inCharset:'utf-8',
-          outCharset:'utf-8',
-          notice:0,
-          platform:'h5',
-          needNewCode:1,
-          tpl:3,
-          page:'detail',
-          type:'top',
-          topid:this.topid,
-          _: new Date().getTime()
-        },
-        jsonp: 'jsonpCallback'
-      }).then((response) => {
+      this.$store.dispatch('getRankSongs').then((response) => {
         this.topListData = response.data
         console.log(this.topListData)
       })
+
       var that = this
       window.onscroll = function () {
         if (document.getElementById('singer-header')) {

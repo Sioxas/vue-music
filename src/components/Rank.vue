@@ -43,21 +43,7 @@
       }
     },
     created: function () {
-      this.$http.jsonp('http://c.y.qq.com/v8/fcg-bin/fcg_myqq_toplist.fcg', {
-        params: {
-          format: 'jsonp',
-          g_tk: 5381,
-          uin: 0,
-          format: 'jsonp',
-          inCharset: 'utf-8',
-          outCharset: 'utf-8',
-          notice: 0,
-          platform: 'h5',
-          needNewCode: 1,
-          _: new Date().getTime()
-        },
-        jsonp: 'jsonpCallback'
-      }).then((response) => {
+      this.$store.dispatch('getRankList').then((response) => {
         this.topList = response.data.data.topList
       })
     },

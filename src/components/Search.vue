@@ -120,29 +120,14 @@
     methods: {
       search: function (key) {
         this.key = key
-        this.$http.jsonp('http://c.y.qq.com/splcloud/fcgi-bin/smartbox_new.fcg', {
-          params: {
-            is_xml: 0,
-            format: 'jsonp',
-            key: key,
-            g_tk: 5381,
-            loginUin: 0,
-            hostUin: 0,
-            inCharset: 'utf8',
-            outCharset: 'utf-8',
-            notice: 0,
-            platform: 'yqq',
-            needNewCode: 0
-          },
-          jsonp: 'jsonpCallback'
-        }).then((response) => {
+        this.$store.dispatch('search', key).then((response) => {
           this.searchRes = response.data.data
           var index = this.searchHistory.indexOf(key)
           if (index !== -1) {
             this.searchHistory.splice(index, 1)
           }
           this.searchHistory.unshift(key)
-          this.searchHistory = this.searchHistory.slice(0,10)
+          this.searchHistory = this.searchHistory.slice(0, 10)
           localStorage.searchHistory = JSON.stringify(this.searchHistory)
         })
       },
@@ -215,20 +200,7 @@
       if (localStorage.searchHistory) {
         this.searchHistory = JSON.parse(localStorage.searchHistory)
       }
-      this.$http.jsonp('http://c.y.qq.com/splcloud/fcgi-bin/gethotkey.fcg', {
-        params: {
-          g_tk: 5381,
-          loginUin: 0,
-          hostUin: 0,
-          format: 'jsonp',
-          inCharset: 'utf8',
-          outCharset: 'utf-8',
-          notice: 0,
-          platform: 'yqq',
-          needNewCode: 0
-        },
-        jsonp: 'jsonpCallback'
-      }).then((response) => {
+      this.$store.dispatch('getHotKey').then((response) => {
         this.hotkey = response.data.data.hotkey.slice(0, 5)
       })
     }

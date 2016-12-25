@@ -80,12 +80,12 @@
     computed: {
       ...mapState({
         dataUrl (state) {
-          return 'http://ws.stream.qqmusic.qq.com/' + state.song.id + '.m4a?fromtag=46'
-        }
-      }),
-      ...mapState([
-        'playing', 'song', 'coverImgUrl'
-      ])
+          return 'http://ws.stream.qqmusic.qq.com/' + state.PlayService.song.id + '.m4a?fromtag=46'
+        },
+        playing : state => state.PlayService.playing,
+        song : state => state.PlayService.song,
+        coverImgUrl : state => state.PlayService.coverImgUrl
+      })
     },
     watch: {
       playing: function (val) {
@@ -102,7 +102,7 @@
           },
           jsonp: 'callback'
         }).then((response) => {
-          this.$store.state['coverImgUrl'] = response.data.url
+          this.$store.state.PlayService.coverImgUrl = response.data.url
         })
       }
     }
