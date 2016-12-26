@@ -20,7 +20,8 @@ export default {
         topid: id,
         _: new Date().getTime()
       }
-    }
+    },
+    jsonp: 'jsonpCallback'
   },
   rank_list: {
     url: 'http://c.y.qq.com/v8/fcg-bin/fcg_myqq_toplist.fcg',
@@ -36,7 +37,8 @@ export default {
         needNewCode: 1,
         _: new Date().getTime()
       }
-    }
+    },
+    jsonp: 'jsonpCallback'
   },
   album: {
     url: 'http://c.y.qq.com/v8/fcg-bin/fcg_v8_album_info_cp.fcg',
@@ -53,7 +55,8 @@ export default {
         platform: 'yqq',
         needNewCode: 0
       }
-    }
+    },
+    jsonp: 'jsonpCallback'
   },
   singer_info: {
     url: 'http://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_track_cp.fcg',
@@ -74,7 +77,8 @@ export default {
         from: 'h5',
         _: new Date().getTime()
       }
-    }
+    },
+    jsonp: 'jsonpCallback'
   },
   search: {
     url: 'http://c.y.qq.com/splcloud/fcgi-bin/smartbox_new.fcg',
@@ -92,7 +96,8 @@ export default {
         platform: 'yqq',
         needNewCode: 0
       }
-    }
+    },
+    jsonp: 'jsonpCallback'
   },
   hotkey: {
     url: 'http://c.y.qq.com/splcloud/fcgi-bin/gethotkey.fcg',
@@ -108,6 +113,35 @@ export default {
         platform: 'yqq',
         needNewCode: 0
       }
-    }
+    },
+    jsonp: 'jsonpCallback'
   },
+  home_page_data: {
+    url: 'https://c.y.qq.com/musichall/fcgi-bin/fcg_yqqhomepagerecommend.fcg',
+    params: () => {
+      return {
+        g_tk: 5381,
+        uin: 0,
+        format: 'jsonp',
+        inCharset: 'utf-8',
+        outCharset: 'utf-8',
+        notice: 0,
+        platform: 'h5',
+        needNewCode: 1,
+        _: new Date().getTime()
+      }
+    },
+    jsonp: 'jsonpCallback'
+  },
+  lyric: {
+    url: 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric.fcg',
+    params: (id) => {
+      return {
+        nobase64:1,
+        musicid:id,
+        songtype:0
+      }
+    },
+    jsonp:'callback'
+  }
 }

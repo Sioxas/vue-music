@@ -1,8 +1,8 @@
 <template>
   <div id="playing-list">
     <div class="tittle border-1px border-1px-after ">
-      <img src="./../assets/icon-xunhuan.png" alt="顺序播放">
-      <p class="tittle-text">顺序播放 {{playList.length}}首歌曲</p>
+      <img :src="buttonImage" :alt="playModeName" @click="changePlayMode">
+      <p class="tittle-text">{{playModeName}} {{playList.length}}首歌曲</p>
       <p class="tittle-button" @touchend.prevent="hidePlayList" @click="hidePlayList">完成</p>
     </div>
     <div class="m-list">
@@ -26,7 +26,8 @@
 
 <script type="text/ecmascript-6">
   import Actionsheet from './../lib/components/Actionsheet'
-  import {mapState} from 'vuex'
+  import {mapState, mapMutations} from 'vuex'
+  import * as def from './../config/def'
   export default {
     components: {
       Actionsheet
@@ -79,12 +80,20 @@
           default:
             console.log(key)
         }
-      }
+      },
+
+      ...mapMutations(['changePlayMode'])
     },
     computed: {
+      buttonImage: function () {
+        return def.PLAY_MODE_IMG[this.playMode]
+      },
+      playModeName:function(){
+        return def.PLAY_MODE_NAME[this.playMode]
+      },
       ...mapState({
         playList: state=>state.PlayService.playList,
-        palyMode: state=>state.PlayService.palyMode,
+        playMode: state=>state.PlayService.playMode,
         index: state=>state.PlayService.index
       })
     },

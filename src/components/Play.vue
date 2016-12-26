@@ -43,8 +43,8 @@
       <div class="other-button">
         <ul>
           <li><img src="../assets/icon-share.png"></li>
-          <li><img src="../assets/icon-suiji.png"></li>
-          <li><img src="../assets/icon-xunhuan.png"></li>
+          <li><img src="../assets/icon-RANDOM.png"></li>
+          <li><img src="../assets/icon-SEQUENTIAL.png"></li>
           <li><img src="../assets/icon-...black.png"></li>
         </ul>
       </div>

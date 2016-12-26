@@ -10,7 +10,7 @@ function apiFactory(api) {
     api.url,
     {
       params: api.params(id),
-      jsonp: 'jsonpCallback'
+      jsonp: api.jsonp
     }
   )
 }
@@ -26,14 +26,17 @@ export default {
     getAlbum({}, id){
       return apiFactory(API.album)(id)
     },
-    getSingerInfo({},id){
+    getSingerInfo({}, id){
       return apiFactory(API.singer_info)(id)
     },
-    search({},key){
+    search({}, key){
       return apiFactory(API.search)(key)
     },
     getHotKey({}){
       return apiFactory(API.hotkey)()
+    },
+    getRecommands({}){
+      return apiFactory(API.home_page_data)()
     }
   }
 }

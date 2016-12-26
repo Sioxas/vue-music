@@ -58,6 +58,9 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
+  .rank{
+    width:100%;
+  }
   .rank ul {
     margin-top: 60px;
     padding: 10px;

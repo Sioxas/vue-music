@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "vue": "^2.0.1",
+    "vue-awesome-swiper": "^2.2.6",
     "vue-lazyload": "^1.0.0-rc7",
     "vue-resource": "^1.0.3",
     "vuex": "^2.0.0"
