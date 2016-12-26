@@ -3,7 +3,7 @@
     <ul>
       <li class="rank-item" v-for="item in topList" @click="showRank(item.id)">
         <div class="rank-media">
-          <img :src="item.picUrl" alt="">
+          <img v-lazy="item.picUrl" alt="">
           <span class="listen-count">{{item.listenCount | listenCount}}</span>
         </div>
         <div class="rank-info">

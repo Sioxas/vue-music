@@ -1,7 +1,7 @@
 <template>
   <div id="singer">
     <div class="singer-photo">
-      <img :src="imgurl"
+      <img v-lazy="imgurl"
            alt="singerphoto">
     </div>
     <div class="header-bar" :style="{background:background}" :class="{dark:isDark}">

@@ -1,28 +1,20 @@
 /**
  * Created by sioxa on 2016/12/25 0025.
  */
-import * as mode from '../config/def'
+import * as def from '../config/def'
 
 export default {
   state: {
-    playing: true,
+    playing: false,
     currentTime: 0,
     duration: 0,
-    playMode: mode.SEQUENTIAL,
+    playMode: def.SEQUENTIAL,
     index: 0,
-    coverImgUrl: 'http://y.gtimg.cn/music/photo_new/T002R300x300M000003RMaRI1iFoYd.jpg?max_age=2592000',
+    coverImgUrl: def.DEFAULT_IMG,
     song: {
-      id: '107192078',
-      mid: '003OUlho2HcRHC',
-      name: '告白气球',
-      singer: '周杰伦'
+      name: def.DEFAULT_SONG_NAME
     },
-    playList: [{
-      id: '107192078',
-      mid: '003OUlho2HcRHC',
-      name: '告白气球',
-      singer: '周杰伦'
-    }]
+    playList: []
   },
   mutations: {
     playIndex (state, index) {
@@ -38,21 +30,24 @@ export default {
       state.playList.push(item)
     },
     deleteFromPlayList (state, index) {
-      // state.playList.del(index)
       if (isNaN(index) || index >= state.playList.length) {
         return false
       }
       if (index === state.index) {
-        state.song = state.playList[state.index + 1]
+        if (state.index === 0 && state.playList.length === 1) {
+          state.song = {
+            name: def.DEFAULT_SONG_NAME,
+            singer: ''
+          }
+          state.coverImgUrl = def.DEFAULT_IMG
+        } else {
+          state.song = state.playList[state.index + 1]
+        }
       } else if (index < state.index) {
         state.index--
       }
-      for (var i = 0, n = 0; i < state.playList.length; i++) {
-        if (state.playList[i] !== state.playList[index]) {
-          state.playList[n++] = state.playList[i]
-        }
-      }
-      state.playList.length -= 1
+      state.playList.splice(index, 1)
+
     },
     addToPlayListAsNextPlay (state, item) {
       state.playList.splice(state.index + 1, 0, item)
@@ -79,13 +74,13 @@ export default {
     },
     playContinue (state) {
       switch (state.playMode) {
-        case mode.SINGLE:
+        case def.SINGLE:
           break
-        case mode.SEQUENTIAL:
+        case def.SEQUENTIAL:
           state.index = (state.index + 1) % state.playList.length
           state.song = state.playList[state.index]
           break
-        case mode.RANDOM:
+        case def.RANDOM:
           state.index = Math.floor(Math.random() * state.playList.length)
           state.song = state.playList[state.index]
           break

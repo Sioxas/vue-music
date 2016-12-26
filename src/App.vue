@@ -13,11 +13,10 @@
       <div id="play-bar" v-show="!playPageShow">
         <audio id="music"
                v-bind:src="dataUrl"
-               autoplay="autoplay"
                @timeupdate="updateTime"
                v-on:ended="playContinue"></audio>
         <div class="play-bar-image-container" @touchstart="showPlayPage" @click="showPlayPage">
-          <img class="play-bar-image" v-bind:src="coverImgUrl">
+          <img class="play-bar-image" v-lazy="coverImgUrl">
         </div>
         <p class="play-bar-text" @touchstart="showPlayPage" @click="showPlayPage">{{song.name}}</p>
         <img class="play-bar-button"
@@ -82,9 +81,9 @@
         dataUrl (state) {
           return 'http://ws.stream.qqmusic.qq.com/' + state.PlayService.song.id + '.m4a?fromtag=46'
         },
-        playing : state => state.PlayService.playing,
-        song : state => state.PlayService.song,
-        coverImgUrl : state => state.PlayService.coverImgUrl
+        playing: state => state.PlayService.playing,
+        song: state => state.PlayService.song,
+        coverImgUrl: state => state.PlayService.coverImgUrl
       })
     },
     watch: {
@@ -96,14 +95,17 @@
         }
       },
       song: function (song) {
-        this.$http.jsonp('http://120.27.93.97/weappserver/get_music_image.php', {
-          params: {
-            mid: song.mid
-          },
-          jsonp: 'callback'
-        }).then((response) => {
-          this.$store.state.PlayService.coverImgUrl = response.data.url
-        })
+        if (this.$store.state.PlayService.playList.length > 0) {
+          this.$http.jsonp('http://120.27.93.97/weappserver/get_music_image.php', {
+            params: {
+              mid: song.mid
+            },
+            jsonp: 'callback'
+          }).then((response) => {
+            this.$store.state.PlayService.coverImgUrl = response.data.url
+          })
+        }
+
       }
     }
   }
@@ -271,6 +273,43 @@
       -webkit-transform: scaleY(.5);
       transform: scaleY(.5);
     }
+  }
+
+  @-webkit-keyframes imgFadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes imgFadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  img[lazy=loaded] {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -webkit-animation-name: imgFadeIn;
+    animation-name: imgFadeIn;
+  }
+
+  img[lazy=error] {
+    border-radius: 2px;
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -webkit-animation-name: imgFadeIn;
+    animation-name: imgFadeIn;
   }
 
 

@@ -8,7 +8,7 @@
       <div class="play-page-hide-btn" @touchend.prevent.stop="hidePlayPage" @click="hidePlayPage">
         <img src="../assets/icon-jiantou.png" alt="">
       </div>
-      <img v-bind:src="coverImgUrl"
+      <img v-lazy="coverImgUrl"
            @touchstart="movestart"
            @touchend="moveend">
     </div>
@@ -39,20 +39,7 @@
           <li><img src="../assets/icon-list.png" @touchend.prevent="showPlayList" @click="showPlayList"></li>
         </ul>
       </div>
-      <div class="volue-bar-group">
-        <div class="volue-icon volue-left">
-          <img src="../assets/icon-volue-left.png">
-        </div>
-        <div class="volue-icon volue-right">
-          <img src="../assets/icon-volue-right.png">
-        </div>
-        <div class="volue-bar">
-          <div class="volue-line">
-            <div class="volue"></div>
-          </div>
-          <div class="value-indicater"></div>
-        </div>
-      </div>
+
       <div class="other-button">
         <ul>
           <li><img src="../assets/icon-share.png"></li>
@@ -179,7 +166,7 @@
   .music-play-page .button-group .music-ctrl,
   .music-play-page .button-group .volue-bar-group,
   .music-play-page .button-group .other-button {
-    height: 20%;
+    height: 25%;
     min-height: 35px;
   }
 
@@ -357,6 +344,7 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    z-index: 1;
   }
 
   .music-play-page .music-album .play-page-hide-btn img {

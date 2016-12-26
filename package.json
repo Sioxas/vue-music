@@ -1,9 +1,9 @@
 {
   "name": "vue-music",
-  "version": "1.0.0",
-  "description": "A Vue.js project",
+  "version": "1.0.1",
+  "description": "A mobile web player",
   "author": "Sioxas <sioxas@qq.com>",
-  "private": true,
+  "private": false,
   "scripts": {
     "dev": "node build/dev-server.js",
     "build": "node build/build.js",
@@ -11,8 +11,9 @@
   },
   "dependencies": {
     "vue": "^2.0.1",
-    "vuex": "^2.0.0",
-    "vue-resource": "^1.0.3"
+    "vue-lazyload": "^1.0.0-rc7",
+    "vue-resource": "^1.0.3",
+    "vuex": "^2.0.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.4.0",

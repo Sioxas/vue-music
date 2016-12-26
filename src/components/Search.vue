@@ -52,7 +52,7 @@
           <p class="group-p">专辑</p>
         </div>
         <div class="album-item" v-for="item in searchRes.album.itemlist" @click="showAlbum(item.mid)">
-          <img class="album-img" v-bind:src="item.pic">
+          <img class="album-img" v-lazy="item.pic">
           <div class="album-info">
             <p class="album-name">{{item.name}}</p>
             <p class="album-author">{{item.singer}}</p>
@@ -66,7 +66,7 @@
           <p class="group-p">歌手</p>
         </div>
         <div class="singer-item" v-for="item in searchRes.singer.itemlist" @click="showSinger(item.mid)">
-          <img class="singer-img" v-bind:src="item.pic">
+          <img class="singer-img" v-lazy="item.pic">
           <div class="singer-p">
             <p>{{item.name}}</p>
           </div>

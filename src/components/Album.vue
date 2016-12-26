@@ -15,13 +15,13 @@
     </div>
 
     <div class="play-list-page" v-if="album!=null">
-      <img class="blurbg " :src="albumImgUrl">
+      <img class="blurbg" :src="albumImgUrl">
       <div class="play-list-info  border-1px border-1px-after">
         <div class="play-list-photo">
           <div class="play-button" @click="play(0)">
             <img src="../assets/icon-play.png">
           </div>
-          <img :src="albumImgUrl">
+          <img v-lazy="albumImgUrl">
         </div>
         <div class="play-list-text">
           <p class="play-list-name">{{album.name}}
