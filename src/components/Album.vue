@@ -63,18 +63,18 @@
     components: {
       Actionsheet
     },
-    props: ['mid'],
     data () {
       return {
         album: null,
         menuShow: false,
         menuedIndex: 0,
-        menus: {}
+        menus: {},
+        mid: this.$route.params.id
       }
     },
     methods: {
       hideAlbum: function () {
-        this.$emit('hideAlbum')
+        this.$router.go(-1)
         this.album = null
       },
       play: function (index) {
@@ -151,24 +151,9 @@
       }
     },
     created: function () {
-      this.$http.jsonp('http://c.y.qq.com/v8/fcg-bin/fcg_v8_album_info_cp.fcg', {
-        params: {
-          albummid: this.mid,
-          g_tk: 5381,
-          loginUin: 0,
-          hostUin: 0,
-          format: 'jsonp',
-          inCharset: 'utf8',
-          outCharset: 'utf-8',
-          notice: 0,
-          platform: 'yqq',
-          needNewCode: 0
-        },
-        jsonp: 'jsonpCallback'
-      }).then((response) => {
-//            console.log(response.data)
+      this.$store.dispatch('getAlbum',this.mid).then((response) => {
         this.album = response.data.data
-      })
+    })
     }
   }
 </script>

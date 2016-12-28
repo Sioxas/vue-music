@@ -16,30 +16,21 @@
         </div>
       </li>
     </ul>
-    <transition name="page-slide">
-      <rank-page @hideRank="hideRank" :topid="topid" v-if="isRankShow"></rank-page>
-    </transition>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import RankPage from './RankPage'
   export default {
+    components: {RankPage},
     data () {
       return {
-        topList: null,
-        topid: null,
-        isRankShow: false,
+        topList: null
       }
     },
-    components: {RankPage},
     methods: {
-      showRank:function(id){
-        this.topid=id
-        this.isRankShow = true
-      },
-      hideRank: function () {
-        this.isRankShow = false
+      showRank: function (id) {
+        this.$router.push({name: 'rank', params: {id: id}})
       }
     },
     created: function () {
@@ -48,7 +39,7 @@
       })
     },
     filters: {
-      listenCount: num=> {
+      listenCount: num => {
         return Math.round(num / 1000) / 10 + '万'
       }
     }
@@ -58,9 +49,10 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
-  .rank{
-    width:100%;
+  .rank {
+    width: 100%;
   }
+
   .rank ul {
     margin-top: 60px;
     padding: 10px;
@@ -128,16 +120,4 @@
     color: #8f8f8f;
   }
 
-  .page-slide-enter-active {
-    transition: all .3s ease;
-  }
-
-  .page-slide-leave-active {
-    transition: all .3s ease-out;
-  }
-
-  .page-slide-enter, .page-slide-leave-active {
-    /*margin-left: 100%;*/
-    transform: translateX(100%);
-  }
 </style>

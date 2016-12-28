@@ -54,7 +54,6 @@
   import Actionsheet from './../lib/components/Actionsheet'
 
   export default {
-    props: ['topid'],
     data () {
       return {
         topListData: null,
@@ -62,6 +61,7 @@
         menuShow: false,
         menuedIndex: 0,
         menus: {},
+        topid:this.$route.params.id
       }
     },
     components: {
@@ -69,7 +69,7 @@
     },
     methods: {
       hideSinger: function () {
-        this.$emit('hideRank')
+        this.$router.go(-1)
       },
       play: function (index) {
         var list = []

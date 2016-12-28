@@ -4,6 +4,7 @@ import VueLazyload from 'vue-lazyload'
 
 import App from './App'
 import store from './store'
+import router from './router'
 
 Vue.use(VueResource)
 Vue.use(VueLazyload, {
@@ -17,5 +18,6 @@ Vue.use(VueLazyload, {
 new Vue({
   el: '#app',
   store,
+  router,
   render: h => h(App)
 })

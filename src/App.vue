@@ -1,5 +1,9 @@
 ﻿<template>
   <div id="app">
+    <transition name="page-slide">
+      <router-view></router-view>
+    </transition>
+
     <search v-show="!blurBgShow"
             @searchshow="rankshow=false"
             @searchhide="rankshow=true"></search>
@@ -204,6 +208,19 @@
     cursor: pointer;
   }
 
+  .page-slide-enter-active {
+    transition: all .3s ease;
+  }
+
+  .page-slide-leave-active {
+    transition: all .3s ease-out;
+  }
+
+  .page-slide-enter, .page-slide-leave-active {
+    /*margin-left: 100%;*/
+    transform: translateX(100%);
+  }
+
   .fade-enter-active {
     transition: all .3s ease;
   }
@@ -367,6 +384,7 @@
 
   .swiper-pagination-bullet-custom.swiper-pagination-bullet-active {
     color: #000;
+
   }
 
   .swiper-pagination{

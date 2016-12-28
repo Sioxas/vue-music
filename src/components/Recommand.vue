@@ -11,8 +11,8 @@
         <div class="swiper-pagination-white swiper-pagination-position" slot="pagination"></div>
       </swiper>
       <div class="hotlist">
-        <div class="list-tittle">
-          <p class="tittle-text">热门歌单</p>
+        <div class="list-title">
+          <p class="title-text">热门歌单</p>
         </div>
         <div class="list-content">
           <div class="list-item" v-for="item in songList">
@@ -22,6 +22,21 @@
             <div class="list-info">
               <p class="list-name">{{item.songListDesc}}</p>
               <p class="list-author">{{item.songListAuthor}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hotlist">
+        <div class="list-title">
+          <p class="title-text">电台</p>
+        </div>
+        <div class="list-content">
+          <div class="list-item" v-for="item in radioList">
+            <div class="list-img">
+              <img v-lazy="item.picUrl">
+            </div>
+            <div class="list-info">
+              <p class="list-name">{{item.Ftitle}}</p>
             </div>
           </div>
         </div>
@@ -93,14 +108,10 @@
   }
   .swiper-pagination-position{
     position: absolute;
-    bottom:10px;
     z-index: 1;
-    width:50px;
     display: flex;
     flex-direction: row;
     justify-content: center;
-    left:50%;
-    margin-left: -25px;
   }
 
   .hotlist{
@@ -111,7 +122,7 @@
     box-shadow: 0 0 10px #DDD;
   }
 
-  .hotlist .list-tittle{
+  .hotlist .list-title{
     height:50px;
     text-align: center;
     line-height: 50px;
@@ -137,7 +148,7 @@
   }
 
   .hotlist .list-content .list-item .list-info .list-name{
-
+    font-size:14px;
   }
 
   .hotlist .list-content .list-item .list-info .list-author{

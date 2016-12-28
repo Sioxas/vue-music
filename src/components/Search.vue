@@ -84,22 +84,14 @@
         </div>
       </div>
     </div>
-    <transition name="page-slide">
-      <album @hideAlbum="hideAlbum" :mid="mid" v-if="isAlbumShow"></album>
-    </transition>
-    <transition name="page-slide">
-      <singer @hideSinger="hideSinger" :singermid="singermid" v-if="isSingerShow"></singer>
-    </transition>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import Actionsheet from './../lib/components/Actionsheet'
-  import Album from './Album'
-  import Singer from './Singer'
   export default {
     components: {
-      Actionsheet, Album, Singer
+      Actionsheet
     },
     data () {
       return {
@@ -160,18 +152,10 @@
         this.menuShow = false
       },
       showAlbum: function (mid) {
-        this.isAlbumShow = true
-        this.mid = mid
-      },
-      hideAlbum: function () {
-        this.isAlbumShow = false
+        this.$router.push({name: 'album', params: {id: mid}})
       },
       showSinger: function (singermid) {
-        this.isSingerShow = true
-        this.singermid = singermid
-      },
-      hideSinger: function () {
-        this.isSingerShow = false
+        this.$router.push({name: 'singer', params: {id: singermid}})
       },
       click (key) {
         switch (key) {
@@ -460,18 +444,7 @@
     }
   }
 
-  .page-slide-enter-active {
-    transition: all .3s ease;
-  }
 
-  .page-slide-leave-active {
-    transition: all .3s ease-out;
-  }
-
-  .page-slide-enter, .page-slide-leave-active {
-    /*margin-left: 100%;*/
-    transform: translateX(100%);
-  }
 
 
 </style>

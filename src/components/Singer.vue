@@ -62,7 +62,6 @@
   import Actionsheet from './../lib/components/Actionsheet'
 
   export default {
-    props: ['singermid'],
     data () {
       return {
         singer: null,
@@ -71,7 +70,8 @@
         menuedIndex: 0,
         menus: {},
         list: ['介绍', '单曲', '专辑', 'MV'],
-        activeTabIndex: 0
+        activeTabIndex: 0,
+        singermid:this.$route.params.id
       }
     },
     components: {
@@ -79,8 +79,7 @@
     },
     methods: {
       hideSinger: function () {
-        console.log('关闭')
-        this.$emit('hideSinger')
+        this.$router.go(-1)
       },
       play: function (index) {
         var list = []
