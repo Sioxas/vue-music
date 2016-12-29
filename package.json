@@ -10,6 +10,7 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
+    "rxjs": "^5.0.2",
     "vue": "^2.0.1",
     "vue-awesome-swiper": "^2.2.6",
     "vue-lazyload": "^1.0.0-rc7",

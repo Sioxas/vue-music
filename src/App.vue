@@ -1,5 +1,6 @@
 ﻿<template>
   <div id="app">
+    <action-sheet></action-sheet>
     <transition name="page-slide">
       <router-view></router-view>
     </transition>
@@ -40,6 +41,7 @@
              @click="tapButton">
       </div>
     </transition>
+
   </div>
 </template>
 
@@ -48,6 +50,7 @@
   import Play from './components/Play'
   import Rank from './components/Rank'
   import Recommand from './components/Recommand'
+  import ActionSheet from './components/ActionSheet'
   import {mapMutations, mapState} from 'vuex'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
@@ -59,6 +62,7 @@
       Play,
       Rank,
       Recommand,
+      ActionSheet,
       swiper,
       swiperSlide
     },

@@ -1,6 +1,5 @@
 <template>
   <div id="search">
-    <actionsheet :show="menuShow" :menus="menus" @on-click-menu="click" show-cancel></actionsheet>
     <div class="search">
       <div class="search-input">
         <img src="./../assets/icon-search.png" alt="搜索">
@@ -88,11 +87,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import Actionsheet from './../lib/components/Actionsheet'
   export default {
-    components: {
-      Actionsheet
-    },
     data () {
       return {
         key: '',
@@ -140,45 +135,35 @@
         })
       },
       showMenu: function (num) {
-        this.menus = {
-          'title.noop': this.searchRes.song.itemlist[num].name + '<br/><span style="color:#666;font-size:12px;">' + this.searchRes.song.itemlist[num].singer + '</span>',
-          playAsNext: '下一首播放',
-          addToPlayList: '添加到播放列表'
-        }
-        this.menuShow = true
         this.menuedIndex = num
-      },
-      hideMenu: function () {
-        this.menuShow = false
+        let that = this
+        this.$store.dispatch('notifyActionSheet', {
+          menus: {
+            'title.noop': this.searchRes.song.itemlist[num].name + '<br/><span style="color:#666;font-size:12px;">' + this.searchRes.song.itemlist[num].singer + '</span>',
+            playAsNext: '下一首播放',
+            addToPlayList: '添加到播放列表'
+          },
+          handler: {
+            ['cancel'](){
+            },
+            ['playAsNext'](){
+              that.$store.commit('addToPlayListAsNextPlay', that.searchRes.song.itemlist[that.menuedIndex])
+            },
+            ['addToPlayList'](){
+              that.$store.commit('addToPlayList', that.searchRes.song.itemlist[that.menuedIndex])
+            }
+          }
+        })
       },
       showAlbum: function (mid) {
         this.$router.push({name: 'album', params: {id: mid}})
       },
       showSinger: function (singermid) {
         this.$router.push({name: 'singer', params: {id: singermid}})
-      },
-      click (key) {
-        switch (key) {
-          case 'cancel':
-            this.hideMenu()
-            break
-          case 'playAsNext':
-            this.$store.commit('addToPlayListAsNextPlay', this.searchRes.song.itemlist[this.menuedIndex])
-            this.hideMenu()
-            break
-          case 'addToPlayList':
-            this.$store.commit('addToPlayList', this.searchRes.song.itemlist[this.menuedIndex])
-            this.hideMenu()
-            break
-          default:
-            console.log(key)
-        }
       }
     },
     filters: {
-      searchVol: num=> {
-        return Math.round(num / 1000) / 10 + '万'
-      }
+      searchVol: num => Math.round(num / 1000) / 10 + '万'
     },
     created: function () {
       if (localStorage.searchHistory) {
@@ -443,8 +428,6 @@
       width: 68vh;
     }
   }
-
-
 
 
 </style>

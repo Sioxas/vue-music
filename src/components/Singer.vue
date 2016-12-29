@@ -54,35 +54,28 @@
         <p>{{singer.SingerDesc}}</p>
       </div>
     </div>
-    <actionsheet :show="menuShow" :menus="menus" @on-click-menu="click" show-cancel></actionsheet>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import Actionsheet from './../lib/components/Actionsheet'
 
   export default {
     data () {
       return {
         singer: null,
         opacity: 0,
-        menuShow: false,
         menuedIndex: 0,
-        menus: {},
         list: ['介绍', '单曲', '专辑', 'MV'],
         activeTabIndex: 0,
         singermid:this.$route.params.id
       }
-    },
-    components: {
-      Actionsheet
     },
     methods: {
       hideSinger: function () {
         this.$router.go(-1)
       },
       play: function (index) {
-        var list = []
+        let list = []
         this.singer.list.forEach(item => {
           list.push({
             id: item.musicData.songid,
@@ -98,43 +91,35 @@
         this.$store.commit('play')
       },
       showMenu: function (num) {
-        this.menus = {
-          'title.noop': this.singer.list[num].musicData.songorig + '<br/><span style="color:#666;font-size:12px;">' + this.getSingerStr(this.singer.list[num].musicData.singer) + '</span>',
-          playAsNext: '下一首播放',
-          addToPlayList: '添加到播放列表'
-        }
-        this.menuShow = true
         this.menuedIndex = num
-      },
-      hideMenu: function () {
-        this.menuShow = false
-      },
-      click (key) {
-        switch (key) {
-          case 'cancel':
-            this.hideMenu()
-            break
-          case 'playAsNext':
-            this.$store.commit('addToPlayListAsNextPlay', {
-              id: this.singer.list[this.menuedIndex].musicData.songid,
-              mid: this.singer.list[this.menuedIndex].musicData.songmid,
-              name: this.singer.list[this.menuedIndex].musicData.songorig,
-              singer: this.singer.list[this.menuedIndex].musicData.singer
-            })
-            this.hideMenu()
-            break
-          case 'addToPlayList':
-            this.$store.commit('addToPlayList', {
-              id: this.singer.list[this.menuedIndex].musicData.songid,
-              mid: this.singer.list[this.menuedIndex].musicData.songmid,
-              name: this.singer.list[this.menuedIndex].musicData.songorig,
-              singer: this.singer.list[this.menuedIndex].musicData.singer
-            })
-            this.hideMenu()
-            break
-          default:
-            console.log(key)
-        }
+        let that = this
+        this.$store.dispatch('notifyActionSheet', {
+          menus: {
+            'title.noop': this.singer.list[num].musicData.songorig + '<br/><span style="color:#666;font-size:12px;">' + this.getSingerStr(this.singer.list[num].musicData.singer) + '</span>',
+            playAsNext: '下一首播放',
+            addToPlayList: '添加到播放列表'
+          },
+          handler: {
+            ['cancel'](){
+            },
+            ['playAsNext'](){
+              that.$store.commit('addToPlayListAsNextPlay', {
+                id: that.singer.list[that.menuedIndex].musicData.songid,
+                mid: that.singer.list[that.menuedIndex].musicData.songmid,
+                name: that.singer.list[that.menuedIndex].musicData.songorig,
+                singer: that.singer.list[that.menuedIndex].musicData.singer
+              })
+            },
+            ['addToPlayList'](){
+              that.$store.commit('addToPlayList', {
+                id: that.singer.list[that.menuedIndex].musicData.songid,
+                mid: that.singer.list[that.menuedIndex].musicData.songmid,
+                name: that.singer.list[that.menuedIndex].musicData.songorig,
+                singer: that.singer.list[that.menuedIndex].musicData.singer
+              })
+            }
+          }
+        })
       },
       getSingerStr: val => {
         if (typeof val === 'string') {
@@ -151,7 +136,7 @@
     computed: {
       color: function () {
         if (this.singer !== null) {
-          var fixed = '00000' + this.singer.color.toString(16)
+          let fixed = '00000' + this.singer.color.toString(16)
           return '#' + fixed.substr(fixed.length - 6)
         } else {
           return '#ffffff'

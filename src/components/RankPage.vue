@@ -46,33 +46,26 @@
         </li>
       </ul>
     </div>
-    <actionsheet :show="menuShow" :menus="menus" @on-click-menu="click" show-cancel></actionsheet>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import Actionsheet from './../lib/components/Actionsheet'
 
   export default {
     data () {
       return {
         topListData: null,
         opacity: 0,
-        menuShow: false,
         menuedIndex: 0,
-        menus: {},
         topid:this.$route.params.id
       }
-    },
-    components: {
-      Actionsheet
     },
     methods: {
       hideSinger: function () {
         this.$router.go(-1)
       },
       play: function (index) {
-        var list = []
+        let list = []
         this.topListData.songlist.forEach(item => {
           list.push({
             id: item.data.songid,
@@ -88,43 +81,35 @@
         this.$store.commit('play')
       },
       showMenu: function (num) {
-        this.menus = {
-          'title.noop': this.topListData.songlist[num].data.songorig + '<br/><span style="color:#666;font-size:12px;">' + this.getSingerStr(this.topListData.songlist[num].data.singer) + '</span>',
-          playAsNext: '下一首播放',
-          addToPlayList: '添加到播放列表'
-        }
-        this.menuShow = true
         this.menuedIndex = num
-      },
-      hideMenu: function () {
-        this.menuShow = false
-      },
-      click (key) {
-        switch (key) {
-          case 'cancel':
-            this.hideMenu()
-            break
-          case 'playAsNext':
-            this.$store.commit('addToPlayListAsNextPlay', {
-              id: this.topListData.songlist[this.menuedIndex].data.songid,
-              mid: this.topListData.songlist[this.menuedIndex].data.songmid,
-              name: this.topListData.songlist[this.menuedIndex].data.songorig,
-              singer: this.topListData.songlist[this.menuedIndex].data.singer
-            })
-            this.hideMenu()
-            break
-          case 'addToPlayList':
-            this.$store.commit('addToPlayList', {
-              id: this.topListData.songlist[this.menuedIndex].data.songid,
-              mid: this.topListData.songlist[this.menuedIndex].data.songmid,
-              name: this.topListData.songlist[this.menuedIndex].data.songorig,
-              singer: this.topListData.songlist[this.menuedIndex].data.singer
-            })
-            this.hideMenu()
-            break
-          default:
-            console.log(key)
-        }
+        let that = this
+        this.$store.dispatch('notifyActionSheet', {
+          menus: {
+            'title.noop': this.topListData.songlist[num].data.songorig + '<br/><span style="color:#666;font-size:12px;">' + this.getSingerStr(this.topListData.songlist[num].data.singer) + '</span>',
+            playAsNext: '下一首播放',
+            addToPlayList: '添加到播放列表'
+          },
+          handler: {
+            ['cancel'](){
+            },
+            ['playAsNext'](){
+              that.$store.commit('addToPlayListAsNextPlay', {
+                id: that.topListData.songlist[that.menuedIndex].data.songid,
+                mid: that.topListData.songlist[that.menuedIndex].data.songmid,
+                name: that.topListData.songlist[that.menuedIndex].data.songorig,
+                singer: that.topListData.songlist[that.menuedIndex].data.singer
+              })
+            },
+            ['addToPlayList'](){
+              that.$store.commit('addToPlayList', {
+                id: that.topListData.songlist[that.menuedIndex].data.songid,
+                mid: that.topListData.songlist[that.menuedIndex].data.songmid,
+                name: that.topListData.songlist[that.menuedIndex].data.songorig,
+                singer: that.topListData.songlist[that.menuedIndex].data.singer
+              })
+            }
+          }
+        })
       },
       getSingerStr: val => {
         if (typeof val === 'string') {

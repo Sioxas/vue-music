@@ -47,15 +47,21 @@
         this.$parent.playingListShow = false
       },
       showMenu: function (num) {
-        this.menus = {
-          'title.noop': this.playList[num].name + '<br/><span style="color:#666;font-size:12px;">' + this.getSingerStr(this.playList[num].singer) + '</span>',
-          delete: '删除'
-        }
-        this.menuShow = true
         this.menuedIndex = num
-      },
-      hideMenu: function () {
-        this.menuShow = false
+        let that = this
+        this.$store.dispatch('notifyActionSheet', {
+            menus:{
+              'title.noop': this.playList[num].name + '<br/><span style="color:#666;font-size:12px;">' + this.getSingerStr(this.playList[num].singer) + '</span>',
+              delete: '删除'
+            },
+          handler:{
+            ['cancel'](){
+            },
+            ['delete'](){
+              that.$store.commit('deleteFromPlayList', that.menuedIndex)
+            }
+          }
+        })
       },
       getSingerStr: val => {
         if (typeof val === 'string') {
@@ -68,20 +74,6 @@
           return singer
         }
       },
-      click (key) {
-        switch (key) {
-          case 'cancel':
-            this.hideMenu()
-            break
-          case 'delete':
-            this.$store.commit('deleteFromPlayList', this.menuedIndex)
-            this.hideMenu()
-            break
-          default:
-            console.log(key)
-        }
-      },
-
       ...mapMutations(['changePlayMode'])
     },
     computed: {

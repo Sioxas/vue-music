@@ -48,27 +48,18 @@
               <img src="../assets/icon-...black.png">
             </div>
           </li>
-
         </ul>
       </div>
-
     </div>
-    <actionsheet :show="menuShow" :menus="menus" @on-click-menu="click" show-cancel></actionsheet>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import Actionsheet from './../lib/components/Actionsheet'
   export default {
-    components: {
-      Actionsheet
-    },
     data () {
       return {
         album: null,
-        menuShow: false,
         menuedIndex: 0,
-        menus: {},
         mid: this.$route.params.id
       }
     },
@@ -95,43 +86,35 @@
         this.$store.commit('play')
       },
       showMenu: function (num) {
-        this.menus = {
-          'title.noop': this.album.list[num].songorig + '<br/><span style="color:#666;font-size:12px;">' + this.getSingerStr(this.album.list[num].singer) + '</span>',
-          playAsNext: '下一首播放',
-          addToPlayList: '添加到播放列表'
-        }
-        this.menuShow = true
         this.menuedIndex = num
-      },
-      hideMenu: function () {
-        this.menuShow = false
-      },
-      click (key) {
-        switch (key) {
-          case 'cancel':
-            this.hideMenu()
-            break
-          case 'playAsNext':
-            this.$store.commit('addToPlayListAsNextPlay', {
-              id: this.album.list[this.menuedIndex].songid,
-              mid: this.album.list[this.menuedIndex].songmid,
-              name: this.album.list[this.menuedIndex].songorig,
-              singer: this.album.list[this.menuedIndex].singer
-            })
-            this.hideMenu()
-            break
-          case 'addToPlayList':
-            this.$store.commit('addToPlayList', {
-              id: this.album.list[this.menuedIndex].songid,
-              mid: this.album.list[this.menuedIndex].songmid,
-              name: this.album.list[this.menuedIndex].songorig,
-              singer: this.album.list[this.menuedIndex].singer
-            })
-            this.hideMenu()
-            break
-          default:
-            console.log(key)
-        }
+        let that = this
+        this.$store.dispatch('notifyActionSheet', {
+          menus: {
+            'title.noop': this.album.list[num].songorig + '<br/><span style="color:#666;font-size:12px;">' + this.getSingerStr(this.album.list[num].singer) + '</span>',
+            playAsNext: '下一首播放',
+            addToPlayList: '添加到播放列表'
+          },
+          handler: {
+            ['cancel'](){
+            },
+            ['playAsNext'](){
+              that.$store.commit('addToPlayListAsNextPlay', {
+                id: that.album.list[that.menuedIndex].songid,
+                mid: that.album.list[that.menuedIndex].songmid,
+                name: that.album.list[that.menuedIndex].songorig,
+                singer: that.album.list[that.menuedIndex].singer
+              })
+            },
+            ['addToPlayList'](){
+              that.$store.commit('addToPlayList', {
+                id: that.album.list[that.menuedIndex].songid,
+                mid: that.album.list[that.menuedIndex].songmid,
+                name: that.album.list[that.menuedIndex].songorig,
+                singer: that.album.list[that.menuedIndex].singer
+              })
+            }
+          }
+        })
       },
       getSingerStr: val => {
         if (typeof val === 'string') {
@@ -151,9 +134,9 @@
       }
     },
     created: function () {
-      this.$store.dispatch('getAlbum',this.mid).then((response) => {
+      this.$store.dispatch('getAlbum', this.mid).then((response) => {
         this.album = response.data.data
-    })
+      })
     }
   }
 </script>
