@@ -1,7 +1,7 @@
 <template>
   <div id="singer">
     <div class="singer-photo">
-      <img v-lazy="cd.logo"
+      <img v-lazy="imgurl"
            alt="cdlogo">
     </div>
     <div class="header-bar" :style="{background:background}" :class="{dark:isDark}">
@@ -128,6 +128,9 @@
       }
     },
     computed: {
+      imgurl: function () {
+        return this.cd !== null ? this.cd.logo : null
+      },
       color: function () {
         if (this.cd !== null) {
           let fixed = '00000' + this.cd.uin.toString(16)
@@ -157,7 +160,7 @@
       }
     },
     created: function () {
-      this.$store.dispatch('getCdList',this.$route.params.id).then((response) => {
+      this.$store.dispatch('getCdList', this.$route.params.id).then((response) => {
         this.cd = response.data.cdlist[0]
       })
 
@@ -283,7 +286,7 @@
     margin: 12.5px;
     margin-left: 5px;
     float: left;
-    cursor:pointer;
+    cursor: pointer;
   }
 
   .header-bar .back-button .back-icon {
@@ -366,7 +369,7 @@
     justify-content: space-between;
     align-items: center;
     height: 60px;
-    cursor:pointer;
+    cursor: pointer;
   }
 
   .list ul li .music-info {

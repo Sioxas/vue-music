@@ -1,8 +1,8 @@
 ﻿<template>
   <div id="app">
     <action-sheet></action-sheet>
-    <transition name="page-slide" v-show="!blurBgShow">
-      <router-view></router-view>
+    <transition :name="routerViewAnimation">
+      <router-view v-show="!blurBgShow"></router-view>
     </transition>
 
     <search v-show="!blurBgShow"
@@ -20,9 +20,15 @@
       </swiper>
     </div>
 
-
-    <transition name="play-slide" v-on:after-enter="showBlurBg" v-on:before-leave="hideBlurBg">
+    <transition
+      name="play-slide"
+      v-on:after-enter="showBlurBg"
+      v-on:before-leave="hideBlurBg"
+      v-on:after-leave="routerViewAnimation='page-slide'">
       <play v-if="playPageShow"></play>
+    </transition>
+    <transition name="play-slide">
+      <playing-list v-if="$store.state.NotifyService.playingList.show"></playing-list>
     </transition>
 
     <transition name="bar-slide">
@@ -42,7 +48,6 @@
              @click="tapButton">
       </div>
     </transition>
-
   </div>
 </template>
 
@@ -52,6 +57,8 @@
   import Rank from './components/Rank'
   import Recommand from './components/Recommand'
   import ActionSheet from './components/ActionSheet'
+  import PlayingList from './components/PlayingList'
+
   import {mapMutations, mapState} from 'vuex'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
@@ -64,6 +71,7 @@
       Rank,
       Recommand,
       ActionSheet,
+      PlayingList,
       swiper,
       swiperSlide
     },
@@ -81,6 +89,7 @@
         this.playPageShow = false
       },
       showBlurBg: function () {
+        this.routerViewAnimation='fade'
         this.blurBgShow = true
       },
       hideBlurBg: function () {
@@ -101,6 +110,7 @@
         playPageShow: false,
         blurBgShow: false,
         rankshow: true,
+        routerViewAnimation:'page-slide',
         swiperOption: {
           pagination: '.swiper-pagination',
           paginationClickable: true,
@@ -222,7 +232,6 @@
   }
 
   .page-slide-enter, .page-slide-leave-active {
-    /*margin-left: 100%;*/
     transform: translateX(100%);
   }
 
@@ -247,7 +256,6 @@
   }
 
   .play-slide-enter, .play-slide-leave-active {
-    /*margin-top: 100vh;*/
     transform: translateY(100vh);
   }
 

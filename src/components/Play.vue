@@ -1,11 +1,9 @@
 <template>
-
   <div id="play" class="music-play-page">
-    <transition name="play-slide">
-      <playing-list v-if="playingListShow"></playing-list>
-    </transition>
     <div class="music-album">
-      <div class="play-page-hide-btn" @touchend.prevent.stop="hidePlayPage" @click="hidePlayPage">
+      <div class="play-page-hide-btn"
+           @touchend.prevent.stop="hidePlayPage"
+           @click="hidePlayPage">
         <img src="../assets/icon-jiantou.png" alt="">
       </div>
       <img v-lazy="coverImgUrl"
@@ -31,12 +29,18 @@
       <div class="music-ctrl">
         <ul>
           <li><img src="../assets/icon-like.png"></li>
-          <li><img src="../assets/icon-shangyiqu.png" @touchend.prevent="playFront" @click="playFront"></li>
+          <li><img src="../assets/icon-shangyiqu.png"
+                   @touchend.prevent="playFront"
+                   @click="playFront"></li>
           <li><img v-bind:src="playing?$parent.iconPause:$parent.iconPlay"
                    @click="$parent.tapButton"
                    @touchend="$parent.tapButton"></li>
-          <li><img src="../assets/icon-xiayiqu.png" @touchend.prevent="playNext" @click="playNext"></li>
-          <li><img src="../assets/icon-list.png" @touchend.prevent="showPlayList" @click="showPlayList"></li>
+          <li><img src="../assets/icon-xiayiqu.png"
+                   @touchend.prevent="playNext"
+                   @click="playNext"></li>
+          <li><img src="../assets/icon-list.png"
+                   @touchend.prevent="showPlayList"
+                   @click="showPlayList"></li>
         </ul>
       </div>
 
@@ -49,22 +53,16 @@
         </ul>
       </div>
     </div>
-
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import PlayingList from './PlayingList'
   import {mapMutations, mapState, mapGetters} from 'vuex'
 
   export default {
-    components: {
-      PlayingList
-    },
     data () {
       return {
         clientY: 0,
-        playingListShow: false
       }
     },
     methods: {
@@ -80,7 +78,7 @@
         }
       },
       showPlayList: function () {
-        this.playingListShow = true
+        this.$store.commit('showPlayingList')
       },
       ...mapMutations([
         'play', 'pause', 'playFront', 'playNext'
@@ -91,9 +89,7 @@
         'currentTime', 'duration'
       ]),
       ...mapState({
-        indicatorPosition (state) {
-          return state.PlayService.currentTime / state.PlayService.duration * 100
-        },
+        indicatorPosition: state => state.PlayService.currentTime / state.PlayService.duration * 100,
         playing: state => state.PlayService.playing,
         song: state => state.PlayService.song,
         coverImgUrl: state => state.PlayService.coverImgUrl
@@ -104,7 +100,7 @@
         if (typeof val === 'string') {
           return val
         } else if (val instanceof Array) {
-          var singer = ''
+          let singer = ''
           val.forEach(item => {
             singer = singer + item.name + ' '
           })

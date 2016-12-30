@@ -37,7 +37,7 @@
         this.$store.commit('playIndex', index)
       },
       hidePlayList: function () {
-        this.$parent.playingListShow = false
+        this.$store.commit('closePlayingList')
       },
       showMenu: function (num) {
         this.menuedIndex = num
@@ -60,7 +60,7 @@
         if (typeof val === 'string') {
           return val
         } else if (val instanceof Array) {
-          var singer = ''
+          let singer = ''
           val.forEach(item => {
             singer = singer + item.name + ' '
           })
@@ -87,7 +87,7 @@
         if (typeof val === 'string') {
           return val
         } else if (val instanceof Array) {
-          var singer = ''
+          let singer = ''
           val.forEach(item => {
             singer = singer + item.name + ' '
           })
@@ -101,7 +101,7 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   #playing-list {
-    z-index: 2;
+    z-index: 10;
     position: absolute;
     width: 100%;
     min-height: 100%;

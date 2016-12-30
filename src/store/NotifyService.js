@@ -9,6 +9,9 @@ export default {
       show: false,
       menus: {},
       subject: null
+    },
+    playingList:{
+      show:false
     }
   },
   actions: {
@@ -32,6 +35,12 @@ export default {
     },
     closeActionSheet(state){
       state.actionSheet.show = false
+    },
+    showPlayingList(state){
+      state.playingList.show=true
+    },
+    closePlayingList(state){
+      state.playingList.show=false
     }
   }
 }
