@@ -25,7 +25,7 @@
       v-on:after-enter="showBlurBg"
       v-on:before-leave="hideBlurBg"
       v-on:after-leave="routerViewAnimation='page-slide'">
-      <play v-if="playPageShow"></play>
+      <play v-show="playPageShow"></play>
     </transition>
     <transition name="play-slide">
       <playing-list v-if="$store.state.NotifyService.playingList.show"></playing-list>
@@ -173,7 +173,7 @@
   }
 
   #app {
-    font-family: Arial, 微软雅黑, "Microsoft yahei", "Hiragino Sans GB", "冬青黑体简体中文 w3", STXihei, 华文细黑, SimSun, 宋体, Heiti, 黑体, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC","Helvetica Neue",STHeiti,"Microsoft Yahei",Tahoma,Simsun,sans-serif;
     width: 100%;
     height:100%;
   }

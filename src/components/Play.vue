@@ -11,11 +11,11 @@
            @touchend="moveend">
     </div>
     <div class="button-group">
-      <img class="blurbg" v-bind:src="coverImgUrl">
+      <img class="blurbg" :src="coverImgUrl">
       <div class="progress-bar-group">
         <div class="progress-bar">
-          <div class="progress" v-bind:style="{width:indicatorPosition+'%'}"></div>
-          <div class="indicater" v-bind:style="{left:indicatorPosition+'%'}"></div>
+          <div class="progress" :style="{width:indicatorPosition+'%'}"></div>
+          <div class="indicater" :style="{left:indicatorPosition+'%'}"></div>
         </div>
         <div class="time-indicater">
           <span>{{currentTime}}</span>
@@ -26,13 +26,16 @@
         <p class="music-name">{{song.name}}</p>
         <p class="music-author">{{song.singer | singer}}</p>
       </div>
+      <div class="lyric">
+        <lyric :songid="song.id" :currentTime="currentTime"></lyric>
+      </div>
       <div class="music-ctrl">
         <ul>
           <li><img src="../assets/icon-like.png"></li>
           <li><img src="../assets/icon-shangyiqu.png"
                    @touchend.prevent="playFront"
                    @click="playFront"></li>
-          <li><img v-bind:src="playing?$parent.iconPause:$parent.iconPlay"
+          <li><img :src="playing?$parent.iconPause:$parent.iconPlay"
                    @click="$parent.tapButton"
                    @touchend="$parent.tapButton"></li>
           <li><img src="../assets/icon-xiayiqu.png"
@@ -44,22 +47,17 @@
         </ul>
       </div>
 
-      <div class="other-button">
-        <ul>
-          <li><img src="../assets/icon-share.png"></li>
-          <li><img src="../assets/icon-RANDOM.png"></li>
-          <li><img src="../assets/icon-SEQUENTIAL.png"></li>
-          <li><img src="../assets/icon-...black.png"></li>
-        </ul>
-      </div>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import {mapMutations, mapState, mapGetters} from 'vuex'
-
+  import Lyric from './Lyric.vue'
   export default {
+    components: {
+      Lyric
+    },
     data () {
       return {
         clientY: 0,
@@ -138,11 +136,13 @@
   .music-play-page .button-group {
     width: 100%;
     position: absolute;
-    left: 0px;
-    bottom: 0px;
+    left: 0;
+    bottom: 0;
     top: 100vw;
     background: rgba(255, 255, 255, 0.76);
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
   }
 
   .blurbg {
@@ -157,13 +157,15 @@
     filter: blur(30px);
   }
 
-  .music-play-page .button-group .progress-bar-group,
-  .music-play-page .button-group .music-info,
-  .music-play-page .button-group .music-ctrl,
-  .music-play-page .button-group .volue-bar-group,
-  .music-play-page .button-group .other-button {
-    height: 25%;
+  .music-play-page .button-group .lyric {
     min-height: 35px;
+    flex-grow: 2;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .music-play-page .button-group .progress-bar-group {
+    height: 30px;
   }
 
   .music-play-page .button-group .progress-bar-group .progress-bar {
@@ -211,6 +213,10 @@
     text-align: center;
     font-size: 12px;
     color: #8f8f8f;
+  }
+
+  .music-play-page .button-group .music-ctrl {
+    height: 50px;
   }
 
   .music-play-page .button-group .music-ctrl ul {
