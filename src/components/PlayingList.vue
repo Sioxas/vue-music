@@ -20,23 +20,16 @@
         </li>
       </ul>
     </div>
-    <actionsheet :show="menuShow" :menus="menus" @on-click-menu="click" show-cancel></actionsheet>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import Actionsheet from './../lib/components/Actionsheet'
   import {mapState, mapMutations} from 'vuex'
   import * as def from './../config/def'
   export default {
-    components: {
-      Actionsheet
-    },
     data () {
       return {
-        menuShow: false,
         menuedIndex: 0,
-        menus: {}
       }
     },
     methods: {

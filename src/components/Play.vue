@@ -122,7 +122,7 @@
     width: 100%;
     max-width: 68vh;
     height: 100%;
-    position: absolute;
+    position: fixed;
     top: 0;
     z-index: 5;
   }

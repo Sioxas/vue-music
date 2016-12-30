@@ -161,6 +161,7 @@
     background: rgba(255, 255, 255, 0.8);
     display: flex;
     flex-direction: row;
+    cursor:pointer;
   }
 
   .m-list .list-item .music-photo {
@@ -273,6 +274,7 @@
     margin: 12.5px;
     margin-left: 5px;
     float: left;
+    cursor:pointer;
   }
 
   .header .back-button .back-icon {

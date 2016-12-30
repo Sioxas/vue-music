@@ -37,6 +37,9 @@ export default {
     },
     getRecommands({}){
       return apiFactory(API.home_page_data)()
+    },
+    getCdList({},id){
+      return apiFactory(API.cd)(id)
     }
   }
 }

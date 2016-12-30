@@ -1,8 +1,8 @@
 <template>
-  <div id="rankpage">
+  <div id="singer">
     <div class="singer-photo">
-      <img v-lazy="imgurl"
-           alt="singerphoto">
+      <img v-lazy="cd.logo"
+           alt="cdlogo">
     </div>
     <div class="header-bar" :style="{background:background}" :class="{dark:isDark}">
       <div class="back-button" @touchend.prevent="hideSinger" @click="hideSinger">
@@ -11,33 +11,32 @@
           <img src="../assets/icon-back-white.svg" v-if="isDark">
         </div>
         <div class="back-text">
-          排行榜
+          歌单
         </div>
       </div>
     </div>
-    <div id="singer-header" class="header border-1px border-1px-after" v-if="topListData!=null">
+    <div id="singer-header" class="header border-1px border-1px-after" v-if="cd!=null">
       <div class="header-blank"></div>
       <div class="header-warp" :style="{background:gradientcolor}">
         <div class="singer-info" :class="{dark:isDark}">
-          <h1 class="singer-name">{{topListData.topinfo.ListName}}</h1>
-          <p class="singer-fans">{{topListData.topinfo.listennum | listenCount}}</p>
+          <h1 class="singer-name">{{cd.dissname}}</h1>
+          <p class="singer-fans">{{cd.visitnum | listenCount}}播放 来自：{{cd.nick}}</p>
         </div>
         <div class="play-button" @click="play(0)">
           <img src="../assets/icon-play.png">
         </div>
       </div>
     </div>
-    <div class="list" :style="{background:color}" v-if="topListData!=null">
+    <div class="list" :style="{background:color}" v-if="cd!=null">
       <ul>
-        <li class="border-1px border-1px-after" v-for="(item,index) in topListData.songlist">
-          <div class="music-index" :class="{dark:isDark}">{{index+1}}</div>
+        <li class="border-1px border-1px-after" v-for="(item,index) in cd.songlist">
           <div class="music-info" @click="play(index)">
             <div class="music-name" :class="{dark:isDark}">
-              {{item.data.songorig}}
+              {{item.name}}
             </div>
             <div class="music-singer">
-              <span v-for="singername in item.data.singer">{{singername.name}}-</span>
-              <span>{{item.data.albumname}}</span>
+              <span v-for="singername in item.singer">{{singername.name}}-</span>
+              <span>{{item.subtitle}}</span>
             </div>
           </div>
           <div class="action-button" @touchend.prevent="showMenu(index)" @click="showMenu(index)">
@@ -45,6 +44,12 @@
           </div>
         </li>
       </ul>
+      <div class="list-title" :class="{dark:isDark}">
+        <p>简介</p>
+      </div>
+      <div class="singer-brief" :class="{dark:isDark}">
+        <p>{{cd.desc}}</p>
+      </div>
     </div>
   </div>
 </template>
@@ -54,10 +59,9 @@
   export default {
     data () {
       return {
-        topListData: null,
+        cd: null,
         opacity: 0,
         menuedIndex: 0,
-        topid:this.$route.params.id
       }
     },
     methods: {
@@ -66,12 +70,12 @@
       },
       play: function (index) {
         let list = []
-        this.topListData.songlist.forEach(item => {
+        this.cd.songlist.forEach(item => {
           list.push({
-            id: item.data.songid,
-            mid: item.data.songmid,
-            name: item.data.songorig,
-            singer: item.data.singer
+            id: item.id,
+            mid: item.mid,
+            name: item.name,
+            singer: item.singer
           })
         })
         this.$store.commit('setPlayList', {
@@ -85,7 +89,7 @@
         let that = this
         this.$store.dispatch('notifyActionSheet', {
           menus: {
-            'title.noop': this.topListData.songlist[num].data.songorig + '<br/><span style="color:#666;font-size:12px;">' + this.getSingerStr(this.topListData.songlist[num].data.singer) + '</span>',
+            'title.noop': this.cd.songlist[num].name + '<br/><span style="color:#666;font-size:12px;">' + this.getSingerStr(this.cd.songlist[num].singer) + '</span>',
             playAsNext: '下一首播放',
             addToPlayList: '添加到播放列表'
           },
@@ -94,18 +98,18 @@
             },
             ['playAsNext'](){
               that.$store.commit('addToPlayListAsNextPlay', {
-                id: that.topListData.songlist[that.menuedIndex].data.songid,
-                mid: that.topListData.songlist[that.menuedIndex].data.songmid,
-                name: that.topListData.songlist[that.menuedIndex].data.songorig,
-                singer: that.topListData.songlist[that.menuedIndex].data.singer
+                id: that.cd.songlist[that.menuedIndex].id,
+                mid: that.cd.songlist[that.menuedIndex].mid,
+                name: that.cd.songlist[that.menuedIndex].name,
+                singer: that.cd.songlist[that.menuedIndex].singer
               })
             },
             ['addToPlayList'](){
               that.$store.commit('addToPlayList', {
-                id: that.topListData.songlist[that.menuedIndex].data.songid,
-                mid: that.topListData.songlist[that.menuedIndex].data.songmid,
-                name: that.topListData.songlist[that.menuedIndex].data.songorig,
-                singer: that.topListData.songlist[that.menuedIndex].data.singer
+                id: that.cd.songlist[that.menuedIndex].id,
+                mid: that.cd.songlist[that.menuedIndex].mid,
+                name: that.cd.songlist[that.menuedIndex].name,
+                singer: that.cd.songlist[that.menuedIndex].singer
               })
             }
           }
@@ -115,7 +119,7 @@
         if (typeof val === 'string') {
           return val
         } else if (val instanceof Array) {
-          var singer = ''
+          let singer = ''
           val.forEach(item => {
             singer = singer + item.name + ' '
           })
@@ -125,23 +129,18 @@
     },
     computed: {
       color: function () {
-        if (this.topListData !== null) {
-          var fixed = '00000' + this.topListData.color.toString(16)
+        if (this.cd !== null) {
+          let fixed = '00000' + this.cd.uin.toString(16)
           return '#' + fixed.substr(fixed.length - 6)
         } else {
           return '#ffffff'
-        }
-      },
-      imgurl: function () {
-        if (this.topListData !== null) {
-          return this.topListData.topinfo.pic_album
         }
       },
       gradientcolor: function () {
         return '-webkit-linear-gradient(top, rgba(' + this.r + ',' + this.g + ',' + this.b + ', 0), ' + this.color + ')'
       },
       isDark: function () {
-        var grayLevel = this.r * 0.299 + this.g * 0.587 + this.b * 0.114
+        let grayLevel = this.r * 0.299 + this.g * 0.587 + this.b * 0.114
         return (grayLevel < 192)
       },
       background: function () {
@@ -158,8 +157,8 @@
       }
     },
     created: function () {
-      this.$store.dispatch('getRankSongs',this.topid).then((response) => {
-        this.topListData = response.data
+      this.$store.dispatch('getCdList',this.$route.params.id).then((response) => {
+        this.cd = response.data.cdlist[0]
       })
 
       let that = this
@@ -172,7 +171,7 @@
       }
     },
     filters: {
-      listenCount: num=> {
+      listenCount: num => {
         return Math.round(num / 1000) / 10 + '万'
       }
     }
@@ -241,7 +240,7 @@
     }
   }
 
-  #rankpage {
+  #singer {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -360,20 +359,14 @@
   }
 
   .list ul li {
+    width: 100%;
     display: flex;
     display: -webkit-flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     height: 60px;
-    margin-left:44px;
     cursor:pointer;
-  }
-
-  .list ul li .music-index{
-    margin-left: -50px;
-    width: 50px;
-    text-align: center;
   }
 
   .list ul li .music-info {

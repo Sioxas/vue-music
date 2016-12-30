@@ -1,7 +1,7 @@
 ﻿<template>
   <div id="app">
     <action-sheet></action-sheet>
-    <transition name="page-slide">
+    <transition name="page-slide" v-show="!blurBgShow">
       <router-view></router-view>
     </transition>
 
@@ -30,7 +30,8 @@
         <audio id="music"
                v-bind:src="dataUrl"
                @timeupdate="updateTime"
-               v-on:ended="playContinue"></audio>
+               v-on:ended="playContinue"
+               autoplay></audio>
         <div class="play-bar-image-container" @touchstart="showPlayPage" @click="showPlayPage">
           <img class="play-bar-image" v-lazy="coverImgUrl">
         </div>

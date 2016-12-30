@@ -15,7 +15,9 @@
           <p class="title-text">热门歌单</p>
         </div>
         <div class="list-content">
-          <div class="list-item" v-for="item in songList">
+          <div class="list-item"
+               v-for="item in songList"
+               @click="$router.push({name: 'cd', params: {id: item.id}})">
             <div class="list-img">
               <img v-lazy="item.picUrl">
             </div>
@@ -136,6 +138,7 @@
 
   .hotlist .list-content .list-item{
     width:50%;
+    cursor: pointer;
   }
 
   .hotlist .list-content .list-item .list-img img{

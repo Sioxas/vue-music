@@ -225,6 +225,7 @@
     line-height: 40px;
     overflow: hidden;
     transition: width 0.3s;
+    cursor:pointer;
   }
 
   .search-cancel-show {
@@ -275,6 +276,7 @@
     padding: 0 3px;
     border: 1px solid #000;
     border-radius: 14px;
+    cursor:pointer;
   }
 
   .result {
@@ -341,6 +343,7 @@
     border-bottom: #eeeeee 1px solid;
     padding: 10px 10px;
     align-items: center;
+    cursor:pointer;
   }
 
   .album-img {
@@ -378,6 +381,7 @@
     flex-direction: row;
     padding: 5px 10px;
     align-items: center;
+    cursor:pointer;
   }
 
   .singer-img {

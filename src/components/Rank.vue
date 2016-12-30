@@ -71,6 +71,7 @@
     box-shadow: 0 0 10px #DDD;
     border-radius: 5px;
     overflow: hidden;
+    cursor:pointer;
   }
 
   .rank-item .rank-media {

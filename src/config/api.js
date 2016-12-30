@@ -3,7 +3,7 @@
  */
 export default {
   rank_songs: {
-    url: 'http://c.y.qq.com/v8/fcg-bin/fcg_v8_toplist_cp.fcg',
+    url: 'https://c.y.qq.com/v8/fcg-bin/fcg_v8_toplist_cp.fcg',
     params: (id) => {
       return {
         g_tk: 5381,
@@ -24,7 +24,7 @@ export default {
     jsonp: 'jsonpCallback'
   },
   rank_list: {
-    url: 'http://c.y.qq.com/v8/fcg-bin/fcg_myqq_toplist.fcg',
+    url: 'https://c.y.qq.com/v8/fcg-bin/fcg_myqq_toplist.fcg',
     params: () => {
       return {
         format: 'jsonp',
@@ -41,7 +41,7 @@ export default {
     jsonp: 'jsonpCallback'
   },
   album: {
-    url: 'http://c.y.qq.com/v8/fcg-bin/fcg_v8_album_info_cp.fcg',
+    url: 'https://c.y.qq.com/v8/fcg-bin/fcg_v8_album_info_cp.fcg',
     params: (id) => {
       return {
         albummid: id,
@@ -59,7 +59,7 @@ export default {
     jsonp: 'jsonpCallback'
   },
   singer_info: {
-    url: 'http://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_track_cp.fcg',
+    url: 'https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_track_cp.fcg',
     params: (id) => {
       return {
         order: 'listen',
@@ -81,7 +81,7 @@ export default {
     jsonp: 'jsonpCallback'
   },
   search: {
-    url: 'http://c.y.qq.com/splcloud/fcgi-bin/smartbox_new.fcg',
+    url: 'https://c.y.qq.com/splcloud/fcgi-bin/smartbox_new.fcg',
     params: (key) => {
       return {
         is_xml: 0,
@@ -100,7 +100,7 @@ export default {
     jsonp: 'jsonpCallback'
   },
   hotkey: {
-    url: 'http://c.y.qq.com/splcloud/fcgi-bin/gethotkey.fcg',
+    url: 'https://c.y.qq.com/splcloud/fcgi-bin/gethotkey.fcg',
     params: () => {
       return {
         g_tk: 5381,
@@ -143,5 +143,30 @@ export default {
       }
     },
     jsonp:'callback'
+  },
+  cd:{
+    url:'https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg',
+    params:(id)=>{
+      return {
+        g_tk:5381,
+        uin:0,
+        format:'jsonp',
+        inCharset:'utf-8',
+        outCharset:'utf-8',
+        notice:0,
+        platform:'h5',
+        needNewCode:1,
+        new_format:1,
+        pic:500,
+        disstid:id,
+        type:1,
+        json:1,
+        utf8:1,
+        onlysong:0,
+        nosign:1,
+        _:new Date().getTime()
+      }
+    },
+    jsonp: 'jsonpCallback'
   }
 }
