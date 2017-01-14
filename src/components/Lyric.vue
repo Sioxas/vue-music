@@ -17,25 +17,25 @@
     methods: {},
     computed: {
       currentLyric: function () {
-          if(this.lyric!==null){
-            let that = this
-            let pastLyric = []
-            let i = 0
-            Object.keys(this.lyric).forEach(function (key) {
-              if (key.split(':')
+        if (this.lyric !== null) {
+          let that = this
+          let pastLyric = []
+          let i = 0
+          Object.keys(this.lyric).forEach(function (key) {
+            if (key.split(':')
+                .reduce((a, b) =>
+                parseInt(a) * 60 * 100 + b
+                  .split('.')
                   .reduce((a, b) =>
-                  parseInt(a) * 60 * 100 + b
-                    .split('.')
-                    .reduce((a, b) =>
-                    parseInt(a) * 100 + parseInt(b)))-120 <= that.currentTimeStamp) {
-                  if(that.lyric[key]!=='\n') pastLyric.push(that.lyric[key])
-              }else if(i<=1&&that.lyric[key]!=='\n'){
-                pastLyric.push(that.lyric[key])
-                i++
-              }
-            })
-            return pastLyric.slice(pastLyric.length-4,pastLyric.length-1)
-          }
+                  parseInt(a) * 100 + parseInt(b))) - 120 <= that.currentTimeStamp) {
+              if (that.lyric[key] !== '\n') pastLyric.push(that.lyric[key])
+            } else if (i <= 1 && that.lyric[key] !== '\n') {
+              pastLyric.push(that.lyric[key])
+              i++
+            }
+          })
+          return pastLyric.slice(pastLyric.length - 4, pastLyric.length - 1)
+        }
       },
       currentTimeStamp: function () {
         let t = this.currentTime.split(':')
@@ -65,21 +65,24 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  #lyric{
+  #lyric {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     height: 100%;
     flex-grow: 1;
   }
-  .lyric-item{
+
+  .lyric-item {
     text-align: center;
   }
-  .lyric-item:first-child{
+
+  .lyric-item:first-child {
     font-size: 14px;
     color: #4d4d4d;
   }
-  .lyric-item:last-child{
+
+  .lyric-item:last-child {
     font-size: 14px;
     color: #4d4d4d;
   }

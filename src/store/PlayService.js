@@ -10,7 +10,6 @@ export default {
     duration: 0,
     playMode: def.SEQUENTIAL,
     index: 0,
-    coverImgUrl: def.DEFAULT_IMG,
     song: {
       name: def.DEFAULT_SONG_NAME
     },
@@ -88,6 +87,9 @@ export default {
     },
     changePlayMode (state) {
       state.playMode = (state.playMode + 1) % 3
+    },
+    setAlbummid(state,albummid){
+      state.song = {...state.song,albummid}
     }
   },
   getters: {
@@ -95,6 +97,12 @@ export default {
     parseInt(state.currentTime / 60) + ':' + (Array(2).join(0) + (state.currentTime % 60)).slice(-2)
     ,
     duration: state =>
-    parseInt(state.duration / 60) + ':' + (Array(2).join(0) + (state.duration % 60)).slice(-2)
+    parseInt(state.duration / 60) + ':' + (Array(2).join(0) + (state.duration % 60)).slice(-2),
+    coverImgUrl:state => {
+      if(typeof state.song.albummid === 'undefined')
+        return def.DEFAULT_IMG
+      else
+        return "https://y.gtimg.cn/music/photo_new/T002R500x500M000"+state.song.albummid+".jpg"
+    }
   }
 }

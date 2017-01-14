@@ -59,7 +59,7 @@
   import ActionSheet from './components/ActionSheet'
   import PlayingList from './components/PlayingList'
 
-  import {mapMutations, mapState} from 'vuex'
+  import {mapMutations, mapState,mapGetters} from 'vuex'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
   const TAB_NAME=['推荐','排行榜']
@@ -122,13 +122,15 @@
       }
     },
     computed: {
+      ...mapGetters([
+        'coverImgUrl'
+      ]),
       ...mapState({
         dataUrl (state) {
           return 'http://ws.stream.qqmusic.qq.com/' + state.PlayService.song.id + '.m4a?fromtag=46'
         },
         playing: state => state.PlayService.playing,
-        song: state => state.PlayService.song,
-        coverImgUrl: state => state.PlayService.coverImgUrl
+        song: state => state.PlayService.song
       })
     },
     watch: {
@@ -140,14 +142,14 @@
         }
       },
       song: function (song) {
-        if (this.$store.state.PlayService.playList.length > 0) {
-          this.$http.jsonp('http://120.27.93.97/weappserver/get_music_image.php', {
+        if (this.$store.state.PlayService.playList.length > 0 && typeof song.albummid === 'undefined') {
+          this.$http.jsonp('http://120.27.93.97/weappserver/get_music_info.php', {
             params: {
               mid: song.mid
             },
             jsonp: 'callback'
           }).then((response) => {
-            this.$store.state.PlayService.coverImgUrl = response.data.url
+            this.$store.commit('setAlbummid',response.data.albummid)
           })
         }
 

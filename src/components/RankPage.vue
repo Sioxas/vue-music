@@ -71,7 +71,8 @@
             id: item.data.songid,
             mid: item.data.songmid,
             name: item.data.songorig,
-            singer: item.data.singer
+            singer: item.data.singer,
+            albummid: item.data.albummid
           })
         })
         this.$store.commit('setPlayList', {
@@ -97,7 +98,8 @@
                 id: that.topListData.songlist[that.menuedIndex].data.songid,
                 mid: that.topListData.songlist[that.menuedIndex].data.songmid,
                 name: that.topListData.songlist[that.menuedIndex].data.songorig,
-                singer: that.topListData.songlist[that.menuedIndex].data.singer
+                singer: that.topListData.songlist[that.menuedIndex].data.singer,
+                albummid: that.topListData.songlist[that.menuedIndex].data.albummid
               })
             },
             ['addToPlayList'](){
@@ -105,7 +107,8 @@
                 id: that.topListData.songlist[that.menuedIndex].data.songid,
                 mid: that.topListData.songlist[that.menuedIndex].data.songmid,
                 name: that.topListData.songlist[that.menuedIndex].data.songorig,
-                singer: that.topListData.songlist[that.menuedIndex].data.singer
+                singer: that.topListData.songlist[that.menuedIndex].data.singer,
+                albummid: that.topListData.songlist[that.menuedIndex].data.albummid
               })
             }
           }
@@ -378,7 +381,6 @@
 
   .list ul li .music-info {
     display: flex;
-    display: -webkit-flex;
     flex-direction: column;
     flex-grow: 1;
     overflow: hidden;

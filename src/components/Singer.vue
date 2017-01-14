@@ -81,7 +81,8 @@
             id: item.musicData.songid,
             mid: item.musicData.songmid,
             name: item.musicData.songorig,
-            singer: item.musicData.singer
+            singer: item.musicData.singer,
+            albummid:item.musicData.albummid
           })
         })
         this.$store.commit('setPlayList', {
@@ -107,7 +108,8 @@
                 id: that.singer.list[that.menuedIndex].musicData.songid,
                 mid: that.singer.list[that.menuedIndex].musicData.songmid,
                 name: that.singer.list[that.menuedIndex].musicData.songorig,
-                singer: that.singer.list[that.menuedIndex].musicData.singer
+                singer: that.singer.list[that.menuedIndex].musicData.singer,
+                albummid:that.singer.list[that.menuedIndex].musicData.albummid
               })
             },
             ['addToPlayList'](){
@@ -115,7 +117,8 @@
                 id: that.singer.list[that.menuedIndex].musicData.songid,
                 mid: that.singer.list[that.menuedIndex].musicData.songmid,
                 name: that.singer.list[that.menuedIndex].musicData.songorig,
-                singer: that.singer.list[that.menuedIndex].musicData.singer
+                singer: that.singer.list[that.menuedIndex].musicData.singer,
+                albummid:that.singer.list[that.menuedIndex].musicData.albummid
               })
             }
           }
