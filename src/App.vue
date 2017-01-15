@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div id="app">
     <action-sheet></action-sheet>
     <transition :name="routerViewAnimation">
@@ -9,22 +9,27 @@
             @searchshow="rankshow=false"
             @searchhide="rankshow=true"></search>
     <div class="content-warper" v-show="rankshow&&!blurBgShow">
-      <swiper :options="swiperOption" class="swiper-box">
-        <swiper-slide class="swiper-item">
+      <tab v-model="tabedIndex" active-color='#000'>
+        <tab-item v-for="(item,index) in tabList"
+                  :selected="tabedIndex === index"
+                  @click="tabedIndex = index">
+        </tab-item>
+      </tab>
+      <swiper>
+        <swiper-item>
           <recommand></recommand>
-        </swiper-slide>
-        <swiper-slide class="swiper-item">
+        </swiper-item>
+        <swiper-item>
           <rank></rank>
-        </swiper-slide>
-        <div class="swiper-pagination" slot="pagination"></div>
+        </swiper-item>
       </swiper>
+
     </div>
 
-    <transition
-      name="play-slide"
-      v-on:after-enter="showBlurBg"
-      v-on:before-leave="hideBlurBg"
-      v-on:after-leave="routerViewAnimation='page-slide'">
+    <transition name="play-slide"
+                @after-enter="showBlurBg"
+                @before-leave="hideBlurBg"
+                @after-leave="routerViewAnimation='page-slide'">
       <play v-show="playPageShow"></play>
     </transition>
     <transition name="play-slide">
@@ -34,16 +39,18 @@
     <transition name="bar-slide">
       <div id="play-bar" v-show="!playPageShow">
         <audio id="music"
-               v-bind:src="dataUrl"
+               :src="dataUrl"
                @timeupdate="updateTime"
-               v-on:ended="playContinue"
+               @ended="playContinue"
                autoplay></audio>
         <div class="play-bar-image-container" @touchstart="showPlayPage" @click="showPlayPage">
           <img class="play-bar-image" v-lazy="coverImgUrl">
         </div>
-        <p class="play-bar-text" @touchstart="showPlayPage" @click="showPlayPage">{{song.name}}</p>
+        <p class="play-bar-text"
+           @touchstart="showPlayPage"
+           @click="showPlayPage">{{song.name}}</p>
         <img class="play-bar-button"
-             v-bind:src="playing?iconPause:iconPlay"
+             :src="playing?iconPause:iconPlay"
              @touchend="tapButton"
              @click="tapButton">
       </div>
@@ -59,10 +66,10 @@
   import ActionSheet from './components/ActionSheet'
   import PlayingList from './components/PlayingList'
 
-  import {mapMutations, mapState,mapGetters} from 'vuex'
-  import { swiper, swiperSlide } from 'vue-awesome-swiper'
+  import {mapMutations, mapState, mapGetters} from 'vuex'
+  import { Tab, TabItem, Swiper, SwiperItem } from 'vux'
 
-  const TAB_NAME=['推荐','排行榜']
+  const TAB_NAME = ['推荐', '排行榜']
 
   export default {
     components: {
@@ -72,8 +79,22 @@
       Recommand,
       ActionSheet,
       PlayingList,
-      swiper,
-      swiperSlide
+      Tab,
+      TabItem,
+      Swiper,
+      SwiperItem
+    },
+    data() {
+      return {
+        iconPlay: require('./assets/icon-play.png'),
+        iconPause: require('./assets/icon-pause.png'),
+        playPageShow: false,
+        blurBgShow: false,
+        rankshow: true,
+        routerViewAnimation: 'page-slide',
+        tabList: TAB_NAME,
+        tabedIndex: 0
+      }
     },
     methods: {
       tapButton: function (event) {
@@ -89,7 +110,7 @@
         this.playPageShow = false
       },
       showBlurBg: function () {
-        this.routerViewAnimation='fade'
+        this.routerViewAnimation = 'fade'
         this.blurBgShow = true
       },
       hideBlurBg: function () {
@@ -103,30 +124,12 @@
         'play', 'pause', 'playContinue'
       ])
     },
-    data () {
-      return {
-        iconPlay: require('./assets/icon-play.png'),
-        iconPause: require('./assets/icon-pause.png'),
-        playPageShow: false,
-        blurBgShow: false,
-        rankshow: true,
-        routerViewAnimation:'page-slide',
-        swiperOption: {
-          pagination: '.swiper-pagination',
-          paginationClickable: true,
-          paginationBulletRender(swiper, index, className) {
-            return `<span class="${className} swiper-pagination-bullet-custom">${TAB_NAME[index]}</span>`
-            // return '<span class="' + className + ' swiper-pagination-bullet-custom' + '">' + (index + 1) + '</span>';
-          }
-        }
-      }
-    },
     computed: {
       ...mapGetters([
         'coverImgUrl'
       ]),
       ...mapState({
-        dataUrl (state) {
+        dataUrl(state) {
           return 'http://ws.stream.qqmusic.qq.com/' + state.PlayService.song.id + '.m4a?fromtag=46'
         },
         playing: state => state.PlayService.playing,
@@ -149,7 +152,7 @@
             },
             jsonp: 'callback'
           }).then((response) => {
-            this.$store.commit('setAlbummid',response.data.albummid)
+            this.$store.commit('setAlbummid', response.data.albummid)
           })
         }
 
@@ -175,9 +178,9 @@
   }
 
   #app {
-    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC","Helvetica Neue",STHeiti,"Microsoft Yahei",Tahoma,Simsun,sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", STHeiti, "Microsoft Yahei", Tahoma, Simsun, sans-serif;
     width: 100%;
-    height:100%;
+    height: 100%;
   }
 
   #app a {
@@ -371,8 +374,8 @@
     animation-name: imgFadeIn;
   }
 
-  .content-warper{
-    margin-top:60px;
+  .content-warper {
+    margin-top: 60px;
   }
 
   .swiper-box {
@@ -388,7 +391,7 @@
   .swiper-pagination-bullet-custom {
     width: 100% !important;
     height: 100% !important;
-    margin:0 !important;
+    margin: 0 !important;
     text-align: center;
     line-height: 50px;
     color: #999999;
@@ -402,13 +405,13 @@
 
   }
 
-  .swiper-pagination{
-    top:0;
-    height:50px;
+  .swiper-pagination {
+    top: 0;
+    height: 50px;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    width:100%;
+    width: 100%;
   }
 
 

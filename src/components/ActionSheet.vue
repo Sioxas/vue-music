@@ -23,7 +23,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
   import {mapMutations, mapState} from 'vuex'
 
   export default {
