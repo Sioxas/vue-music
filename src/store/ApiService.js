@@ -36,7 +36,7 @@ export default {
       return apiFactory(API.hotkey)()
     },
     getRecommands({}){
-      return apiFactory(API.home_page_data)()
+      return apiFactory(API.first_page_data)()
     },
     getCdList({},id){
       return apiFactory(API.cd)(id)

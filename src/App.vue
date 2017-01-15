@@ -1,4 +1,4 @@
-﻿<template>
+﻿﻿<template>
   <div id="app">
     <action-sheet></action-sheet>
     <transition :name="routerViewAnimation">
@@ -9,21 +9,15 @@
             @searchshow="rankshow=false"
             @searchhide="rankshow=true"></search>
     <div class="content-warper" v-show="rankshow&&!blurBgShow">
-      <tab v-model="tabedIndex" active-color='#000'>
-        <tab-item v-for="(item,index) in tabList"
-                  :selected="tabedIndex === index"
-                  @click="tabedIndex = index">
-        </tab-item>
-      </tab>
-      <swiper>
-        <swiper-item>
+      <swiper :options="swiperOption" class="swiper-box">
+        <swiper-slide class="swiper-item">
           <recommand></recommand>
-        </swiper-item>
-        <swiper-item>
+        </swiper-slide>
+        <swiper-slide class="swiper-item">
           <rank></rank>
-        </swiper-item>
+        </swiper-slide>
+        <div class="swiper-pagination" slot="pagination"></div>
       </swiper>
-
     </div>
 
     <transition name="play-slide"
@@ -46,9 +40,7 @@
         <div class="play-bar-image-container" @touchstart="showPlayPage" @click="showPlayPage">
           <img class="play-bar-image" v-lazy="coverImgUrl">
         </div>
-        <p class="play-bar-text"
-           @touchstart="showPlayPage"
-           @click="showPlayPage">{{song.name}}</p>
+        <p class="play-bar-text" @touchstart="showPlayPage" @click="showPlayPage">{{song.name}}</p>
         <img class="play-bar-button"
              :src="playing?iconPause:iconPlay"
              @touchend="tapButton"
@@ -67,7 +59,7 @@
   import PlayingList from './components/PlayingList'
 
   import {mapMutations, mapState, mapGetters} from 'vuex'
-  import { Tab, TabItem, Swiper, SwiperItem } from 'vux'
+  import {swiper, swiperSlide} from 'vue-awesome-swiper'
 
   const TAB_NAME = ['推荐', '排行榜']
 
@@ -79,44 +71,30 @@
       Recommand,
       ActionSheet,
       PlayingList,
-      Tab,
-      TabItem,
-      Swiper,
-      SwiperItem
-    },
-    data() {
-      return {
-        iconPlay: require('./assets/icon-play.png'),
-        iconPause: require('./assets/icon-pause.png'),
-        playPageShow: false,
-        blurBgShow: false,
-        rankshow: true,
-        routerViewAnimation: 'page-slide',
-        tabList: TAB_NAME,
-        tabedIndex: 0
-      }
+      swiper,
+      swiperSlide
     },
     methods: {
-      tapButton: function (event) {
+      tapButton(event) {
         event.preventDefault()
         this.playing ? this.pause() : this.play()
       },
-      showPlayPage: function (event) {
+      showPlayPage(event) {
         event.preventDefault()
         this.playPageShow = true
       },
-      hidePlayPage: function (event) {
+      hidePlayPage(event) {
         event.preventDefault()
         this.playPageShow = false
       },
-      showBlurBg: function () {
+      showBlurBg() {
         this.routerViewAnimation = 'fade'
         this.blurBgShow = true
       },
-      hideBlurBg: function () {
+      hideBlurBg () {
         this.blurBgShow = false
       },
-      updateTime: function () {
+      updateTime() {
         this.$store.commit('updateCurrentTime', parseInt(document.getElementById('music').currentTime))
         this.$store.commit('updateDuration', parseInt(document.getElementById('music').duration))
       },
@@ -124,12 +102,30 @@
         'play', 'pause', 'playContinue'
       ])
     },
+    data () {
+      return {
+        iconPlay: require('./assets/icon-play.png'),
+        iconPause: require('./assets/icon-pause.png'),
+        playPageShow: false,
+        blurBgShow: false,
+        rankshow: true,
+        routerViewAnimation: 'page-slide',
+        swiperOption: {
+          pagination: '.swiper-pagination',
+          paginationClickable: true,
+          paginationBulletRender(swiper, index, className) {
+            return `<span class="${className} swiper-pagination-bullet-custom">${TAB_NAME[index]}</span>`
+            // return '<span class="' + className + ' swiper-pagination-bullet-custom' + '">' + (index + 1) + '</span>';
+          }
+        }
+      }
+    },
     computed: {
       ...mapGetters([
         'coverImgUrl'
       ]),
       ...mapState({
-        dataUrl(state) {
+        dataUrl (state) {
           return 'http://ws.stream.qqmusic.qq.com/' + state.PlayService.song.id + '.m4a?fromtag=46'
         },
         playing: state => state.PlayService.playing,
@@ -137,14 +133,14 @@
       })
     },
     watch: {
-      playing: function (val) {
+      playing(val) {
         if (val) {
           document.getElementById('music').play()
         } else {
           document.getElementById('music').pause()
         }
       },
-      song: function (song) {
+      song(song) {
         if (this.$store.state.PlayService.playList.length > 0 && typeof song.albummid === 'undefined') {
           this.$http.jsonp('http://120.27.93.97/weappserver/get_music_info.php', {
             params: {
@@ -155,7 +151,6 @@
             this.$store.commit('setAlbummid', response.data.albummid)
           })
         }
-
       }
     }
   }

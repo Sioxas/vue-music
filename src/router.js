@@ -18,5 +18,9 @@ const routes = [
 ]
 
 export default new VueRouter({
-  routes
+  routes,
+  //只在history模式下有用
+  scrollBehavior (to, from, savedPosition) {
+    return { x: 0, y: 0 }
+  }
 })

@@ -71,10 +71,10 @@
       }
     },
     methods: {
-      hideSinger: function () {
+      hideSinger() {
         this.$router.go(-1)
       },
-      play: function (index) {
+      play(index) {
         let list = []
         this.singer.list.forEach(item => {
           list.push({
@@ -91,7 +91,7 @@
         })
         this.$store.commit('play')
       },
-      showMenu: function (num) {
+      showMenu(num) {
         this.menuedIndex = num
         let that = this
         this.$store.dispatch('notifyActionSheet', {
@@ -137,7 +137,7 @@
       }
     },
     computed: {
-      color: function () {
+      color() {
         if (this.singer !== null) {
           let fixed = '00000' + this.singer.color.toString(16)
           return '#' + fixed.substr(fixed.length - 6)
@@ -145,30 +145,30 @@
           return '#ffffff'
         }
       },
-      imgurl: function () {
+      imgurl () {
         return 'http://y.gtimg.cn/music/photo_new/T001R300x300M000' + this.singermid + '.jpg?max_age=2592000'
       },
-      gradientcolor: function () {
+      gradientcolor () {
         return '-webkit-linear-gradient(top, rgba(' + this.r + ',' + this.g + ',' + this.b + ', 0), ' + this.color + ')'
       },
-      isDark: function () {
+      isDark() {
         var grayLevel = this.r * 0.299 + this.g * 0.587 + this.b * 0.114
         return (grayLevel < 192)
       },
-      background: function () {
+      background() {
         return 'rgba(' + this.r + ',' + this.g + ',' + this.b + ',' + this.opacity + ')'
       },
-      r: function () {
+      r() {
         return parseInt(this.color.slice(1, 3), 16)
       },
-      g: function () {
+      g () {
         return parseInt(this.color.slice(3, 5), 16)
       },
-      b: function () {
+      b () {
         return parseInt(this.color.slice(5, 7), 16)
       }
     },
-    created: function () {
+    created() {
       this.$store.dispatch('getSingerInfo',this.singermid).then((response) => {
         this.singer = response.data.data
       })
