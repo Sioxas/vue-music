@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div id="app">
     <action-sheet></action-sheet>
     <transition :name="routerViewAnimation">

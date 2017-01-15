@@ -3,7 +3,7 @@ var config = require('../config')
 var utils = require('./utils')
 var projectRoot = path.resolve(__dirname, '../')
 
-const originaWebpackConfig = module.exports = {
+module.exports = {
   entry: {
     app: './src/main.js'
   },
@@ -71,10 +71,3 @@ const originaWebpackConfig = module.exports = {
     ]
   }
 }
-
-const vuxLoader = require('vux-loader')
-module.exports = vuxLoader.merge(originaWebpackConfig, {
-  plugins: [{
-    name: 'vux-ui'
-  }]
-})
