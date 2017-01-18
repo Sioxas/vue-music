@@ -77,7 +77,9 @@
           <img class="group-img" src="./../assets/icon-mv.png">
           <p class="group-p">MV</p>
         </div>
-        <div class="mv-item" v-for="item in searchRes.mv.itemlist">
+        <div class="mv-item"
+             @click="openmv(item.vid)"
+             v-for="item in searchRes.mv.itemlist">
           <p class="mv-name">{{item.name}}</p>
           <p class="mv-author">{{item.singer}}</p>
         </div>
@@ -160,6 +162,9 @@
       },
       showSinger: function (singermid) {
         this.$router.push({name: 'singer', params: {id: singermid}})
+      },
+      openmv(vid){
+        window.open("https://y.qq.com/portal/mv/v/" + vid + ".html")
       }
     },
     filters: {
@@ -404,6 +409,7 @@
     flex-direction: column;
     border-bottom: #eeeeee 1px solid;
     padding: 10px;
+    cursor:pointer;
   }
 
   .mv-name {

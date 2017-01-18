@@ -10,6 +10,9 @@
         </swiper-slide>
         <div class="swiper-pagination-white swiper-pagination-position" slot="pagination"></div>
       </swiper>
+
+
+
       <div class="hotlist">
         <div class="list-title">
           <p class="title-text">热门歌单</p>
@@ -47,16 +50,28 @@
       <!--</div>-->
       <!--</div>-->
       <!--</div>-->
+
+      <div class="mvlist">
+        <mvitem v-for="item in mvList"
+                :name="item.mvtitle"
+                :vid="item.vid"
+                :date="item.pub_date"
+                :playcount="item.listennum"
+                :author="item.singer_name"></mvitem>
+      </div>
+
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import {swiper, swiperSlide} from 'vue-awesome-swiper'
+  import mvitem from '../lib/components/mvitem'
   export default {
     components: {
       swiper,
-      swiperSlide
+      swiperSlide,
+      mvitem
     },
     data () {
       return {
@@ -65,6 +80,7 @@
         slider: [],
         radioList: [],
         songList: [],
+        mvList: [],
         swiperOptionIn: {
           pagination: '.swiper-pagination-white',
           paginationClickable: true,
@@ -78,116 +94,103 @@
         this.loading = false
         this.slider = response.data.data.focus
         this.songList = response.data.data.hotdiss.list
+        this.mvList=response.data.data.shoubomv.all
       }, (responce) => {
         this.loadingState = '加载失败'
       })
     },
     filters: {
       listenCount: num => Math.round(num / 1000) / 10 + '万'
-    },
+    }
   }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped lang="less" rel="stylesheet/less">
   .recommand {
     margin-top: 50px;
-  }
+    .loading {
+      color: #999;
+      width: 100%;
+      height: 150px;
+      line-height: 150px;
+      text-align: center;
+    }
+    .content {
+      .swiper-position {
+        position: relative;
+        .recommand-swiper-img {
+          width: 100%;
+          display: block;
+        }
+      }
+      .swiper-pagination-position {
+        position: absolute;
+        z-index: 1;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+      }
+      .hotlist {
+        display: flex;
+        flex-direction: column;
+        background: #fff;
+        margin-top: 10px;
+        box-shadow: 0 0 10px #DDD;
+        .list-title {
+          height: 50px;
+          text-align: center;
+          line-height: 50px;
+        }
+        .list-content {
+          display: flex;
+          flex-direction: row;
+          flex-wrap: wrap;
+          .list-item {
+            width: 50%;
+            cursor: pointer;
+            .list-img {
+              position: relative;
+              img {
+                width: 100%;
+              }
+              .listen-count {
+                position: absolute;
+                bottom: 5px;
+                left: 5px;
+                color: #fff;
+                font-size: 12px;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                img {
+                  width: 15px;
+                  height: 15px;
+                  display: inline-block;
+                  margin-right: 3px;
+                }
+              }
+            }
+            .list-info {
+              padding: 0 5px;
+              font-weight: 300;
+              font-size: 14px;
+              margin-bottom: 10px;
+              .list-name {
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+              }
+              .list-author {
+                color: #777777
+              }
+            }
+          }
+        }
+      }
+      .mvlist{
 
-  .loading {
-    color: #999;
-    width: 100%;
-    height: 150px;
-    line-height: 150px;
-    text-align: center;
-  }
-
-  .recommand-swiper-img {
-    width: 100%;
-    display: block;
-  }
-
-  .swiper-slide {
-
-  }
-
-  .swiper-position {
-    position: relative;
-  }
-
-  .swiper-pagination-position {
-    position: absolute;
-    z-index: 1;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-  }
-
-  .hotlist {
-    display: flex;
-    flex-direction: column;
-    background: #fff;
-    margin-top: 10px;
-    box-shadow: 0 0 10px #DDD;
-  }
-
-  .hotlist .list-title {
-    height: 50px;
-    text-align: center;
-    line-height: 50px;
-  }
-
-  .hotlist .list-content {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-
-  .hotlist .list-content .list-item {
-    width: 50%;
-    cursor: pointer;
-  }
-
-  .hotlist .list-content .list-item .list-img{
-    position:relative;
-  }
-
-  .hotlist .list-content .list-item .list-img img {
-    width: 100%;
-  }
-
-  .hotlist .list-content .list-item .list-img .listen-count{
-    position: absolute;
-    bottom:5px;
-    left:5px;
-    color:#fff;
-    font-size: 12px;
-    display:flex;
-    flex-direction:row;
-    align-items: center;
-  }
-
-  .hotlist .list-content .list-item .list-img .listen-count img{
-    width:15px;
-    height:15px;
-    display: inline-block;
-    margin-right:3px;
-  }
-
-  .hotlist .list-content .list-item .list-info {
-    padding: 0 5px;
-    font-weight: 300;
-    font-size: 14px;
-    margin-bottom: 10px;
-  }
-
-  .hotlist .list-content .list-item .list-info .list-name {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-
-  .hotlist .list-content .list-item .list-info .list-author {
-    color: #777777
+      }
+    }
   }
 </style>
