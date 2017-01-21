@@ -6,11 +6,10 @@
     <div class="content" v-if="!loading">
       <swiper :options="swiperOptionIn" class="swiper-position">
         <swiper-slide v-for="s in slider">
-          <img class="recommand-swiper-img" v-lazy="s.pic">
+          <img class="recommand-swiper-img" v-lazy="s.pic" @click="jump(s)">
         </swiper-slide>
         <div class="swiper-pagination-white swiper-pagination-position" slot="pagination"></div>
       </swiper>
-
 
 
       <div class="hotlist">
@@ -67,6 +66,9 @@
 <script type="text/ecmascript-6">
   import {swiper, swiperSlide} from 'vue-awesome-swiper'
   import mvitem from '../lib/components/mvitem'
+
+  import {types} from '../config/def'
+
   export default {
     components: {
       swiper,
@@ -88,13 +90,40 @@
         }
       }
     },
-    methods: {},
+    methods: {
+      jump(info){
+        switch (info.type) {
+          case types.ALBUM:
+            this.$router.push({
+              name: 'album',
+              params: {
+                id: info.id
+              }
+            })
+            break;
+          case types.CD:
+            this.$router.push({
+              name: 'cd',
+              params: {
+                id: info.id
+              }
+            })
+            break;
+          case types.JUMP:
+            window.open(info.jumpurl)
+            break;
+          default:
+            console.log(info)
+            break;
+        }
+      }
+    },
     created: function () {
       this.$store.dispatch('getRecommands').then((response) => {
         this.loading = false
         this.slider = response.data.data.focus
         this.songList = response.data.data.hotdiss.list
-        this.mvList=response.data.data.shoubomv.all
+        this.mvList = response.data.data.shoubomv.all
       }, (responce) => {
         this.loadingState = '加载失败'
       })
@@ -119,6 +148,7 @@
     .content {
       .swiper-position {
         position: relative;
+        cursor: pointer;
         .recommand-swiper-img {
           width: 100%;
           display: block;
@@ -188,7 +218,7 @@
           }
         }
       }
-      .mvlist{
+      .mvlist {
 
       }
     }
