@@ -126,7 +126,7 @@
       ]),
       ...mapState({
         dataUrl (state) {
-          return 'http://ws.stream.qqmusic.qq.com/' + state.PlayService.song.id + '.m4a?fromtag=46'
+          return 'https://dl.stream.qqmusic.qq.com/C100' + state.PlayService.song.mid + '.m4a?fromtag=46'
         },
         playing: state => state.PlayService.playing,
         song: state => state.PlayService.song
