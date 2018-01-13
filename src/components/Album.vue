@@ -36,11 +36,11 @@
 
       <div class="m-list">
         <ul>
-          <li class="border-1px border-1px-after list-item" v-for="(song,index) in album.list">
+          <li class="border-1px border-1px-after list-item" v-for="(song,index) in album.list" :key="index">
             <div class="music-info" @click="play(index)">
               <p class="music-name">{{song.songorig}}</p>
               <p class="music-author">
-                <span v-for="singer in song.singer">{{singer.name}}</span>
+                <span v-for="singer in song.singer" :key="singer">{{singer.name}}</span>
                 <span>{{song.albumdesc}}</span>
               </p>
             </div>
