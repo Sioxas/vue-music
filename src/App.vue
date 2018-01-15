@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div id="app">
     <action-sheet></action-sheet>
     <transition :name="routerViewAnimation">
@@ -9,11 +9,12 @@
     <div class="content-warper" v-show="rankshow&&!blurBgShow">
       <swiper :options="swiperOption" class="swiper-box">
         <swiper-slide class="swiper-item">
-          <recommand></recommand>
-        </swiper-slide>
-        <swiper-slide class="swiper-item">
           <rank></rank>
         </swiper-slide>
+        <swiper-slide class="swiper-item">
+          <recommand></recommand>
+        </swiper-slide>
+
         <div class="swiper-pagination" slot="pagination"></div>
       </swiper>
     </div>
@@ -39,17 +40,17 @@
 </template>
 
 <script type="text/ecmascript-6">
-import Search from './components/Search'
-import Play from './components/Play'
-import Rank from './components/Rank'
-import Recommand from './components/Recommand'
-import ActionSheet from './components/ActionSheet'
-import PlayingList from './components/PlayingList'
+import Search from "./components/Search";
+import Play from "./components/Play";
+import Rank from "./components/Rank";
+import Recommand from "./components/Recommand";
+import ActionSheet from "./components/ActionSheet";
+import PlayingList from "./components/PlayingList";
 
-import { mapMutations, mapState, mapGetters } from 'vuex'
-import { swiper, swiperSlide } from 'vue-awesome-swiper'
+import { mapMutations, mapState, mapGetters } from "vuex";
+import { swiper, swiperSlide } from "vue-awesome-swiper";
 
-const TAB_NAME = ['推荐', '排行榜']
+const TAB_NAME = ["排行榜", "推荐"];
 
 export default {
   components: {
@@ -64,57 +65,65 @@ export default {
   },
   methods: {
     tapButton(event) {
-      event.preventDefault()
-      this.playing ? this.pause() : this.play()
+      event.preventDefault();
+      this.playing ? this.pause() : this.play();
     },
     showPlayPage(event) {
-      event.preventDefault()
-      this.playPageShow = true
+      event.preventDefault();
+      this.playPageShow = true;
     },
     hidePlayPage(event) {
-      event.preventDefault()
-      this.playPageShow = false
+      event.preventDefault();
+      this.playPageShow = false;
     },
     showBlurBg() {
-      this.routerViewAnimation = 'fade'
-      this.blurBgShow = true
+      this.routerViewAnimation = "fade";
+      this.blurBgShow = true;
     },
     hideBlurBg() {
-      this.blurBgShow = false
+      this.blurBgShow = false;
     },
     updateTime() {
-      this.$store.commit('updateCurrentTime', parseInt(document.getElementById('music').currentTime))
-      this.$store.commit('updateDuration', parseInt(document.getElementById('music').duration))
+      this.$store.commit(
+        "updateCurrentTime",
+        parseInt(document.getElementById("music").currentTime)
+      );
+      this.$store.commit(
+        "updateDuration",
+        parseInt(document.getElementById("music").duration)
+      );
     },
-    ...mapMutations([
-      'play', 'pause', 'playContinue'
-    ])
+    ...mapMutations(["play", "pause", "playContinue"])
   },
   data() {
     return {
-      iconPlay: require('./assets/icon-play.png'),
-      iconPause: require('./assets/icon-pause.png'),
+      iconPlay: require("./assets/icon-play.png"),
+      iconPause: require("./assets/icon-pause.png"),
       playPageShow: false,
       blurBgShow: false,
       rankshow: true,
-      routerViewAnimation: 'page-slide',
+      routerViewAnimation: "page-slide",
       swiperOption: {
-        pagination: '.swiper-pagination',
+        pagination: ".swiper-pagination",
         paginationClickable: true,
         paginationBulletRender(swiper, index, className) {
-          return `<span class="${className} swiper-pagination-bullet-custom">${TAB_NAME[index]}</span>`
+          return `<span class="${className} swiper-pagination-bullet-custom">${TAB_NAME[
+            index
+          ]}</span>`;
           // return '<span class="' + className + ' swiper-pagination-bullet-custom' + '">' + (index + 1) + '</span>';
         }
       }
-    }
+    };
   },
   computed: {
-    ...mapGetters([
-      'coverImgUrl'
-    ]),
+    ...mapGetters(["coverImgUrl"]),
     ...mapState({
       dataUrl(state) {
-        return 'https://dl.stream.qqmusic.qq.com/C100' + state.PlayService.song.mid + '.m4a?fromtag=46'
+        return (
+          "https://dl.stream.qqmusic.qq.com/C100" +
+          state.PlayService.song.mid +
+          ".m4a?fromtag=46"
+        );
       },
       playing: state => state.PlayService.playing,
       song: state => state.PlayService.song
@@ -123,25 +132,30 @@ export default {
   watch: {
     playing(val) {
       if (val) {
-        document.getElementById('music').play()
+        document.getElementById("music").play();
       } else {
-        document.getElementById('music').pause()
+        document.getElementById("music").pause();
       }
     },
     song(song) {
-      if (this.$store.state.PlayService.playList.length > 0 && typeof song.albummid === 'undefined') {
-        this.$http.jsonp('http://120.27.93.97/weappserver/get_music_info.php', {
-          params: {
-            mid: song.mid
-          },
-          jsonp: 'callback'
-        }).then((response) => {
-          this.$store.commit('setAlbummid', response.data.albummid)
-        })
+      if (
+        this.$store.state.PlayService.playList.length > 0 &&
+        typeof song.albummid === "undefined"
+      ) {
+        this.$http
+          .jsonp("http://120.27.93.97/weappserver/get_music_info.php", {
+            params: {
+              mid: song.mid
+            },
+            jsonp: "callback"
+          })
+          .then(response => {
+            this.$store.commit("setAlbummid", response.data.albummid);
+          });
       }
     }
   }
-}
+};
 </script>
 
 <style>
@@ -152,7 +166,7 @@ export default {
 
 html {
   overflow-x: hidden;
-  background: #EEEEEE;
+  background: #eeeeee;
 }
 
 body {
@@ -161,7 +175,8 @@ body {
 }
 
 #app {
-  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", STHeiti, "Microsoft Yahei", Tahoma, Simsun, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+    "Helvetica Neue", STHeiti, "Microsoft Yahei", Tahoma, Simsun, sans-serif;
   width: 100%;
   height: 100%;
 }
@@ -212,11 +227,11 @@ body {
 }
 
 .page-slide-enter-active {
-  transition: all .3s ease;
+  transition: all 0.3s ease;
 }
 
 .page-slide-leave-active {
-  transition: all .3s ease-out;
+  transition: all 0.3s ease-out;
 }
 
 .page-slide-enter,
@@ -225,11 +240,11 @@ body {
 }
 
 .fade-enter-active {
-  transition: all .3s ease;
+  transition: all 0.3s ease;
 }
 
 .fade-leave-active {
-  transition: all .3s ease-out;
+  transition: all 0.3s ease-out;
 }
 
 .fade-enter,
@@ -238,11 +253,11 @@ body {
 }
 
 .play-slide-enter-active {
-  transition: all .3s ease;
+  transition: all 0.3s ease;
 }
 
 .play-slide-leave-active {
-  transition: all .3s ease-out;
+  transition: all 0.3s ease-out;
 }
 
 .play-slide-enter,
@@ -251,11 +266,11 @@ body {
 }
 
 .bar-slide-enter-active {
-  transition: all .3s ease;
+  transition: all 0.3s ease;
 }
 
 .bar-slide-leave-active {
-  transition: all .3s ease-out;
+  transition: all 0.3s ease-out;
 }
 
 .bar-slide-enter,
@@ -274,9 +289,6 @@ body {
   }
 }
 
-
-
-
 /*border-1px 部分*/
 
 .border-1px {
@@ -285,7 +297,7 @@ body {
 
 .border-1px-after:after {
   border-top: 1px solid #d0d0d0;
-  content: ' ';
+  content: " ";
   display: block;
   width: 100%;
   position: absolute;
@@ -294,7 +306,7 @@ body {
 
 .border-1px-before:before {
   border-top: 1px solid #d0d0d0;
-  content: ' ';
+  content: " ";
   display: block;
   width: 100%;
   position: absolute;
@@ -309,13 +321,12 @@ body {
   bottom: 0;
 }
 
-@media (-webkit-min-device-pixel-ratio: 1.5),
-(min-device-pixel-ratio: 1.5) {
+@media (-webkit-min-device-pixel-ratio: 1.5), (min-device-pixel-ratio: 1.5) {
   .border-1px:after,
   .border-1px:before {
-    -webkit-transform: scaleY(.7);
+    -webkit-transform: scaleY(0.7);
     -webkit-transform-origin: 0 0;
-    transform: scaleY(.7);
+    transform: scaleY(0.7);
   }
 
   .border-1px:after {
@@ -323,12 +334,11 @@ body {
   }
 }
 
-@media (-webkit-min-device-pixel-ratio: 2),
-(min-device-pixel-ratio: 2) {
+@media (-webkit-min-device-pixel-ratio: 2), (min-device-pixel-ratio: 2) {
   .border-1px:after,
   .border-1px:before {
-    -webkit-transform: scaleY(.5);
-    transform: scaleY(.5);
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
   }
 }
 
@@ -350,7 +360,7 @@ body {
   }
 }
 
-img[lazy=loaded] {
+img[lazy="loaded"] {
   -webkit-animation-duration: 1s;
   animation-duration: 1s;
   -webkit-animation-fill-mode: both;
@@ -359,7 +369,7 @@ img[lazy=loaded] {
   animation-name: imgFadeIn;
 }
 
-img[lazy=error] {
+img[lazy="error"] {
   border-radius: 2px;
   -webkit-animation-duration: 1s;
   animation-duration: 1s;
