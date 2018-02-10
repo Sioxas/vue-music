@@ -50,6 +50,8 @@ import PlayingList from "./components/PlayingList";
 import { mapMutations, mapState, mapGetters } from "vuex";
 import { swiper, swiperSlide } from "vue-awesome-swiper";
 
+import 'swiper/dist/css/swiper.css'
+
 const TAB_NAME = ["排行榜", "推荐"];
 
 export default {
