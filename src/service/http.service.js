@@ -5,4 +5,8 @@
      withCredentials: true
  })
 
- export default http
+ export class HttpService{
+     constructor(){
+
+     }
+ }
