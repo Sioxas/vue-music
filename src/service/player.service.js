@@ -1,5 +1,3 @@
 export class PlayerService{
-    constructor(){
 
-    }
 }

@@ -1,7 +1,6 @@
-import http from './http.service'
-
 export class ApiService{
-    constructor(){
-
+    onInit(DI){
+        const http = DI.get('http')
+        http.get('')
     }
 }

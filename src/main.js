@@ -5,6 +5,8 @@ import VueLazyload from 'vue-lazyload'
 import App from './App'
 import store from './store'
 import router from './router'
+import {DI} from './service/provider'
+import {service} from './config/types'
 
 Vue.use(VueResource)
 Vue.use(VueLazyload, {
@@ -21,3 +23,6 @@ new Vue({
   router,
   render: h => h(App)
 })
+
+const api = DI.get('api')
+console.log(api)
