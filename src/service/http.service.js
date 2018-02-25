@@ -1,6 +1,12 @@
  import axios from 'axios'
- export const HttpService = axios.create({
-     baseURL: '/api',
-     withCredentials: true
- })
+//  export const MyhttpService = axios.create({
+//      baseURL: '/api',
+//      withCredentials: true
+//  })
+
+export class MyhttpService{
+    constructor(){
+        console.log(axios.Axios)
+    }
+}
 
