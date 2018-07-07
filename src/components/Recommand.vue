@@ -5,7 +5,7 @@
     </div>
     <div class="content" v-if="!loading">
       <swiper :options="swiperOptionIn" class="swiper-position">
-        <swiper-slide v-for="s in slider">
+        <swiper-slide v-for="(s,index) in slider" :key="index">
           <img class="recommand-swiper-img" v-lazy="s.pic" @click="jump(s)">
         </swiper-slide>
         <div class="swiper-pagination-white swiper-pagination-position" slot="pagination"></div>
@@ -18,7 +18,8 @@
         </div>
         <div class="list-content">
           <div class="list-item"
-               v-for="item in songList"
+               v-for="(item,index) in songList"
+                :key="index"
                @click="$router.push({name: 'cd', params: {id: item.dissid}})">
             <div class="list-img">
               <img v-lazy="item.imgurl">
@@ -51,7 +52,8 @@
       <!--</div>-->
 
       <div class="mvlist">
-        <mvitem v-for="item in mvList"
+        <mvitem v-for="(item,index) in mvList"
+                :key="index"
                 :name="item.mvtitle"
                 :vid="item.vid"
                 :date="item.pub_date"
@@ -118,7 +120,7 @@
         }
       }
     },
-    created: function () {
+    created() {
       this.$store.dispatch('getRecommands').then((response) => {
         this.loading = false
         this.slider = response.data.data.focus

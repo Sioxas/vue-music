@@ -32,13 +32,13 @@
         <p>热门单曲</p>
       </div>
       <ul>
-        <li class="border-1px border-1px-after" v-for="(item,index) in singer.list">
+        <li class="border-1px border-1px-after" v-for="(item,index) in singer.list" :key="index">
           <div class="music-info" @click="play(index)">
             <div class="music-name" :class="{dark:isDark}">
               {{item.musicData.songorig}}
             </div>
             <div class="music-singer">
-              <span v-for="singername in item.musicData.singer">{{singername.name}}-</span>
+              <span v-for="(singername,index) in item.musicData.singer" :key="index">{{singername.name}}-</span>
               <span>{{item.musicData.albumname}}</span>
             </div>
           </div>
@@ -124,7 +124,7 @@
           }
         })
       },
-      getSingerStr: val => {
+      getSingerStr(val) {
         if (typeof val === 'string') {
           return val
         } else if (val instanceof Array) {

@@ -19,10 +19,10 @@
     </div>
     <div class="hotkey" v-if="searchRes==null&&searchShow">
       <div class="search-history">
-        <div class="search-history-item" v-for="item in searchHistory" @click="search(item)">{{item}}</div>
+        <div class="search-history-item" v-for="item in searchHistory" :key="item" @click="search(item)">{{item}}</div>
       </div>
       <ul>
-        <li v-for="(item,index) in hotkey" @click="search(item.k)">
+        <li v-for="(item,index) in hotkey" :key="item" @click="search(item.k)">
           <span class="hotkey-index">{{index+1}}</span>
           <span class="hotkey-k">{{item.k}}</span>
           <span class="hotkey-n">{{item.n | searchVol}}</span>
@@ -35,7 +35,7 @@
           <img class="group-img" src="./../assets/icon-music.png">
           <p class="group-p">单曲</p>
         </div>
-        <div class="result-item" v-for="(item, index) in searchRes.song.itemlist">
+        <div class="result-item" v-for="(item, index) in searchRes.song.itemlist" :key="item">
           <p class="result-title" @click="play(index)">{{item.name}}</p>
           <p class="result-author" @click="play(index)">-{{item.singer}}</p>
           <div class="action-button" @touchend.prevent="showMenu(index)" @click="showMenu(index)">
@@ -50,7 +50,7 @@
           <img class="group-img" src="./../assets/icon-album.png">
           <p class="group-p">专辑</p>
         </div>
-        <div class="album-item" v-for="item in searchRes.album.itemlist" @click="showAlbum(item.mid)">
+        <div class="album-item" v-for="item in searchRes.album.itemlist" :key="item" @click="showAlbum(item.mid)">
           <img class="album-img" v-lazy="item.pic">
           <div class="album-info">
             <p class="album-name">{{item.name}}</p>
@@ -64,7 +64,7 @@
           <img class="group-img" src="./../assets/icon-singer.png">
           <p class="group-p">歌手</p>
         </div>
-        <div class="singer-item" v-for="item in searchRes.singer.itemlist" @click="showSinger(item.mid)">
+        <div class="singer-item" v-for="item in searchRes.singer.itemlist" :key="item" @click="showSinger(item.mid)">
           <img class="singer-img" v-lazy="item.pic">
           <div class="singer-p">
             <p>{{item.name}}</p>
@@ -79,7 +79,7 @@
         </div>
         <div class="mv-item"
              @click="openmv(item.vid)"
-             v-for="item in searchRes.mv.itemlist">
+             v-for="(item,index) in searchRes.mv.itemlist" :key="index">
           <p class="mv-name">{{item.name}}</p>
           <p class="mv-author">{{item.singer}}</p>
         </div>
@@ -107,7 +107,7 @@
       }
     },
     methods: {
-      search: function (key) {
+      search(key) {
         this.key = key
         this.$store.dispatch('search', key).then((response) => {
           this.searchRes = response.data.data
@@ -120,23 +120,23 @@
           localStorage.searchHistory = JSON.stringify(this.searchHistory)
         })
       },
-      focus: function () {
+      focus() {
         this.searchShow = true
         this.$emit('searchshow')
       },
-      searchCancel: function () {
+      searchCancel() {
         this.searchShow = false
         this.key = ''
         this.searchRes = null
         this.$emit('searchhide')
       },
-      play: function (index) {
+      play(index) {
         this.$store.commit('setPlayList', {
           index: index,
           list: this.searchRes.song.itemlist
         })
       },
-      showMenu: function (num) {
+      showMenu(num) {
         this.menuedIndex = num
         let that = this
         this.$store.dispatch('notifyActionSheet', {
@@ -157,10 +157,10 @@
           }
         })
       },
-      showAlbum: function (mid) {
+      showAlbum (mid) {
         this.$router.push({name: 'album', params: {id: mid}})
       },
-      showSinger: function (singermid) {
+      showSinger(singermid) {
         this.$router.push({name: 'singer', params: {id: singermid}})
       },
       openmv(vid){
@@ -170,7 +170,7 @@
     filters: {
       searchVol: num => Math.round(num / 1000) / 10 + '万'
     },
-    created: function () {
+    created() {
       if (localStorage.searchHistory) {
         this.searchHistory = JSON.parse(localStorage.searchHistory)
       }

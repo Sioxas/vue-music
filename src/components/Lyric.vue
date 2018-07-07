@@ -1,6 +1,6 @@
 <template>
   <div id="lyric">
-    <p class="lyric-item" v-for="v in currentLyric">{{v}}</p>
+    <p class="lyric-item" v-for="(v,index) in currentLyric" :key="index">{{v}}</p>
   </div>
 </template>
 
@@ -16,7 +16,7 @@
     components: {},
     methods: {},
     computed: {
-      currentLyric: function () {
+      currentLyric () {
         if (this.lyric !== null) {
           let that = this
           let pastLyric = []
@@ -37,13 +37,13 @@
           return pastLyric.slice(pastLyric.length - 4, pastLyric.length - 1)
         }
       },
-      currentTimeStamp: function () {
+      currentTimeStamp () {
         let t = this.currentTime.split(':')
         return (parseInt(t[0]) * 60 + parseInt(t[1])) * 100
       }
     },
     watch: {
-      songid: function (id) {
+      songid (id) {
         this.$store.dispatch('getLyric', id)
           .then((responce) => {
             this.lyric = Base64

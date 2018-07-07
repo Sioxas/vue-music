@@ -29,13 +29,13 @@
     </div>
     <div class="list" :style="{background:color}" v-if="cd!=null">
       <ul>
-        <li class="border-1px border-1px-after" v-for="(item,index) in cd.songlist">
+        <li class="border-1px border-1px-after" v-for="(item,index) in cd.songlist" :key="index">
           <div class="music-info" @click="play(index)">
             <div class="music-name" :class="{dark:isDark}">
               {{item.name}}
             </div>
             <div class="music-singer">
-              <span v-for="singername in item.singer">{{singername.name}}-</span>
+              <span v-for="(singername,index) in item.singer" :key="index">{{singername.name}}-</span>
               <span>{{item.subtitle}}</span>
             </div>
           </div>
@@ -65,10 +65,10 @@
       }
     },
     methods: {
-      hideSinger: function () {
+      hideSinger () {
         this.$router.go(-1)
       },
-      play: function (index) {
+      play (index) {
         let list = []
         this.cd.songlist.forEach(item => {
           list.push({
@@ -84,7 +84,7 @@
         })
         this.$store.commit('play')
       },
-      showMenu: function (num) {
+      showMenu (num) {
         this.menuedIndex = num
         let that = this
         this.$store.dispatch('notifyActionSheet', {
@@ -115,7 +115,7 @@
           }
         })
       },
-      getSingerStr: val => {
+      getSingerStr (val)  {
         if (typeof val === 'string') {
           return val
         } else if (val instanceof Array) {
@@ -128,10 +128,10 @@
       }
     },
     computed: {
-      imgurl: function () {
+      imgurl () {
         return this.cd !== null ? this.cd.logo : null
       },
-      color: function () {
+      color () {
         if (this.cd !== null) {
           let fixed = '00000' + this.cd.uin.toString(16)
           return '#' + fixed.substr(fixed.length - 6)
@@ -139,27 +139,27 @@
           return '#ffffff'
         }
       },
-      gradientcolor: function () {
+      gradientcolor () {
         return '-webkit-linear-gradient(top, rgba(' + this.r + ',' + this.g + ',' + this.b + ', 0), ' + this.color + ')'
       },
-      isDark: function () {
+      isDark () {
         let grayLevel = this.r * 0.299 + this.g * 0.587 + this.b * 0.114
         return (grayLevel < 192)
       },
-      background: function () {
+      background () {
         return 'rgba(' + this.r + ',' + this.g + ',' + this.b + ',' + this.opacity + ')'
       },
-      r: function () {
+      r () {
         return parseInt(this.color.slice(1, 3), 16)
       },
-      g: function () {
+      g () {
         return parseInt(this.color.slice(3, 5), 16)
       },
-      b: function () {
+      b () {
         return parseInt(this.color.slice(5, 7), 16)
       }
     },
-    created: function () {
+    created () {
       this.$store.dispatch('getCdList', this.$route.params.id).then((response) => {
         this.cd = response.data.cdlist[0]
       })

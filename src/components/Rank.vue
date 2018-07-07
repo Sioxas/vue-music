@@ -1,14 +1,14 @@
 <template>
   <div class="rank">
     <ul>
-      <li class="rank-item" v-for="item in topList" @click="showRank(item.id)">
+      <li class="rank-item" v-for="(item,index) in topList" @click="showRank(item.id)" :key="index">
         <div class="rank-media">
           <img v-lazy="item.picUrl" alt="">
           <span class="listen-count">{{item.listenCount | listenCount}}</span>
         </div>
         <div class="rank-info">
           <p class="rank-title">{{item.topTitle}}</p>
-          <p class="rank-songs" v-for="(song,index) in item.songList">
+          <p class="rank-songs" v-for="(song,index) in item.songList" :key="index">
             {{index+1}}
             {{song.songname}}
             <span class="rank-singername">-{{song.singername}}</span>
@@ -29,11 +29,11 @@
       }
     },
     methods: {
-      showRank: function (id) {
+      showRank (id) {
         this.$router.push({name: 'rank', params: {id: id}})
       }
     },
-    created: function () {
+    created () {
       this.$store.dispatch('getRankList').then((response) => {
         this.topList = response.data.data.topList
       })

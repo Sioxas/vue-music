@@ -39,126 +39,31 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
-import Search from "./components/Search";
-import Play from "./components/Play";
-import Rank from "./components/Rank";
-import Recommand from "./components/Recommand";
-import ActionSheet from "./components/ActionSheet";
-import PlayingList from "./components/PlayingList";
+<script lang="ts">
+import { Component, Vue, Inject } from 'vue-property-decorator';
 
-import { mapMutations, mapState, mapGetters } from "vuex";
-import { swiper, swiperSlide } from "vue-awesome-swiper";
-
-import 'swiper/dist/css/swiper.css'
-
-const TAB_NAME = ["排行榜", "推荐"];
-
-export default {
-  components: {
-    Search,
-    Play,
-    Rank,
-    Recommand,
-    ActionSheet,
-    PlayingList,
-    swiper,
-    swiperSlide
-  },
-  methods: {
-    tapButton(event) {
-      event.preventDefault();
-      this.playing ? this.pause() : this.play();
-    },
-    showPlayPage(event) {
-      event.preventDefault();
-      this.playPageShow = true;
-    },
-    hidePlayPage(event) {
-      event.preventDefault();
-      this.playPageShow = false;
-    },
-    showBlurBg() {
-      this.routerViewAnimation = "fade";
-      this.blurBgShow = true;
-    },
-    hideBlurBg() {
-      this.blurBgShow = false;
-    },
-    updateTime() {
-      this.$store.commit(
-        "updateCurrentTime",
-        parseInt(document.getElementById("music").currentTime)
-      );
-      this.$store.commit(
-        "updateDuration",
-        parseInt(document.getElementById("music").duration)
-      );
-    },
-    ...mapMutations(["play", "pause", "playContinue"])
-  },
-  data() {
-    return {
-      iconPlay: require("./assets/icon-play.png"),
-      iconPause: require("./assets/icon-pause.png"),
-      playPageShow: false,
-      blurBgShow: false,
-      rankshow: true,
-      routerViewAnimation: "page-slide",
-      swiperOption: {
-        pagination: ".swiper-pagination",
-        paginationClickable: true,
-        paginationBulletRender(swiper, index, className) {
-          return `<span class="${className} swiper-pagination-bullet-custom">${TAB_NAME[
-            index
-          ]}</span>`;
-          // return '<span class="' + className + ' swiper-pagination-bullet-custom' + '">' + (index + 1) + '</span>';
-        }
-      }
-    };
-  },
-  computed: {
-    ...mapGetters(["coverImgUrl"]),
-    ...mapState({
-      dataUrl(state) {
-        return (
-          "https://dl.stream.qqmusic.qq.com/C100" +
-          state.PlayService.song.mid +
-          ".m4a?fromtag=46"
-        );
-      },
-      playing: state => state.PlayService.playing,
-      song: state => state.PlayService.song
-    })
-  },
-  watch: {
-    playing(val) {
-      if (val) {
-        document.getElementById("music").play();
-      } else {
-        document.getElementById("music").pause();
-      }
-    },
-    song(song) {
-      if (
-        this.$store.state.PlayService.playList.length > 0 &&
-        typeof song.albummid === "undefined"
-      ) {
-        this.$http
-          .jsonp("http://120.27.93.97/weappserver/get_music_info.php", {
-            params: {
-              mid: song.mid
-            },
-            jsonp: "callback"
-          })
-          .then(response => {
-            this.$store.commit("setAlbummid", response.data.albummid);
-          });
-      }
+@Component()
+export class App extends Vue{
+  iconPlay = require("./assets/icon-play.png");
+  iconPause = require("./assets/icon-pause.png");
+  playPageShow = false;
+  blurBgShow = false;
+  rankshow = true;
+  routerViewAnimation = "page-slide";
+  swiperOption = {
+    pagination: ".swiper-pagination",
+    paginationClickable: true,
+    paginationBulletRender(swiper, index, className) {
+      return `<span class="${className} swiper-pagination-bullet-custom">${TAB_NAME[
+        index
+      ]}</span>`;
+      // return '<span class="' + className + ' swiper-pagination-bullet-custom' + '">' + (index + 1) + '</span>';
     }
   }
-};
+}
+
 </script>
+
 
 <style>
 * {

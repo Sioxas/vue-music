@@ -9,6 +9,7 @@
     <div class="weui_actionsheet_menu" :class="{'weui_actionsheet_toggle': show}">
       <div class="weui_actionsheet_cell"
            v-for="(text, key) in menus"
+           :key="key"
            @click="emitEvent('on-click-menu', key)"
            v-html="text">
       </div>

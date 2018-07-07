@@ -7,7 +7,7 @@
     </div>
     <div class="m-list">
       <ul>
-        <li class="border-1px border-1px-after list-item" v-for="(item,num) in playList">
+        <li class="border-1px border-1px-after list-item" v-for="(item,num) in playList" :key="num">
           <div class="music-info" @click="play(num)">
             <p class="music-name">{{item.name}}</p>
             <p class="music-author">-{{item.singer | singer}}</p>
@@ -33,13 +33,13 @@
       }
     },
     methods: {
-      play: function (index) {
+      play (index) {
         this.$store.commit('playIndex', index)
       },
-      hidePlayList: function () {
+      hidePlayList () {
         this.$store.commit('closePlayingList')
       },
-      showMenu: function (num) {
+      showMenu (num) {
         this.menuedIndex = num
         let that = this
         this.$store.dispatch('notifyActionSheet', {
@@ -56,7 +56,7 @@
           }
         })
       },
-      getSingerStr: val => {
+      getSingerStr (val) {
         if (typeof val === 'string') {
           return val
         } else if (val instanceof Array) {
@@ -70,10 +70,10 @@
       ...mapMutations(['changePlayMode'])
     },
     computed: {
-      buttonImage: function () {
+      buttonImage () {
         return def.PLAY_MODE_IMG[this.playMode]
       },
-      playModeName:function(){
+      playModeName(){
         return def.PLAY_MODE_NAME[this.playMode]
       },
       ...mapState({
@@ -83,7 +83,7 @@
       })
     },
     filters: {
-      singer: val => {
+      singer (val)  {
         if (typeof val === 'string') {
           return val
         } else if (val instanceof Array) {

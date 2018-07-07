@@ -40,7 +40,7 @@
             <div class="music-info" @click="play(index)">
               <p class="music-name">{{song.songorig}}</p>
               <p class="music-author">
-                <span v-for="singer in song.singer" :key="singer">{{singer.name}}</span>
+                <span v-for="(singer,index) in song.singer" :key="index">{{singer.name}}</span>
                 <span>{{song.albumdesc}}</span>
               </p>
             </div>
@@ -64,11 +64,11 @@
       }
     },
     methods: {
-      hideAlbum: function () {
+      hideAlbum () {
         this.$router.go(-1)
         this.album = null
       },
-      play: function (index) {
+      play (index) {
         console.log(this.album)
         var list = []
         this.album.list.forEach(item => {
@@ -86,7 +86,7 @@
         })
         this.$store.commit('play')
       },
-      showMenu: function (num) {
+      showMenu (num) {
         this.menuedIndex = num
         let that = this
         this.$store.dispatch('notifyActionSheet', {
@@ -119,7 +119,7 @@
           }
         })
       },
-      getSingerStr: val => {
+      getSingerStr (val)  {
         if (typeof val === 'string') {
           return val
         } else if (val instanceof Array) {
@@ -132,11 +132,11 @@
       }
     },
     computed: {
-      albumImgUrl: function () {
+      albumImgUrl () {
         return 'http://y.gtimg.cn/music/photo_new/T002R300x300M000' + this.mid + '.jpg?max_age=2592000'
       }
     },
-    created: function () {
+    created () {
       this.$store.dispatch('getAlbum', this.mid).then((response) => {
         this.album = response.data.data
       })

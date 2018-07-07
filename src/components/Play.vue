@@ -64,18 +64,18 @@
       }
     },
     methods: {
-      hidePlayPage: function () {
+      hidePlayPage () {
         this.$parent.playPageShow = false
       },
-      movestart: function (event) {
+      movestart (event) {
         console.log('start' + event.touches[0].clientY)
       },
-      moveend: function (event) {
+      moveend (event) {
         if (event.changedTouches[0].clientY - this.clientY > 0) {
           this.hidePlayPage()
         }
       },
-      showPlayList: function () {
+      showPlayList () {
         this.$store.commit('showPlayingList')
       },
       ...mapMutations([
@@ -93,7 +93,7 @@
       })
     },
     filters: {
-      singer: val => {
+      singer (val) {
         if (typeof val === 'string') {
           return val
         } else if (val instanceof Array) {
