@@ -11,8 +11,6 @@ export function validate(target: any, propertyKey: string) {
 
 }
 
-
-
 const instances: {
     [key: string]: any,
 } = {}
@@ -21,7 +19,7 @@ export function Provide(name: string) {
     return function <VC extends VueClass<Vue>>(target: VC) {
         console.log(target)
         return componentFactory(target, {
-            name
+            name,
         })
     }
 }
@@ -29,26 +27,26 @@ export function Provide(name: string) {
 export class BaseService extends Vue { }
 
 export function Inject(service: Function | string) {
-    return function (target: any, key: string) {
+    return function(target: any, key: string) {
         Object.defineProperty(target, key, {
             get() {
                 return typeof service === 'function'
                     ? instances[service.name]
                     : instances[service]
             },
-            configurable: true
+            configurable: true,
         })
     }
 }
 
 export function Provider<VC extends VueClass<Vue>>(providers: VC[]) {
-    providers.forEach(provider => {
+    providers.forEach((provider) => {
         const instance = new (provider as VC)()
         Object.defineProperty(instances, instance.$options.name!, {
             get() {
                 return instance
             },
-            configurable: true
+            configurable: true,
         })
     });
     return instances;

@@ -2,10 +2,10 @@ import Vue from 'vue';
 import VueResource from 'vue-resource';
 import VueLazyload from 'vue-lazyload';
 
-import {App} from './app.component';
-import router from '@/router';
-import { provide } from '@/services';
-import '@/registerServiceWorker';
+import router from './router';
+import App from './App.vue';
+import { provide } from './services';
+import './registerServiceWorker';
 
 Vue.config.productionTip = false;
 Vue.use(VueResource);

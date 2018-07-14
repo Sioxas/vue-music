@@ -14,7 +14,7 @@ export class PlayService extends BaseService {
     };
     playList: Song[] = [];
 
-    get coverImgUrl() {
+    get coverImgUrl():string {
         return typeof this.song.albummid === 'undefined'
             ? DEFAULT_IMG
             : `https://y.gtimg.cn/music/photo_new/T002R500x500M000"${this.song.albummid}.jpg`;
@@ -24,11 +24,11 @@ export class PlayService extends BaseService {
 
     }
 
-    get currentTimeFormatted() {
+    get currentTimeFormatted():string {
         return ((this.currentTime / 60) | 0) + ':' + ('0' + (this.currentTime % 60)).slice(-2);
     }
 
-    get durationFormatted() {
+    get durationFormatted():string {
         return ((this.duration / 60) | 0) + ':' + ('0' + (this.duration % 60)).slice(-2);
     }
 
@@ -60,7 +60,6 @@ export class PlayService extends BaseService {
             this.index--;
         }
         this.playList.splice(index, 1);
-
     }
 
     addToPlayListAsNextPlay(item: Song) {

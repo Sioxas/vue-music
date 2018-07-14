@@ -3,5 +3,5 @@ export declare type VueClass<V> = {
     new (...args: any[]): V & Vue;
 } & typeof Vue;
 export declare type DecoratedClass = VueClass<Vue> & {
-    __decorators__?: ((options: ComponentOptions<Vue>) => void)[];
+    __decorators__?: Array<(options: ComponentOptions<Vue>) => void>;
 };

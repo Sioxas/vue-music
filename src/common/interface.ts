@@ -19,8 +19,8 @@ export interface PlayList {
 
 export interface Api {
     url: string,
+    jsonp: string,
     params(id?: number | string): any,
-    jsonp: string
 }
 
 export interface QQMusicResponse<T> {
@@ -310,7 +310,6 @@ interface Preview {
     tryend: number;
     trysize: number;
 }
-
 
 interface AlbumlistEntity {
     albummid: string;

@@ -1,17 +1,28 @@
 import { BaseService, Provide } from '@/common/dependency-injection';
 import Vue from 'vue';
-import { API } from '../config/api';
-import { Api } from '../common/interface';
+import {Observable,Observer, observable} from 'rxjs';
 import { HttpResponse } from '../../node_modules/vue-resource/types/vue_resource';
+import { API } from '../config/api';
+import { Api, TopList, QQMusicResponse, RankList, AlbumInfo, SingerInfo, SearchResult, HotKey, QQMusicFirstPage, Lyric } from '../common/interface';
 
-function apiFactory(api: Api, id?: number|string): PromiseLike<HttpResponse> {
-    return Vue.http.jsonp(
-        api.url,
-        {
-            params: api.params(id),
-            jsonp: api.jsonp,
-        },
-    )
+function jsonpFactory<T>(url:string,jsonp:string,params?:any):Observable<T>{
+    return new Observable<T>((observer:Observer<T>)=>{
+        let p = {jsonp};
+        if(params){
+            p = Object.assign(p,{params});
+        }
+        Vue.http.jsonp(url,p).then((response:HttpResponse)=>{
+            observer.next(response.data);
+            observer.complete();
+        },(error:any)=>{
+            observer.error(error);
+            observer.complete();
+        });
+    });
+}
+
+function apiFactory<T>(api: Api, id?: number|string): Observable<T> {
+    return jsonpFactory<T>(api.url,api.jsonp,api.params(id));
 }
 
 @Provide('ApiService')
@@ -24,10 +35,9 @@ export class ApiService extends BaseService {
      * @returns TopList
      * @memberof ApiService
      */
-    getRankSongs(id: number) {
-        return apiFactory(API.rank_songs, id)
+    getRankSongs(id: number):Observable<TopList> {
+        return apiFactory<TopList>(API.rank_songs, id);
     }
-
 
     /**
      * 歌曲排行榜
@@ -35,10 +45,9 @@ export class ApiService extends BaseService {
      * @returns QQMusicResponse<RankList>
      * @memberof ApiService
      */
-    getRankList() {
-        return apiFactory(API.rank_list)
+    getRankList():Observable<QQMusicResponse<RankList>> {
+        return apiFactory<QQMusicResponse<RankList>>(API.rank_list);
     }
-
 
     /**
      * 专辑
@@ -47,8 +56,8 @@ export class ApiService extends BaseService {
      * @returns QQMusicResponse<AlbumInfo>
      * @memberof ApiService
      */
-    getAlbum(id: number) {
-        return apiFactory(API.album, id)
+    getAlbum(id: number):Observable<QQMusicResponse<AlbumInfo>> {
+        return apiFactory<QQMusicResponse<AlbumInfo>>(API.album, id);
     }
 
     /**
@@ -58,20 +67,19 @@ export class ApiService extends BaseService {
      * @returns QQMusicResponse<SingerInfo>
      * @memberof ApiService
      */
-    getSingerInfo(id: number) {
-        return apiFactory(API.singer_info, id)
+    getSingerInfo(id: number):Observable<QQMusicResponse<SingerInfo>> {
+        return apiFactory<QQMusicResponse<SingerInfo>>(API.singer_info, id);
     }
-
 
     /**
      * 搜索结果
-     * 
+     *
      * @param {string} key
      * @returns QQMusicResponse<SearchResult>
      * @memberof ApiService
      */
-    search(key: string) {
-        return apiFactory(API.search, key)
+    search(key: string):Observable<QQMusicResponse<SearchResult>> {
+        return apiFactory<QQMusicResponse<SearchResult>>(API.search, key);
     }
 
     /**
@@ -80,8 +88,8 @@ export class ApiService extends BaseService {
      * @returns QQMusicResponse<HotKey>
      * @memberof ApiService
      */
-    getHotKey() {
-        return apiFactory(API.hotkey)
+    getHotKey():Observable<QQMusicResponse<HotKey>> {
+        return apiFactory<QQMusicResponse<HotKey>>(API.hotkey);
     }
 
     /**
@@ -90,8 +98,8 @@ export class ApiService extends BaseService {
      * @returns QQMusicResponse<QQMusicFirstPage>
      * @memberof ApiService
      */
-    getRecommands() {
-        return apiFactory(API.first_page_data)
+    getRecommands():Observable<QQMusicResponse<QQMusicFirstPage>> {
+        return apiFactory<QQMusicResponse<QQMusicFirstPage>>(API.first_page_data);
     }
 
     getCdList(id: number) {
@@ -102,12 +110,10 @@ export class ApiService extends BaseService {
      * 歌词
      *
      * @param {number} id
-     * @returns ILyric
+     * @returns Lyric
      * @memberof ApiService
      */
-    getLyric(id: number) {
-        return Vue.http.jsonp('https://api.darlin.me/music/lyric/' + id + '/', {
-            jsonp: 'callback',
-        })
+    getLyric(id: number):Observable<Lyric> {
+        return jsonpFactory<Lyric>(`https://api.darlin.me/music/lyric/${id}/`,'callback');
     }
 }
