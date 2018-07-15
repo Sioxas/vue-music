@@ -1,8 +1,9 @@
 import { BaseService, Provide } from '@/common/dependency-injection';
 import { DEFAULT_SONG_NAME, PlayMode, DEFAULT_IMG } from '@/common/types';
-import { PlayList, Song } from '../common/interface';
+import { PlayList, Song } from '@/common/interface';
+import { service } from '@/common/types';
 
-@Provide('PlayService')
+@Provide(service.PLAY)
 export class PlayService extends BaseService {
     currentTime = 0;
     duration = 0;
@@ -17,7 +18,7 @@ export class PlayService extends BaseService {
     get coverImgUrl():string {
         return typeof this.song.albummid === 'undefined'
             ? DEFAULT_IMG
-            : `https://y.gtimg.cn/music/photo_new/T002R500x500M000"${this.song.albummid}.jpg`;
+            : `https://y.gtimg.cn/music/photo_new/T002R500x500M000${this.song.albummid}.jpg`;
     }
 
     set coverImgUrl(url: string) {
@@ -38,6 +39,8 @@ export class PlayService extends BaseService {
     }
     setPlayList(playList: PlayList) {
         this.playList = playList.list;
+        this.index = playList.index;
+        this.song = this.playList[this.index];
     }
     addToPlayList(item: Song) {
         this.playList.push(item);

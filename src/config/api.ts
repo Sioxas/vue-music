@@ -1,4 +1,4 @@
-import { Api } from '../common/interface';
+import { Api } from '@/common/interface';
 /**
  * Created by sioxa on 2016/12/25 0025.
  */

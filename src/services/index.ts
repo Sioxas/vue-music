@@ -1,8 +1,8 @@
 
 import { Provider } from '@/common/dependency-injection'
-import { PlayService } from './play.service';
+import { PlayService } from '@/services/play.service';
 import { ApiService } from '@/services/api.service';
-export { PlayService }
+export { PlayService,ApiService }
 
 export const provide = Provider([
     PlayService,

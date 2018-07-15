@@ -1,6 +1,6 @@
 export interface Song {
     albummid?: string,
-    id?: number,
+    id?: number|string,
     mid?: string,
     name: string,
     singer?: Singer[] | string,
@@ -236,16 +236,16 @@ export interface SearchResult {
 
 export interface SearchResultItem {
     count: number,
-    itemlist: {
+    itemlist: Array<{
         albummid?: string,
         docid: string,
-        id: string,
+        id: string|number,
         mid: string,
         name: string,
         pic?: string,
         singer: Singer[] | string,
         vid?: string,
-    },
+    }>,
     name: string,
     order: number,
     type: number

@@ -3,6 +3,8 @@ export const service = {
     API:'API_SERVICE',
     PLAY:'PLAY_SERVICE',
     ACTION_SHEET:'ACTION_SHEET_SERVICE',
+    COLOR:'COLOR_SERVICE',
+    UTIL:'UTIL',
 
 }
 export const PLAY_MODE_IMG = [

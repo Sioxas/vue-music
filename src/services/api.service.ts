@@ -1,9 +1,10 @@
 import { BaseService, Provide } from '@/common/dependency-injection';
 import Vue from 'vue';
 import {Observable,Observer, observable} from 'rxjs';
-import { HttpResponse } from '../../node_modules/vue-resource/types/vue_resource';
-import { API } from '../config/api';
-import { Api, TopList, QQMusicResponse, RankList, AlbumInfo, SingerInfo, SearchResult, HotKey, QQMusicFirstPage, Lyric } from '../common/interface';
+import { HttpResponse } from 'vue-resource/types/vue_resource';
+import { API } from '@/config/api';
+import { Api, TopList, QQMusicResponse, RankList, AlbumInfo, SingerInfo, SearchResult, HotKey, QQMusicFirstPage, Lyric } from '@/common/interface';
+import { service } from '@/common/types';
 
 function jsonpFactory<T>(url:string,jsonp:string,params?:any):Observable<T>{
     return new Observable<T>((observer:Observer<T>)=>{
@@ -25,7 +26,7 @@ function apiFactory<T>(api: Api, id?: number|string): Observable<T> {
     return jsonpFactory<T>(api.url,api.jsonp,api.params(id));
 }
 
-@Provide('ApiService')
+@Provide(service.API)
 export class ApiService extends BaseService {
 
     /**
@@ -35,7 +36,7 @@ export class ApiService extends BaseService {
      * @returns TopList
      * @memberof ApiService
      */
-    getRankSongs(id: number):Observable<TopList> {
+    getRankSongs(id: number|string):Observable<TopList> {
         return apiFactory<TopList>(API.rank_songs, id);
     }
 

@@ -5,14 +5,14 @@
       <router-view v-show="!blurBgShow"></router-view>
     </transition>
 
-    <!-- <search v-show="!blurBgShow" @searchshow="rankshow=false" @searchhide="rankshow=true"></search> -->
+    <search v-show="!blurBgShow" @searchshow="rankshow=false" @searchhide="rankshow=true"></search>
     <div class="content-warper" v-show="rankshow&&!blurBgShow">
       <swiper :options="swiperOption" class="swiper-box">
         <swiper-slide class="swiper-item">
-          <!-- <rank></rank> -->
+          <rank></rank>
         </swiper-slide>
         <swiper-slide class="swiper-item">
-          <!-- <recommand></recommand> -->
+          <recommand></recommand>
         </swiper-slide>
 
         <div class="swiper-pagination" slot="pagination"></div>
@@ -44,6 +44,13 @@ import { swiper, swiperSlide } from 'vue-awesome-swiper';
 import { Component, Inject, Vue, Watch } from 'vue-property-decorator';
 
 import { PlayService } from '@/services';
+import Search from '@/components/Search.vue';
+import Rank from '@/components/Rank.vue';
+import Recommand from '@/components/Recommand.vue';
+
+import 'swiper/dist/css/swiper.css';
+import { Song } from '@/common/interface';
+import { service } from '@/common/types';
 
 const TAB_NAME = ['排行榜', '推荐'];
 
@@ -51,10 +58,13 @@ const TAB_NAME = ['排行榜', '推荐'];
     components: {
         swiper,
         swiperSlide,
+        Search,
+        Rank,
+        Recommand,
     },
 })
 export default class App extends Vue {
-    @Inject('PlayService') play!: PlayService;
+    @Inject(service.PLAY) play!: PlayService;
 
     iconPlay = require('./assets/icon-play.png');
     iconPause = require('./assets/icon-pause.png');
@@ -76,7 +86,7 @@ export default class App extends Vue {
     }
 
     get dataUrl(){
-      return `https://dl.stream.qqmusic.qq.com/C100${this.play.song.mid}.m4a?fromtag=46`;
+        return `https://dl.stream.qqmusic.qq.com/C100${this.play.song.mid}.m4a?fromtag=46`;
     }
 
     get coverImgUrl(){
@@ -111,9 +121,17 @@ export default class App extends Vue {
         this.blurBgShow = false;
     }
     updateTime(){
-      const music = document.getElementById('music') as HTMLMediaElement;
-      this.play.updateCurrentTime(music.currentTime);
-      this.play.updateDuration(music.duration);
+        const music = document.getElementById('music') as HTMLMediaElement;
+        if(music){
+            this.play.updateCurrentTime(music.currentTime);
+            this.play.updateDuration(music.duration);
+        }
+    }
+
+    @Watch('playing')
+    onPlayStateChanges(val:boolean){
+        const music = document.getElementById('music') as HTMLMediaElement;
+        val && music ? music.play() : music.pause();
     }
 }
 </script>
@@ -123,29 +141,29 @@ export default class App extends Vue {
     margin: 0;
     padding: 0;
   }
-  
+
   html {
     overflow-x: hidden;
     background: #eeeeee;
   }
-  
+
   body {
     display: flex;
     overflow-x: hidden;
   }
-  
+
   #app {
     font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
       "Helvetica Neue", STHeiti, "Microsoft Yahei", Tahoma, Simsun, sans-serif;
     width: 100%;
     height: 100%;
   }
-  
+
   #app a {
     color: #42b983;
     text-decoration: none;
   }
-  
+
   #play-bar {
     position: fixed;
     bottom: 0;
@@ -158,103 +176,103 @@ export default class App extends Vue {
     align-items: center;
     z-index: 2;
   }
-  
+
   .play-bar-image-container {
     width: 37.5px;
     height: 37.5px;
     padding-left: 15px;
     cursor: pointer;
   }
-  
+
   .play-bar-image {
     width: 37.5px;
     height: 37.5px;
     border-radius: 5px;
     display: inline-block;
   }
-  
+
   .play-bar-text {
     flex-grow: 1;
     padding-left: 10px;
     cursor: pointer;
   }
-  
+
   .play-bar-button {
     width: 20px;
     height: 20px;
     padding-right: 15px;
     cursor: pointer;
   }
-  
+
   .page-slide-enter-active {
     transition: all 0.3s ease;
   }
-  
+
   .page-slide-leave-active {
     transition: all 0.3s ease-out;
   }
-  
+
   .page-slide-enter,
   .page-slide-leave-active {
     transform: translateX(100%);
   }
-  
+
   .fade-enter-active {
     transition: all 0.3s ease;
   }
-  
+
   .fade-leave-active {
     transition: all 0.3s ease-out;
   }
-  
+
   .fade-enter,
   .fade-leave-active {
     opacity: 0;
   }
-  
+
   .play-slide-enter-active {
     transition: all 0.3s ease;
   }
-  
+
   .play-slide-leave-active {
     transition: all 0.3s ease-out;
   }
-  
+
   .play-slide-enter,
   .play-slide-leave-active {
     transform: translateY(100vh);
   }
-  
+
   .bar-slide-enter-active {
     transition: all 0.3s ease;
   }
-  
+
   .bar-slide-leave-active {
     transition: all 0.3s ease-out;
   }
-  
+
   .bar-slide-enter,
   .bar-slide-leave-active {
     margin-bottom: -50px;
   }
-  
+
   @media screen and (min-width: 68vh) {
     body {
       width: 68vh;
       margin: 0 auto;
     }
-  
+
     #play-bar {
       width: 68vh;
     }
   }
-  
+
   /*border-1px 部分*/
-  
+
   .border-1px {
     position: relative;
   }
-  
+
   .border-1px-after:after {
     border-top: 1px solid #d0d0d0;
     content: " ";
@@ -263,7 +281,7 @@ export default class App extends Vue {
     position: absolute;
     left: 0;
   }
-  
+
   .border-1px-before:before {
     border-top: 1px solid #d0d0d0;
     content: " ";
@@ -272,15 +290,15 @@ export default class App extends Vue {
     position: absolute;
     left: 0;
   }
-  
+
   .border-1px:before {
     top: 0;
   }
-  
+
   .border-1px:after {
     bottom: 0;
   }
-  
+
   @media (-webkit-min-device-pixel-ratio: 1.5), (min-device-pixel-ratio: 1.5) {
     .border-1px:after,
     .border-1px:before {
@@ -288,12 +306,12 @@ export default class App extends Vue {
       -webkit-transform-origin: 0 0;
       transform: scaleY(0.7);
     }
-  
+
     .border-1px:after {
       -webkit-transform-origin: left bottom;
     }
   }
-  
+
   @media (-webkit-min-device-pixel-ratio: 2), (min-device-pixel-ratio: 2) {
     .border-1px:after,
     .border-1px:before {
@@ -301,7 +319,7 @@ export default class App extends Vue {
       transform: scaleY(0.5);
     }
   }
-  
+
   @-webkit-keyframes imgFadeIn {
     from {
       opacity: 0;
@@ -310,7 +328,7 @@ export default class App extends Vue {
       opacity: 1;
     }
   }
-  
+
   @keyframes imgFadeIn {
     from {
       opacity: 0;
@@ -319,7 +337,7 @@ export default class App extends Vue {
       opacity: 1;
     }
   }
-  
+
   img[lazy="loaded"] {
     -webkit-animation-duration: 1s;
     animation-duration: 1s;
@@ -328,7 +346,7 @@ export default class App extends Vue {
     -webkit-animation-name: imgFadeIn;
     animation-name: imgFadeIn;
   }
-  
+
   img[lazy="error"] {
     border-radius: 2px;
     -webkit-animation-duration: 1s;
@@ -338,21 +356,21 @@ export default class App extends Vue {
     -webkit-animation-name: imgFadeIn;
     animation-name: imgFadeIn;
   }
-  
+
   .content-warper {
     margin-top: 60px;
   }
-  
+
   .swiper-box {
     width: 100%;
     height: 100%;
     margin: 0 auto;
   }
-  
+
   .swiper-item {
     height: 100%;
   }
-  
+
   .swiper-pagination-bullet-custom {
     width: 100% !important;
     height: 100% !important;
@@ -364,11 +382,11 @@ export default class App extends Vue {
     background: #fff !important;
     opacity: 1 !important;
   }
-  
+
   .swiper-pagination-bullet-custom.swiper-pagination-bullet-active {
     color: #000;
   }
-  
+
   .swiper-pagination {
     top: 0;
     height: 50px;
