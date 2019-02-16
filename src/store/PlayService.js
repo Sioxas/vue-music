@@ -2,7 +2,21 @@
  * Created by sioxa on 2016/12/25 0025.
  */
 import * as def from '../config/def'
-
+import store from './index'
+const player = new QMplayer();
+player.on("timeupdate", function () {
+    store.commit(
+        "updateCurrentTime",
+        parseInt(player.currentTime)
+      );
+      store.commit(
+        "updateDuration",
+        parseInt(player.duration)
+      );
+});
+player.on("ended", function () {
+    store.commit("playContinue");
+});
 export default {
   state: {
     playing: false,
@@ -58,18 +72,22 @@ export default {
       state.duration = time
     },
     play (state) {
-      state.playing = true
+        player.play(state.song.mid);
+      state.playing = true;
     },
     pause (state) {
+        player.pause();
       state.playing = false
     },
     playFront (state) {
       state.index = (state.index - 1 + state.playList.length) % state.playList.length
       state.song = state.playList[state.index]
+      player.play(state.song.mid);
     },
     playNext (state) {
       state.index = (state.index + 1) % state.playList.length
       state.song = state.playList[state.index]
+      player.play(state.song.mid);
     },
     playContinue (state) {
       switch (state.playMode) {
@@ -84,6 +102,7 @@ export default {
           state.song = state.playList[state.index]
           break
       }
+      player.play(state.song.mid);
     },
     changePlayMode (state) {
       state.playMode = (state.playMode + 1) % 3

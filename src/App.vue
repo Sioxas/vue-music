@@ -28,7 +28,7 @@
 
     <transition name="bar-slide">
       <div id="play-bar" v-show="!playPageShow">
-        <audio id="music" :src="dataUrl" @timeupdate="updateTime" @ended="playContinue" autoplay></audio>
+        <!-- <audio id="music" :src="dataUrl" @timeupdate="updateTime" @ended="playContinue" autoplay></audio> -->
         <div class="play-bar-image-container" @touchstart="showPlayPage" @click="showPlayPage">
           <img class="play-bar-image" v-lazy="coverImgUrl">
         </div>
@@ -85,16 +85,6 @@ export default {
     hideBlurBg() {
       this.blurBgShow = false;
     },
-    updateTime() {
-      this.$store.commit(
-        "updateCurrentTime",
-        parseInt(document.getElementById("music").currentTime)
-      );
-      this.$store.commit(
-        "updateDuration",
-        parseInt(document.getElementById("music").duration)
-      );
-    },
     ...mapMutations(["play", "pause", "playContinue"])
   },
   data() {
@@ -131,32 +121,6 @@ export default {
       song: state => state.PlayService.song
     })
   },
-  watch: {
-    playing(val) {
-      if (val) {
-        document.getElementById("music").play();
-      } else {
-        document.getElementById("music").pause();
-      }
-    },
-    song(song) {
-      if (
-        this.$store.state.PlayService.playList.length > 0 &&
-        typeof song.albummid === "undefined"
-      ) {
-        this.$http
-          .jsonp("http://120.27.93.97/weappserver/get_music_info.php", {
-            params: {
-              mid: song.mid
-            },
-            jsonp: "callback"
-          })
-          .then(response => {
-            this.$store.commit("setAlbummid", response.data.albummid);
-          });
-      }
-    }
-  }
 };
 </script>
 
