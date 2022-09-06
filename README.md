@@ -32,8 +32,6 @@ npm run dev
 npm run build
 ```
 
-> 字节商业变现部门目前在招前端开发方向的职位候选人，核心收入来源部门，面向字节全产品矩阵，目前从一线开发到高T/业务方向负责人都有需求，邮箱：jiaozhengshan@bytedance.com 微信：sioxas
-
 # 截图
 
 
